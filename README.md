@@ -1,4 +1,4 @@
-# The Decentralized Gaming Protocol 
+# The Bounty Protocol 
 
 Using the magic of decentralized cryptography to create a higher-level game system out of composible smart contracts and NFTs.
 
