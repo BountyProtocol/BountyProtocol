@@ -1,15 +1,18 @@
-# The Bounty Protocol 
+# The Decentralized Gaming Protocol 
 
-The Gig economy is the future of work, and we make it frictionless. 
+Using the magic of decentralized cryptography to create a higher-level game system out of composible smart contracts and NFTs.
+
 
 ## Overview
 
-This protocol focuses on the game of exchange. Complete tasks to receive compensation.
+This platform allows you to
 
-- Mint profiles
-- Create Projects & Post Bounties
-- Apply and deliver bounties to receive finecial and equaity rewards
-- Team up with other players and work together as a self-managed microDAO
+- Mint characters
+- Create games
+- Set up roles and incentives
+- Manage reputation
+- Design an interaction flow 
+
 
 ## Technical info
 
