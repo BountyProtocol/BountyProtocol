@@ -174,10 +174,11 @@ contract HubUpgradable is
         emit ContractCreated("game", address(newGameProxy));
 
         //Register as a Soul
-        try ISoul(repo().addressGet("SBT")).mintFor(address(newGameProxy), uri_) {}   //Failure should not be fatal
-        catch Error(string memory reason) {
-            console.log("Failed to mint a soul for the new Game Contract", reason);
-        }
+        _mintSoul(address(newGameProxy), uri_);
+        // try ISoul(repo().addressGet("SBT")).mintFor(address(newGameProxy), uri_) {}   //Failure should not be fatal
+        // catch Error(string memory reason) {
+        //     console.log("Failed to mint a soul for the new Game Contract", reason);
+        // }
 
         //Remember
         _games[address(newGameProxy)] = true;
@@ -209,13 +210,12 @@ contract HubUpgradable is
         //Event
         emit ContractCreated("claim", address(newClaimProxy));
 
-        /* Maybe...        
         //Register as a Soul
-        try ISoul(repo().addressGet("SBT")).mintFor(address(newClaimProxy), uri_) {}   //Failure should not be fatal
-        catch Error(string memory reason) {
-            console.log("Failed to mint a soul for the new Game Contract", reason);
-        }
-        */
+        _mintSoul(address(newClaimProxy), uri_);
+        // try ISoul(repo().addressGet("SBT")).mintFor(address(newClaimProxy), uri_) {}   //Failure should not be fatal
+        // catch Error(string memory reason) {
+        //     console.log("Failed to mint a soul for the new Game Contract", reason);
+        // }
 
         //Remember Parent
         _claims[address(newClaimProxy)] = _msgSender();
@@ -244,19 +244,28 @@ contract HubUpgradable is
         //Event
         emit ContractCreated("task", address(newTaskProxy));
 
-        /* Maybe...        
         //Register as a Soul
-        try ISoul(repo().addressGet("SBT")).mintFor(address(newTaskProxy), uri_) {}   //Failure should not be fatal
-        catch Error(string memory reason) {
-            console.log("Failed to mint a soul for the new Game Contract", reason);
-        }
-        */
-
+        _mintSoul(address(newTaskProxy), uri_);
+        // try ISoul(repo().addressGet("SBT")).mintFor(address(newTaskProxy), uri_) {}   //Failure should not be fatal
+        // catch Error(string memory reason) {
+        //     console.log("Failed to mint a soul for the new Game Contract", reason);
+        // }
+        
         //Remember Parent (Same as Claims)
         _claims[address(newTaskProxy)] = _msgSender();
         //Return
         return address(newTaskProxy);
     }
+
+    /// Mint a new SBT for Entity
+    function _mintSoul(address account, string calldata uri_) internal {
+        //Register as a Soul
+        try ISoul(repo().addressGet("SBT")).mintFor(account, uri_) {}   //Failure should not be fatal
+        catch Error(string memory reason) {
+            console.log("Failed to mint a soul for the new Contract", reason);
+        }
+    }
+
     //--- Reputation
 
     /// Add Reputation (Positive or Negative)
