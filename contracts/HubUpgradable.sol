@@ -172,19 +172,12 @@ contract HubUpgradable is
         );
         //Event
         emit ContractCreated("game", address(newGameProxy));
-
         //Register as a Soul
         _mintSoul(address(newGameProxy), uri_);
-        // try ISoul(repo().addressGet("SBT")).mintFor(address(newGameProxy), uri_) {}   //Failure should not be fatal
-        // catch Error(string memory reason) {
-        //     console.log("Failed to mint a soul for the new Game Contract", reason);
-        // }
-
         //Remember
         _games[address(newGameProxy)] = true;
         //Register Game to Repo
         repo().addressAdd("game", address(newGameProxy));
-
         //Return
         return address(newGameProxy);
     }
@@ -206,17 +199,10 @@ contract HubUpgradable is
                 uri_            //Contract URI
             )
         );
-
         //Event
         emit ContractCreated("claim", address(newClaimProxy));
-
         //Register as a Soul
         _mintSoul(address(newClaimProxy), uri_);
-        // try ISoul(repo().addressGet("SBT")).mintFor(address(newClaimProxy), uri_) {}   //Failure should not be fatal
-        // catch Error(string memory reason) {
-        //     console.log("Failed to mint a soul for the new Game Contract", reason);
-        // }
-
         //Remember Parent
         _claims[address(newClaimProxy)] = _msgSender();
         //Return
@@ -240,17 +226,10 @@ contract HubUpgradable is
                 uri_            //Contract URI
             )
         );
-
         //Event
         emit ContractCreated("task", address(newTaskProxy));
-
         //Register as a Soul
         _mintSoul(address(newTaskProxy), uri_);
-        // try ISoul(repo().addressGet("SBT")).mintFor(address(newTaskProxy), uri_) {}   //Failure should not be fatal
-        // catch Error(string memory reason) {
-        //     console.log("Failed to mint a soul for the new Game Contract", reason);
-        // }
-        
         //Remember Parent (Same as Claims)
         _claims[address(newTaskProxy)] = _msgSender();
         //Return

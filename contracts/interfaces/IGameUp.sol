@@ -55,9 +55,6 @@ interface IGame {
     /// Set Metadata URI For Role
     // function setRoleURI(string memory role, string memory _tokenURI) external;
 
-    /// Set Contract URI
-    // function setContractURI(string calldata contract_uri) external;
-
     /// Add Reputation (Positive or Negative)
     // function repAdd(address contractAddr, uint256 tokenId, string calldata domain, bool rating, uint8 amount) external;
 
