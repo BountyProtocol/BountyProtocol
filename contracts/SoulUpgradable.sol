@@ -223,13 +223,6 @@ contract SoulUpgradable is
         emit SoulType(tokenId, soulType);
     }
 
-    /// Transfer Privileges are manged in the _beforeTokenTransfer function
-    /// @dev Override the main Transfer privileges function
-    function _isApprovedOrOwner(address spender, uint256 tokenId) internal view override returns (bool) {
-        //Approved or Seconday Owner
-        return (super._isApprovedOrOwner(spender, tokenId)  || (_owners[spender] == tokenId));
-    }
-
     /// Override transferFrom()
     /// Remove Approval Check 
     /// Transfer Privileges are manged in the _beforeTokenTransfer function
@@ -239,21 +232,24 @@ contract SoulUpgradable is
         _transfer(from, to, tokenId);
     }
 
+    /// Transfer Privileges are manged in the _beforeTokenTransfer function
+    /// @dev Override the main Transfer privileges function
+    function _isApprovedOrOwner(address spender, uint256 tokenId) internal view override returns (bool) {
+        //Approved or Seconday Owner
+        return (
+            super._isApprovedOrOwner(spender, tokenId)  // Approved or Owner
+            || (_owners[spender] == tokenId)    //Or Secondary Owner
+        );
+    }
+
     /// Check if the Current Account has Control over a Token   //DEPRECATE?
     function hasTokenControl(uint256 tokenId) public view override returns (bool) {
-        /*
-        address ownerAccount = ownerOf(tokenId);
         return (
-            ownerAccount == _msgSender() //Token Owner (Support for Contract as Owner)
+            hasTokenControlAccount(tokenId, _msgSender()) 
             // solhint-disable-next-line avoid-tx-origin
-            || ownerAccount == tx.origin    //Token Owner (Allows it to go therough the hub)
-            // solhint-disable-next-line avoid-tx-origin
-            // || (ownerAccount == address(this) && owner() == tx.origin) //Unclaimed Tokens Controlled by Contract Owner/DAO
-            || (ownerAccount == address(this) && owner() == _msgSender()) //Unclaimed Tokens Controlled by Contract Owner Contract (DAO)
+            || hasTokenControlAccount(tokenId, tx.origin)
+            || _isSecondaryOwner(tokenId)  //Owner of the owner contract
         );
-        */
-        // solhint-disable-next-line avoid-tx-origin
-        return hasTokenControlAccount(tokenId, _msgSender()) || hasTokenControlAccount(tokenId, tx.origin);
     }
 
     /// Check if a Specific Account has control over a Token
@@ -263,6 +259,22 @@ contract SoulUpgradable is
             ownerAccount == account //Token Owner (Support for Contract as Owner)
             || (ownerAccount == address(this) && owner() == account) //Unclaimed Tokens Controlled by Contract Owner Contract (DAO)
         );
+    }
+
+    /// Check if sender is the Owner of the Owner Contract
+    function _isSecondaryOwner(uint256 tokenId) internal view returns (bool){
+        address ownerAccount = ownerOf(tokenId);
+        if(ownerAccount.isContract()){
+            try OwnableUpgradeable(ownerAccount).owner() //Failure should not be fatal
+            returns (address contractOwner) {
+                console.log("Found Owner", contractOwner);
+                // solhint-disable-next-line avoid-tx-origin
+                return (contractOwner == _msgSender() || contractOwner == tx.origin);
+            } 
+            catch Error(string memory) {}
+        }
+        //Default to No
+        return false;
     }
 
     /// Post
