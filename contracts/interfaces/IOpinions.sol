@@ -23,5 +23,6 @@ interface IOpinions {
 
     /// Opinion Changed (Crosschain)
     event OpinionChange(uint256 chainId, address indexed contractAddr, uint256 indexed tokenId, string domain, bool rating, uint256 score);
+    // event OpinionChange(uint256 chainId, uint256 indexed sbtOf, uint256 indexed sbtOn, string domain, bool rating, uint256 score);
 
 }

@@ -9,8 +9,6 @@ import "../interfaces/IPosts.sol";
  */
 abstract contract Posts is IPosts {
     
-    //--- Storage
-
     //--- Functions
 
     /// Add Post 

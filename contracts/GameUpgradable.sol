@@ -55,7 +55,6 @@ contract GameUpgradable is IGame
         , Posts
         , ProxyMulti
         // VotesUpgradeable,
-        // ERC1155RolesTrackerUp 
         , CTXEntityUpgradable
         {
 
@@ -184,7 +183,7 @@ contract GameUpgradable is IGame
             || ISoul(getSoulAddr()).hasTokenControlAccount(tokenId, tx.origin)
             , "POST:SOUL_NOT_YOURS"); //Supports Contract Permissions
         //Validate: Soul Assigned to the Role 
-        require(roleHasByToken(tokenId, entRole), "POST:ROLE_NOT_ASSIGNED");    //Validate the Calling Account
+        require(roleHasByToken(tokenId, entRole), "POST:SOUL_NOT_IN_ROLE");    //Validate the Calling Account
         // require(roleHasByToken(tokenId, entRole), string(abi.encodePacked("TOKEN: ", tokenId, " NOT_ASSIGNED_AS: ", entRole)) );    //Validate the Calling Account
         //Post Event
         _post(tx.origin, tokenId, entRole, uri_);
