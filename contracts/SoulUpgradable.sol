@@ -215,7 +215,7 @@ contract SoulUpgradable is
 
     /// Hook - After Token Transfer
     function _afterTokenTransfer(address, address to, uint256 tokenId) internal virtual override {
-        //Soul Type
+        //Soul Type (Contract Symbol)
         string memory soulType = Utils.getAddressType(to);
         //Set
         types[tokenId] = soulType;
@@ -237,7 +237,7 @@ contract SoulUpgradable is
     function _isApprovedOrOwner(address spender, uint256 tokenId) internal view override returns (bool) {
         //Approved or Seconday Owner
         return (
-            super._isApprovedOrOwner(spender, tokenId)  // Approved or Owner
+            super._isApprovedOrOwner(spender, tokenId)  // Token Owner or Approved 
             || (_owners[spender] == tokenId)    //Or Secondary Owner
         );
     }
@@ -256,7 +256,8 @@ contract SoulUpgradable is
     function hasTokenControlAccount(uint256 tokenId, address account) public view override returns (bool) {
         address ownerAccount = ownerOf(tokenId);
         return (
-            ownerAccount == account //Token Owner (Support for Contract as Owner)
+            _isApprovedOrOwner(account, tokenId)  // Token Owner or Approved 
+            // ownerAccount == account //Token Owner (Support for Contract as Owner)
             || (ownerAccount == address(this) && owner() == account) //Unclaimed Tokens Controlled by Contract Owner Contract (DAO)
         );
     }
