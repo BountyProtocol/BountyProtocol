@@ -116,8 +116,9 @@ contract GameUpgradable is IGame
         // _setRoleURI("admin", "");
         // _setRoleURI("member", "");
         // _setRoleURI("authority", "");
+        
         //Set Entity  Type        
-        confSet("type", type_);
+        // confSet("type", type_);  //Moved to the HUB, After making a soul
     }
 
     //** Claim Functions

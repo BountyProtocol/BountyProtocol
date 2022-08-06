@@ -1011,7 +1011,8 @@ describe("Protocol", function () {
 
       //Expect Claim Created Event
       // await expect(tx).to.emit(gameContract, 'ClaimCreated').withArgs(1, claimAddr);   //DEPRECATED
-      await expect(tx).to.emit(hubContract, 'ContractCreated').withArgs("claim", claimAddr);
+      // await expect(tx).to.emit(hubContract, 'ContractCreated').withArgs("claim", claimAddr);
+      await expect(tx).to.emit(hubContract, 'ContractCreated').withArgs("process", claimAddr);
       
       //Expect Post Event
       await expect(tx).to.emit(this.claimContract, 'Post').withArgs(this.adminAddr, posts[0].tokenId, posts[0].entRole, posts[0].uri);
@@ -1053,7 +1054,8 @@ describe("Protocol", function () {
       
       //Expect Claim Created Event
       // await expect(tx).to.emit(gameContract, 'ClaimCreated').withArgs(2, claimAddr); //DEPRECATED
-      await expect(tx).to.emit(hubContract, 'ContractCreated').withArgs("claim", claimAddr);
+      // await expect(tx).to.emit(hubContract, 'ContractCreated').withArgs("claim", claimAddr);
+      await expect(tx).to.emit(hubContract, 'ContractCreated').withArgs("process", claimAddr);
 
       //Expect Post Event
       // await expect(tx).to.emit(claimContract, 'Post').withArgs(this.adminAddr, posts[0].tokenId, posts[0].entRole, posts[0].postRole, posts[0].uri);
@@ -1104,7 +1106,8 @@ describe("Protocol", function () {
       
       //Expect Claim Created Event
       // await expect(tx).to.emit(gameContract, 'ClaimCreated').withArgs(3, claimAddr);  //DEPRECATED
-      await expect(tx).to.emit(hubContract, 'ContractCreated').withArgs("claim", claimAddr);
+      // await expect(tx).to.emit(hubContract, 'ContractCreated').withArgs("claim", claimAddr);
+      await expect(tx).to.emit(hubContract, 'ContractCreated').withArgs("process", claimAddr);
 
       //Expect Post Event
       // await expect(tx).to.emit(claimContract, 'Post').withArgs(this.authorityAddr, posts[0].tokenId, posts[0].entRole, posts[0].uri);

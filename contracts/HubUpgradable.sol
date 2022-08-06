@@ -13,6 +13,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "./public/interfaces/IOpenRepo.sol";
 import "./interfaces/IProtocolEntity.sol";
+import "./interfaces/ICTXEntityUpgradable.sol";
 import "./interfaces/IHub.sol";
 import "./interfaces/IGameUp.sol";
 import "./interfaces/IClaim.sol";
@@ -161,7 +162,7 @@ contract HubUpgradable is
         string calldata uri_
     ) external override returns (address) {
         //Deploy
-        BeaconProxy newGameProxy = new BeaconProxy(
+        BeaconProxy newProxyContract = new BeaconProxy(
             _beacons["game"],
             abi.encodeWithSelector(
                 IGame( payable(address(0)) ).initialize.selector,
@@ -171,15 +172,19 @@ contract HubUpgradable is
             )
         );
         //Register as a Soul
-        _mintSoul(address(newGameProxy), uri_);
+        _mintSoul(address(newProxyContract), uri_);
+        
+        //Set Type (to be called after creating a Soul)
+        ICTXEntityUpgradable(address(newProxyContract)).confSet("type", type_);
+
         //Event
-        emit ContractCreated("game", address(newGameProxy));
+        emit ContractCreated("game", address(newProxyContract));
         //Remember
-        _games[address(newGameProxy)] = true;
+        _games[address(newProxyContract)] = true;
         //Register Game to Repo
-        repo().addressAdd("game", address(newGameProxy));
+        repo().addressAdd("game", address(newProxyContract));
         //Return
-        return address(newGameProxy);
+        return address(newProxyContract);
     }
 
     /// Make a new Claim
@@ -189,7 +194,7 @@ contract HubUpgradable is
         string calldata uri_
     ) public override activeGame returns (address) {
         //Deploy
-        BeaconProxy newClaimProxy = new BeaconProxy(
+        BeaconProxy newProxyContract = new BeaconProxy(
             _beacons["claim"],
             abi.encodeWithSelector(
                 IProcedure( payable(address(0)) ).initialize.selector,
@@ -200,13 +205,17 @@ contract HubUpgradable is
             )
         );
         //Register as a Soul
-        _mintSoul(address(newClaimProxy), uri_);
+        _mintSoul(address(newProxyContract), uri_);
+        
+        //Set Type (to be called after creating a Soul)
+        ICTXEntityUpgradable(address(newProxyContract)).confSet("type", type_);
+
         //Event
-        emit ContractCreated("process", address(newClaimProxy));
+        emit ContractCreated("process", address(newProxyContract));
         //Remember Parent
-        _claims[address(newClaimProxy)] = _msgSender();
+        _claims[address(newProxyContract)] = _msgSender();
         //Return
-        return address(newClaimProxy);
+        return address(newProxyContract);
     }
 
     /// Make a new Task
@@ -216,7 +225,7 @@ contract HubUpgradable is
         string calldata uri_ 
     ) public override activeGame returns (address) {
         //Deploy (Same as Claim)
-        BeaconProxy newTaskProxy = new BeaconProxy(
+        BeaconProxy newProxyContract = new BeaconProxy(
             _beacons["task"],
             abi.encodeWithSelector(
                 IProcedure( payable(address(0)) ).initialize.selector,
@@ -227,13 +236,17 @@ contract HubUpgradable is
             )
         );
         //Register as a Soul
-        _mintSoul(address(newTaskProxy), uri_);
+        _mintSoul(address(newProxyContract), uri_);
+
+        //Set Type (to be called after creating a Soul)
+        ICTXEntityUpgradable(address(newProxyContract)).confSet("type", type_);
+
         //Event
-        emit ContractCreated("process", address(newTaskProxy));
+        emit ContractCreated("process", address(newProxyContract));
         //Remember Parent (Same as Claims)
-        _claims[address(newTaskProxy)] = _msgSender();
+        _claims[address(newProxyContract)] = _msgSender();
         //Return
-        return address(newTaskProxy);
+        return address(newProxyContract);
     }
 
     /// Mint a new SBT for Entity

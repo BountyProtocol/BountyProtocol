@@ -87,8 +87,6 @@ abstract contract Procedure is IProcedure
         // __ProtocolEntity_init(hub);
         __ProtocolEntity_init(msg.sender);  //Sender is the Hub
         __setTargetContract(getSoulAddr());
-        //Set Parent Container
-        _setParentCTX(container);
         //Set Contract URI
         _setContractURI(uri_);
         //Identifiers
@@ -105,8 +103,11 @@ abstract contract Procedure is IProcedure
         // _roleCreate("witness");     //Witnesses
         // _roleCreate("affected");    //Affected Party (For reparations)
 
+        //Set Parent Container
+        _setParentCTX(container);
         //Set Entity Type        
-        confSet("type", type_);
+        // confSet("type", type_);  //Moved to the HUB, After making a soul
+
     }
     /// Change Claim Stage
     function _setStage(DataTypes.ClaimStage stage_) internal {
