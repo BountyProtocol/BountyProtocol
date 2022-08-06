@@ -11,7 +11,6 @@ const chain = hre.hardhatArguments.network;
 
 import contractAddrs from "./_contractAddr";
 const contractAddr = contractAddrs[chain];
-
 const proxyAddress = contractAddr.hub;
 
 
@@ -33,7 +32,7 @@ async function main() {
     //Validate Upgrade
     await upgrades.prepareUpgrade(proxyAddress, NewImplementation);
 
-    //Upgrade    
+    //Run Upgrade    
     // await upgrades.upgradeProxy(factoryContract, NewImplementation);
 
     //Attach

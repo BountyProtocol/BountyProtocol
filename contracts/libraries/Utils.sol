@@ -24,15 +24,10 @@ library Utils {
 
     /// Contract Type Logic
     function getAddressType(address account) internal view returns (string memory) {
-        
         // console.log("** _getType() Return: ", response);
-
         if (account.isContract() && account != address(this)) {
-
             // console.log("THIS IS A Contract:", account);
-
             try IToken(account).symbol() returns (string memory response) {
-
                 // console.log("* * * Contract Symbol:", account, response);
 
                 //Contract's Symbol
