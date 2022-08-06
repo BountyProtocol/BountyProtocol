@@ -170,10 +170,10 @@ contract HubUpgradable is
                 uri_            //Contract URI
             )
         );
-        //Event
-        emit ContractCreated("game", address(newGameProxy));
         //Register as a Soul
         _mintSoul(address(newGameProxy), uri_);
+        //Event
+        emit ContractCreated("game", address(newGameProxy));
         //Remember
         _games[address(newGameProxy)] = true;
         //Register Game to Repo
@@ -199,10 +199,10 @@ contract HubUpgradable is
                 uri_            //Contract URI
             )
         );
-        //Event
-        emit ContractCreated("process", address(newClaimProxy));
         //Register as a Soul
         _mintSoul(address(newClaimProxy), uri_);
+        //Event
+        emit ContractCreated("process", address(newClaimProxy));
         //Remember Parent
         _claims[address(newClaimProxy)] = _msgSender();
         //Return
@@ -226,10 +226,10 @@ contract HubUpgradable is
                 uri_            //Contract URI
             )
         );
-        //Event
-        emit ContractCreated("process", address(newTaskProxy));
         //Register as a Soul
         _mintSoul(address(newTaskProxy), uri_);
+        //Event
+        emit ContractCreated("process", address(newTaskProxy));
         //Remember Parent (Same as Claims)
         _claims[address(newTaskProxy)] = _msgSender();
         //Return
