@@ -200,7 +200,7 @@ contract HubUpgradable is
             )
         );
         //Event
-        emit ContractCreated("claim", address(newClaimProxy));
+        emit ContractCreated("process", address(newClaimProxy));
         //Register as a Soul
         _mintSoul(address(newClaimProxy), uri_);
         //Remember Parent
@@ -227,7 +227,7 @@ contract HubUpgradable is
             )
         );
         //Event
-        emit ContractCreated("task", address(newTaskProxy));
+        emit ContractCreated("process", address(newTaskProxy));
         //Register as a Soul
         _mintSoul(address(newTaskProxy), uri_);
         //Remember Parent (Same as Claims)
