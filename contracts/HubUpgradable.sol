@@ -207,6 +207,8 @@ contract HubUpgradable is
         //Register as a Soul
         _mintSoul(address(newProxyContract), uri_);
         
+        //Set Container
+        IProcedure(address(newProxyContract)).setParentCTX(_msgSender());
         //Set Type (to be called after creating a Soul)
         ICTXEntityUpgradable(address(newProxyContract)).confSet("type", type_);
 
@@ -229,8 +231,8 @@ contract HubUpgradable is
             _beacons["task"],
             abi.encodeWithSelector(
                 IProcedure( payable(address(0)) ).initialize.selector,
-                _msgSender(),   //Birth Parent (Container)
-                type_,          //Type
+                _msgSender(),   //Birth Parent (Container)      //MOVED - DEPRECATE
+                type_,          //Type                          //MOVED - DEPRECATE
                 name_,          //Name
                 uri_            //Contract URI
             )
@@ -238,6 +240,8 @@ contract HubUpgradable is
         //Register as a Soul
         _mintSoul(address(newProxyContract), uri_);
 
+        //Set Container
+        IProcedure(address(newProxyContract)).setParentCTX(_msgSender());
         //Set Type (to be called after creating a Soul)
         ICTXEntityUpgradable(address(newProxyContract)).confSet("type", type_);
 

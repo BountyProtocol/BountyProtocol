@@ -15,6 +15,9 @@ interface IProcedure {
         string calldata uri_
     ) external;
 
+    /// Set Parent Container
+    function setParentCTX(address container) external;
+
     /// Add Post 
     function post(string calldata entRole, uint256 tokenId, string calldata uri) external;
 
