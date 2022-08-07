@@ -141,7 +141,7 @@ async function main() {
     */
   }
 
-  //Hub Associations & Validation
+  //Validate Hub Associations
   if(!hubContract && contractAddr.hub) hubContract = await ethers.getContractFactory("HubUpgradable").then(res => res.attach(contractAddr.hub));
   if(hubContract){
     console.log("Validate Hub ", hubContract.address);

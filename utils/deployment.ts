@@ -1,8 +1,14 @@
 import { Contract } from "ethers";
 import { run } from "hardhat";
 import { ethers } from "hardhat";
-const { upgrades } = require("hardhat");
+import contractAddrs from "../scripts/_contractAddr";
 // import { deployments, ethers } from "hardhat"
+const { upgrades } = require("hardhat");
+const hre = require("hardhat");
+const chain = hre.hardhatArguments.network;
+const contractAddr = contractAddrs[chain];
+const ZERO_ADDR = '0x0000000000000000000000000000000000000000';
+
 // export const deployRepoRules = async (contractAddress: string, args: any[]) => {
 // }
 
@@ -77,6 +83,30 @@ export const deployHub = async (openRepoAddress: String) => {
     await hubContract.deployed();
     //Return
     return hubContract;
+}
+
+/**
+ * Set / Update Hub Assoc
+ */
+export const hubAssocUpdate = async () => {
+  let hubContract = await ethers.getContractFactory("HubUpgradable").then(res => res.attach(contractAddr.hub));
+  if(hubContract){
+    console.log("Validate Hub ", hubContract.address);
+    let assoc: any = {};
+    assoc.sbt = await hubContract.assocGet("SBT");
+    // console.log("Hub: ", hubContract.address, " Assoc:", assoc, contractAddr);
+    if(assoc.sbt != contractAddr.avatar){
+      await hubContract.assocSet("SBT", contractAddr.avatar);
+      console.log("Hub: Updated SBT to: ", contractAddr.avatar);
+    }
+    assoc.history = await hubContract.assocGet("history");
+    if(assoc.history == contractAddr.history){
+      await hubContract.assocSet("history", contractAddr.history);
+      console.log("Hub: Updated History to: ", contractAddr.history);
+    }
+    // else console.log("Not the same", contractAddr.history, ZERO_ADDR, (assoc.history == ZERO_ADDR));
+  }
+  else console.error("Failed to attach to Hub Contract at: " +contractAddr.hub);
 }
 
 /// Verify Contract on Etherscan
