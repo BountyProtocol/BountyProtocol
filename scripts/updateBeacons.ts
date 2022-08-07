@@ -1,9 +1,3 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// When running the script with `npx hardhat run <script>` you'll find the Hardhat
-// Runtime Environment's members available in the global scope.
-
 import { ethers } from "hardhat";
 const { upgrades } = require("hardhat");
 const hre = require("hardhat");
@@ -16,16 +10,20 @@ const contractAddr = contractAddrs[chain];
  * Migrate Contracts Between Hubs
  */
 async function main() {
-    //Hub
-    let hubContract = await ethers.getContractFactory("HubUpgradable").then(res => res.attach(contractAddr.hub));
+  //Hub
+  let hubContract = await ethers.getContractFactory("HubUpgradable").then(res => res.attach(contractAddr.hub));
+  if(true){
     //Update Implementations
-    // await hubContract.upgradeImplementation("claim", contractAddr.claim);
-    // await hubContract.upgradeImplementation("game", contractAddr.game);
-
+    await hubContract.upgradeImplementation("game", contractAddr.game);
+    await hubContract.upgradeImplementation("claim", contractAddr.claim);
+    await hubContract.upgradeImplementation("task", contractAddr.task);
+    console.log("Beacons Updated");
+  }
+  if(false){
     //Set to HUB
     await hubContract.assocSet("SBT", contractAddr.avatar);
     await hubContract.assocSet("history", contractAddr.history);
-
+  }
 }
 
 // We recommend this pattern to be able to use async/await everywhere

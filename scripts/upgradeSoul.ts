@@ -27,6 +27,8 @@ async function main() {
   //Fetch New Implementation Contract
   let NewImplementation = await ethers.getContractFactory("SoulUpgradable");
   
+  // await upgrades.forceImport(proxyAddress, NewImplementation);
+  
   //Validate Upgrade
   // await upgrades.prepareUpgrade(proxyAddress, NewImplementation);
   //Run Upgrade    
