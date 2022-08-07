@@ -17,11 +17,11 @@ const contractAddr: any = {
     history:"0xce5F671e5e2C9c122e09Fe323aB0840155ab1D60", //0.5.1
   },
   mumbai:{
-    game: "", //0.5.2
-    claim: "0x178bb840D79C24841526cF887e89686FaE6950F0", //0.5.1
-    task: "0xdC0CBcECB342fe10C16C8f00733599bF940399F0", //0.5.1
-    hub: "0x47307dEBB584C680E51dAFb167622ce9633c2Acf", // D4.6 (Proxy)
-    avatar: "0xFe61dc25C3B8c3F990bCea5bb901704B2a8b9Bd2", // D2.8 (Proxy)
+    game: "0x54dC3260A7c56B1d2Ff8803A79729A24F7bd2fd7", //0.5.2
+    claim: "0xC5849dB2833D80a07e5fAF33f7FFd4141dfC8B49", //0.5.2
+    task: "0x7b5e236AADcB7C8a16E35dE8ad24cDBE9F7DDc19", //0.5.2
+    hub: "0xC78DFebB059b40B22C130Ce0cbA3d661AEfcDa8b", //0.5.2 (Proxy)
+    avatar: "0x74413DEE1E5D01e4E2176e2Ebb94EA6711bf78A9", // 0.5.2 (Proxy)
     history: "0x95BD98a656C907fC037aF87Ea740fD94188Cd65f", // D4.4 (Proxy)
   },
   optimism_kovan:{
