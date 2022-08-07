@@ -47,9 +47,6 @@ contract HubUpgradable is
     // Arbitrary contract designation signature
     string public constant override role = "Hub";
     string public constant override symbol = "HUB";
-    // address public _beacons["game"];
-    // address public _beacons["claim"];
-    // address public beaconTask;
     mapping(string => address) internal _beacons; // Mapping for Active Game Contracts
     mapping(address => bool) internal _games; // Mapping for Active Game Contracts
     mapping(address => address) internal _claims; // Mapping for Claim Contracts  [G] => [R]
@@ -176,6 +173,7 @@ contract HubUpgradable is
         
         //Set Type (to be called after creating a Soul)
         ICTXEntityUpgradable(address(newProxyContract)).confSet("type", type_);
+        ICTXEntityUpgradable(address(newProxyContract)).confSet("role", type_);
 
         //Event
         emit ContractCreated("game", address(newProxyContract));
@@ -206,12 +204,13 @@ contract HubUpgradable is
         );
         //Register as a Soul
         _mintSoul(address(newProxyContract), uri_);
-        
-        //Set Container
-        IProcedure(address(newProxyContract)).setParentCTX(_msgSender());
+
         //Set Type (to be called after creating a Soul)
         ICTXEntityUpgradable(address(newProxyContract)).confSet("type", type_);
-
+        ICTXEntityUpgradable(address(newProxyContract)).confSet("role", type_);
+        //Set Container
+        IProcedure(address(newProxyContract)).setParentCTX(_msgSender());
+        
         //Event
         emit ContractCreated("process", address(newProxyContract));
         //Remember Parent
@@ -240,11 +239,12 @@ contract HubUpgradable is
         //Register as a Soul
         _mintSoul(address(newProxyContract), uri_);
 
-        //Set Container
-        IProcedure(address(newProxyContract)).setParentCTX(_msgSender());
         //Set Type (to be called after creating a Soul)
         ICTXEntityUpgradable(address(newProxyContract)).confSet("type", type_);
-
+        ICTXEntityUpgradable(address(newProxyContract)).confSet("role", type_);
+        //Set Container
+        IProcedure(address(newProxyContract)).setParentCTX(_msgSender());
+        
         //Event
         emit ContractCreated("process", address(newProxyContract));
         //Remember Parent (Same as Claims)

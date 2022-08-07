@@ -330,11 +330,25 @@ describe("Protocol", function () {
       //Expect Claim Created Event
       await expect(tx).to.emit(hubContract, 'ContractCreated').withArgs("game", gameAddr);
       await expect(tx).to.emit(avatarContract, 'SoulType').withArgs(soulTokenId, "GAME");
+      await expect(tx).to.emit(this.openRepo, 'StringSet').withArgs(gameAddr, "type", game.type);
+      await expect(tx).to.emit(this.openRepo, 'StringSet').withArgs(gameAddr, "role", game.type);
+
+      // const receipt = await tx.wait()
+      // console.log("makeGame Logs: ", receipt.logs);
+      // console.log("makeGame Events: ", receipt.events);
+      // console.log("makeGame Event count: ", receipt.events.length);
+      // console.log("Repo Addr: ", this?.openRepo?.address); //V
+
+
       // console.log("Current soulTokenId", soulTokenId);
       ++soulTokenId;
       //Init Game Contract Object
       gameContract = await ethers.getContractFactory("GameUpgradable").then(res => res.attach(gameAddr));
       this.gameContract = gameContract;
+
+      expect(await this.gameContract.confGet("type")).to.equal(game.type);
+      expect(await this.gameContract.confGet("role")).to.equal(game.type);
+
     });
 
     it("Should Update Contract URI", async function () {
@@ -502,6 +516,7 @@ describe("Protocol", function () {
 
       //Add Another Rule
       let tx2 = await gameContract.connect(admin).ruleAdd(rule2, confirmation, effects2);
+      
       
             
       //Expect Event
@@ -677,9 +692,15 @@ describe("Protocol", function () {
       let gameMDAOAddr = await hubContract.connect(admin2).callStatic.gameMake(gameMDAOData.type, gameMDAOData.name, test_uri);
       // let gameAddr = await hubContract.callStatic.gameMake(game.type, game.name, test_uri);
       //Create New Game
-      await hubContract.connect(admin2).gameMake(gameMDAOData.type, gameMDAOData.name, test_uri);
+      let tx1 = await hubContract.connect(admin2).gameMake(gameMDAOData.type, gameMDAOData.name, test_uri);
       // await hubContract.gameMake(game.type, game.name, test_uri);
       ++soulTokenId;
+
+      
+      // await expect(tx1).to.emit(this.openRepo, 'StringSet').withArgs("type", gameMDAOData.type);
+      // await expect(tx1).to.emit(this.openRepo, 'StringSet').withArgs("role", gameMDAOData.type);
+
+
       //Init Game Contract Object
       this.mDAOGameContract = await ethers.getContractFactory("GameUpgradable").then(res => res.attach(gameMDAOAddr));
       //Attach Project Functionality
@@ -698,9 +719,16 @@ describe("Protocol", function () {
       let gameProjAddr = await hubContract.connect(admin).callStatic.gameMake(game.type, game.name, test_uri);
       // let gameProjAddr = await hubContract.callStatic.gameMake(game.type, game.name, test_uri);
       //Create New Game
-      await hubContract.connect(admin).gameMake(game.type, game.name, test_uri);
+      let tx2 = await hubContract.connect(admin).gameMake(game.type, game.name, test_uri);
       // await hubContract.gameMake(game.type, game.name, test_uri);
       ++soulTokenId;
+      
+      // await expect(tx2).to.emit(this.openRepo, 'StringSet').withArgs("type", game.type);
+      // await expect(tx2).to.emit(this.openRepo, 'StringSet').withArgs("role", game.type);
+
+
+
+      
 
       //Init Game Contract Object
       // this.projectGameContract = await ethers.getContractFactory("GameUpgradable").then(res => res.attach(gameProjAddr));
@@ -1268,7 +1296,7 @@ describe("Protocol", function () {
       //Submit Verdict & Close Claim
       let tx = await this.claimContract.connect(authority).stageDecision(verdict, test_uri);
       //Expect Verdict Event
-      await expect(tx).to.emit(this.claimContract, 'Verdict').withArgs(test_uri, this.authorityAddr);
+      await expect(tx).to.emit(this.claimContract, "Verdict").withArgs(test_uri, this.authorityAddr);
       //Expect State Event
       await expect(tx).to.emit(this.claimContract, "Stage").withArgs(6);
     });

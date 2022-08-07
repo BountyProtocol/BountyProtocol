@@ -35,10 +35,11 @@ abstract contract CTXEntityUpgradable is
     /// Permissions Modifier
     modifier AdminOrOwner() virtual {
        //Validate Permissions
-        require(owner() == _msgSender()      //Owner
-            || roleHas(tx.origin, "admin")    //Admin Role
-            || roleHas(_msgSender(), "admin")    //Admin Role
-            , "INVALID_PERMISSIONS");
+        // require(owner() == _msgSender()      //Owner
+        //     || roleHas(tx.origin, "admin")    //Admin Role
+        //     || roleHas(_msgSender(), "admin")    //Admin Role
+        //     , "INVALID_PERMISSIONS");
+            require(_isAdminOrOwner(), "INVALID_PERMISSIONS");
         _;
     }
 
@@ -128,7 +129,7 @@ abstract contract CTXEntityUpgradable is
         _setRoleURI(role, _tokenURI);
     }
    
-    /// Set Contract URI
+    /// Set Contract URI    //DEPRECATE - Use Souls to track Contract data
     function setContractURI(string calldata contract_uri) external override AdminOrOwner {
         _setContractURI(contract_uri);
     }

@@ -111,8 +111,8 @@ export const hubAssocUpdate = async () => {
 
 /// Verify Contract on Etherscan
 export const verify = async (contractAddress: string, args: any[]) => {
-  console.log("Verifying contract...")
-  // try {
+  if(!!chain){
+    // console.log("Verifying contract...")
     await run("verify:verify", {
       address: contractAddress,
       constructorArguments: args,
@@ -121,17 +121,11 @@ export const verify = async (contractAddress: string, args: any[]) => {
       if (error.message.toLowerCase().includes("already verified")) {
         console.log("Already verified!");
       } else {
-        console.log("[CAUGHT] Verification Error: ", error);
+        console.log("[CAUGHT] Verification Error on Chain:"+chain, error);
       }
     });
-
-  // } catch (e: any) {
-  //   if (e.message.toLowerCase().includes("already verified")) {
-  //     console.log("Already verified!");
-  //   } else {
-  //     console.log(e);
-  //   }
-  // }
+  }
+  else console.log("Skip verification on Chain:"+chain);
 }
 
 
