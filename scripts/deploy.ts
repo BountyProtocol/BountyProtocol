@@ -85,18 +85,17 @@ async function main() {
     //Deploy Hub Upgradable (UUPS)    
     hubContract = await deployUUPS("HubUpgradable", params);
     await hubContract.deployed();
-
-    //Deploy All Game Extensions & Set to Hub
-    deployGameExt(hubContract);
     //Set RuleRepo to Hub
     await hubContract.assocSet("RULE_REPO", publicAddr.ruleRepo);
-    
     //Set Address
     contractAddr.hub = hubContract.address;
-
+ 
     //Log
     console.log("Deployed Hub Upgradable Contract to " + contractAddr.hub+ " game: "+contractAddr.game+ " Claim: "+ contractAddr.claim);
     console.log("Run: npx hardhat verify --network "+chain+" " + contractAddr.hub);
+
+    //Deploy All Game Extensions & Set to Hub
+    await deployGameExt(hubContract);
 
     /* Fails
     try{
