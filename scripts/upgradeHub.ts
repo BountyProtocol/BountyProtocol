@@ -27,7 +27,7 @@ async function main() {
     //Fetch New Implementation Contract
     let NewImplementation = await ethers.getContractFactory("HubUpgradable");
 
-    await upgrades.forceImport(proxyAddress, NewImplementation);
+    // await upgrades.forceImport(proxyAddress, NewImplementation);
 
     //Validate Upgrade
     // await upgrades.prepareUpgrade(proxyAddress, NewImplementation);

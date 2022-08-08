@@ -119,7 +119,7 @@ export const verify = async (contractAddress: string, args: any[]) => {
     })
     .catch(error => {
       if (error.message.toLowerCase().includes("already verified")) {
-        console.log("Already verified!");
+        console.log("Contract already verified");
       } else {
         console.log("[CAUGHT] Verification Error on Chain:"+chain, error);
       }
@@ -127,6 +127,3 @@ export const verify = async (contractAddress: string, args: any[]) => {
   }
   else console.log("Skip verification on Chain:"+chain);
 }
-
-
-
