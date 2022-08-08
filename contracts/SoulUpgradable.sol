@@ -179,7 +179,7 @@ contract SoulUpgradable is
         //Validate - Bot Protection
         // require(tx.origin == _msgSender(), "Bots not allowed");      //CANCELLED - Allow Contracts to Have Souls
         //One Per Account
-        require(to == address(this) || balanceOf(_msgSender()) == 0, "Requesting account already has a token");
+        require(to == address(this) || balanceOf(to) == 0, "Account already has a token");
         //Mint
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
@@ -195,9 +195,6 @@ contract SoulUpgradable is
     /// Token Transfer Rules
     function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal virtual override(ERC721Upgradeable) {
         super._beforeTokenTransfer(from, to, tokenId);
-        //Can't be owned by a Contract      //CANCELLED - Allow Contracts to have Souls
-        // require(to == address(this) || !to.isContract(), "Destination is a Contract");
-
         //Non-Transferable (by client)
         require(
             _msgSender() == owner()
