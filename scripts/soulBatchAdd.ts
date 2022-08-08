@@ -16,13 +16,14 @@ const contractAddr = contractAddrs[chain];
  * Migrate Contracts Between Hubs
  */
 async function main() {
-    if(0){
-        let soulContract = await ethers.getContractFactory("SoulUpgradable").then(res => res.attach(contractAddr.avatar));
-        for(let soul of getData()){
-            await soulContract.mintFor(soul.owner, soul.uri);
-            console.log(`Soul Added for Account:'${soul.owner}'`)
-        }
-    }
+  let soulContract = await ethers.getContractFactory("SoulUpgradable").then(res => res.attach(contractAddr.avatar));
+  for(let soul of getData()){
+    try{
+      await soulContract.mintFor(soul.owner, soul.uri);
+      console.log(`Soul Added for Account:'${soul.owner}'`)
+    }catch(error){
+      console.log("[CAUGHT] Skip Account:"+soul.owner, error);}
+  }
 }
 
 // We recommend this pattern to be able to use async/await everywhere
