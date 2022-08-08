@@ -44,10 +44,13 @@ async function main() {
     }
     // else console.log("History", contractAddr.history, ZERO_ADDR, (assoc.history == ZERO_ADDR));
   }
-  /* [WIP]
-  //Validate History
 
-  //Validate Souls
+  //TODO: Validate Game Extensions
+
+  /* [WIP]
+  //TODO: Validate History
+
+  //TODO: Validate Souls
   await ethers.getContractFactory("SoulUpgradable").then(async res =>  {
     let contract = res.attach(contractAddr.avatar);
     let hubAddr = await contract.hub();
