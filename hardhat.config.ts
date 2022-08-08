@@ -59,9 +59,11 @@ const config = {
     },
 
     mumbai: {
-      url: process.env.MUMBAI_RPC || "",
+      // url: process.env.MUMBAI_RPC || "",
       // url: "https://rpc-mumbai.maticvigil.com",
+      url: "https://polygon-mumbai.g.alchemy.com/v2/ccyKLe0OfwiowHcFkxKYBZBr2ViojXis",
       accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+      // gasPrice: 1000000000,
     },
     polygon: {
       url: "https://rpc-mainnet.maticvigil.com/",
