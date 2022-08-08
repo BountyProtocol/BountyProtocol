@@ -20,8 +20,8 @@ const contractAddr: any = {
     game: "0x964147d5215c43b33DDb81Db663efAeC776eC6a4", //0.5.2
     claim: "0x29B46D6463951A31bEfa095040eE33b4f4f63EeD", //0.5.2
     task: "0xB2a0e344528fE48EA6f392a24374A2F20c87658f", //0.5.2
-    hub: "0xf87AF5bC790CFB472603b66aC0A9EA366fbf1367", //0.5.2 (Proxy)
-    avatar: "0xc4F3156DA055e802347dfEf8d8f15d728053Bf78", // 0.5.2 (Proxy)
+    hub: "0x9956b603Eb5A081d23721e5e0c8839257A92c499", //0.5.2 (Proxy)
+    avatar: "0x5726eB1ba64F3FA0aAD002F273B625adA6e788ff", // 0.5.2 (Proxy)
     history: "0x95BD98a656C907fC037aF87Ea740fD94188Cd65f", // D4.4 (Proxy)
   },
   optimism_kovan:{
