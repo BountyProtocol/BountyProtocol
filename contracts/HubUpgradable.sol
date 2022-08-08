@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
-import "hardhat/console.sol";
+// import "hardhat/console.sol";
 
 import "@openzeppelin/contracts/proxy/beacon/BeaconProxy.sol";
 import "@openzeppelin/contracts/proxy/beacon/UpgradeableBeacon.sol";
@@ -115,7 +115,7 @@ contract HubUpgradable is
         if(actionRepo != address(0)) {
             try IProtocolEntity(actionRepo).setHub(newHubAddr) {}   //Failure should not be fatal
             catch Error(string memory reason) {
-                console.log("Failed to update Hub for ActionRepo Contract", reason);
+                // console.log("Failed to update Hub for ActionRepo Contract", reason);
             }
         }
         //Emit Hub Change Event
@@ -258,7 +258,7 @@ contract HubUpgradable is
         //Register as a Soul
         try ISoul(repo().addressGet("SBT")).mintFor(account, uri_) {}   //Failure should not be fatal
         catch Error(string memory reason) {
-            console.log("Failed to mint a soul for the new Contract", reason);
+            // console.log("Failed to mint a soul for the new Contract", reason);
         }
     }
 

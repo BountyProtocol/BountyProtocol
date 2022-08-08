@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
-import "hardhat/console.sol";
+// import "hardhat/console.sol";
 
 // import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
@@ -268,7 +268,7 @@ contract SoulUpgradable is
         if(ownerAccount.isContract()){
             try OwnableUpgradeable(ownerAccount).owner() //Failure should not be fatal
             returns (address contractOwner) {
-                console.log("Found Owner", contractOwner);
+                // console.log("Found Owner", contractOwner);
                 // solhint-disable-next-line avoid-tx-origin
                 return (contractOwner == _msgSender() || contractOwner == tx.origin);
             } 

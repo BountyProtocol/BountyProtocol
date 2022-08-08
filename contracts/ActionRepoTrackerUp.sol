@@ -19,7 +19,7 @@ import "./abstract/ERC1155GUIDTrackerUp.sol";
  */
 contract ActionRepoTrackerUp is 
         IActionRepo, 
-        Initializable,
+        // Initializable,
         ProtocolEntityUpgradable, 
         UUPSUpgradeable,
         ERC1155GUIDTrackerUp {
