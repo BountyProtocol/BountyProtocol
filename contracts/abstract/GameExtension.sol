@@ -53,7 +53,7 @@ abstract contract GameExtension is Context {
     }
       
     /// Get Hub
-    function hub() internal view returns (IHub) {
+    function hub() public view returns (IHub) {
         return IHub(getHubAddress());
     }  
 

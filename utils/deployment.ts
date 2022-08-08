@@ -26,7 +26,7 @@ export const deployUUPS = async (contractName: string, args: any[]) => {
 /// Deploy Game Extensions
 export const deployGameExt = async (hubContract: Contract) => {
   let verification:any = [];
-  // console.log("Start Deploying Game Extensions...");
+  console.log("Start Deploying Game Extensions...");
   //Game Extension: Court of Law
   await deployContract("CourtExt", []).then(async res => {
     await hubContract.assocSet("GAME_COURT", res.address);

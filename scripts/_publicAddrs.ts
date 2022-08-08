@@ -13,8 +13,8 @@ const publicAddr: any = {
     ruleRepo: "0xF8B45CB9c3A63bE93B63a382729C733cB988de69", //D1.0
   },
   mumbai:{
-    openRepo: "0x4fB72b6Eb2812D1aA333C168552E5B1444E02a23", //0.5.1
-    ruleRepo: "0x52C2B43aF9C85Fa181187a00B9C7B5058a81Bd09", //0.5.1
+    openRepo: "0x647DBF306fE835E231dB1f9d711364806467E20a", //0.5.2
+    ruleRepo: "0x196FA9eCFbf6cE2643E53dB477332aD68a80D20f", //0.5.2
   },
   optimism:{
     openRepo: "",

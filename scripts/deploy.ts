@@ -89,7 +89,7 @@ async function main() {
     //Deploy All Game Extensions & Set to Hub
     deployGameExt(hubContract);
     //Set RuleRepo to Hub
-    hubContract.assocSet("RULE_REPO", publicAddr.ruleRepo);
+    await hubContract.assocSet("RULE_REPO", publicAddr.ruleRepo);
     
     //Set Address
     contractAddr.hub = hubContract.address;
@@ -143,7 +143,7 @@ async function main() {
 
   //Validate Hub Associations
   if(!hubContract && contractAddr.hub) hubContract = await ethers.getContractFactory("HubUpgradable").then(res => res.attach(contractAddr.hub));
-  if(hubContract){
+  if(0 && hubContract){
     console.log("Validate Hub ", hubContract.address);
     let assoc: any = {};
     assoc.sbt = await hubContract.assocGet("SBT");
