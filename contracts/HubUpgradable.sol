@@ -170,13 +170,13 @@ contract HubUpgradable is
         );
         //Register as a Soul
         _mintSoul(address(newProxyContract), uri_);
+        //Event
+        emit ContractCreated("game", address(newProxyContract));
         
         //Set Type (to be called after creating a Soul)
         ICTXEntityUpgradable(address(newProxyContract)).confSet("type", type_);
         ICTXEntityUpgradable(address(newProxyContract)).confSet("role", type_);
 
-        //Event
-        emit ContractCreated("game", address(newProxyContract));
         //Remember
         _games[address(newProxyContract)] = true;
         //Register Game to Repo
@@ -204,6 +204,8 @@ contract HubUpgradable is
         );
         //Register as a Soul
         _mintSoul(address(newProxyContract), uri_);
+        //Event
+        emit ContractCreated("process", address(newProxyContract));
 
         //Set Type (to be called after creating a Soul)
         ICTXEntityUpgradable(address(newProxyContract)).confSet("type", type_);
@@ -211,8 +213,6 @@ contract HubUpgradable is
         //Set Container
         IProcedure(address(newProxyContract)).setParentCTX(_msgSender());
         
-        //Event
-        emit ContractCreated("process", address(newProxyContract));
         //Remember Parent
         _claims[address(newProxyContract)] = _msgSender();
         //Return
@@ -238,6 +238,8 @@ contract HubUpgradable is
         );
         //Register as a Soul
         _mintSoul(address(newProxyContract), uri_);
+        //Event
+        emit ContractCreated("process", address(newProxyContract));
 
         //Set Type (to be called after creating a Soul)
         ICTXEntityUpgradable(address(newProxyContract)).confSet("type", type_);
@@ -245,8 +247,6 @@ contract HubUpgradable is
         //Set Container
         IProcedure(address(newProxyContract)).setParentCTX(_msgSender());
         
-        //Event
-        emit ContractCreated("process", address(newProxyContract));
         //Remember Parent (Same as Claims)
         _claims[address(newProxyContract)] = _msgSender();
         //Return
