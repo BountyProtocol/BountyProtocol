@@ -27,12 +27,14 @@ export const deployUUPS = async (contractName: string, args: any[]) => {
 export const deployGameExt = async (hubContract: Contract) => {
   let verification:any = [];
   console.log("Start Deploying Game Extensions...");
+  /* [mumbai] FAILS W/reason: 'replacement fee too low', code: 'REPLACEMENT_UNDERPRICED',
   //Game Extension: Court of Law
   await deployContract("CourtExt", []).then(async res => {
     await hubContract.assocSet("GAME_COURT", res.address);
     console.log("(i) Deployed Game CourtExt Extension ", res.address);
     verification.push({name:"CourtExt", address:res.address, params:[]});
   });
+  */
   //Game Extension: mDAO
   await deployContract("MicroDAOExt", []).then(async res => {
     await hubContract.assocSet("GAME_MDAO", res.address);
