@@ -48,6 +48,7 @@ contract ProjectExt is GameExtension {
     function _registerNewClaim(address claimContract) private {
         //Register Child Contract
         repo().addressAdd("claim", claimContract);
+        // repo().addressAdd("task", claimContract);   //TODO: Change this to 'task' or 'child' or 'part'...
     }
 
 }
