@@ -154,7 +154,6 @@ contract TaskUpgradable is ITask
     }
 
     /// Split funds between different recipients (TBD: by relative share)
-    // _splitAndSend(uint256[] memory sbts, uint256 amount){
     function _splitAndSend(string memory role, address[] memory tokens) internal {
         //Get members in roles (subjects)
         uint256[] memory sbts = uniqueRoleMembers(role);

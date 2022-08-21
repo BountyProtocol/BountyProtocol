@@ -58,7 +58,6 @@ export const deployGameExt = async (hubContract: Contract) => {
 
   //Verify Contracts
   for(let item of verification){
-    console.log("Verify Contract:", item);
     await verify(item.address, item.params);
   }
 }
