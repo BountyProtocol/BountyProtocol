@@ -17,10 +17,12 @@ import "../interfaces/IEscrow.sol";
 abstract contract Escrow is IEscrow {
 
     //--- Events
-
+    //Events Inherited from PaymentSplitter.sol
     event PaymentReleased(address to, uint256 amount);
     event ERC20PaymentReleased(IERC20 indexed token, address to, uint256 amount);
     event PaymentReceived(address from, uint256 amount);
+    //Generic Funds Sent Event
+    event FundsSent(address to, uint256 amount, address token);
 
     //--- Storage
 
@@ -44,10 +46,11 @@ abstract contract Escrow is IEscrow {
      * @dev Triggers a transfer to `account` of the amount of Ether they are owed, according to their percentage of the
      * total shares and their previous withdrawals.
      */
-    function _release(address payable account, uint256 payment) internal {
-        require(payment > 0, "ESCROW:NOTHING_TO_RELEASE");
-        Address.sendValue(account, payment);
-        emit PaymentReleased(account, payment);
+    function _release(address payable account, uint256 amount) internal {
+        require(amount > 0, "ESCROW:NOTHING_TO_RELEASE");
+        Address.sendValue(account, amount);
+        emit PaymentReleased(account, amount);
+        emit FundsSent(account, amount, address(0));
     }
 
     /**
@@ -55,10 +58,11 @@ abstract contract Escrow is IEscrow {
      * percentage of the total shares and their previous withdrawals. `token` must be the address of an IERC20
      * contract.
      */
-    function _releaseToken(address token, address account, uint256 payment) internal {
-        require(payment > 0, "ESCROW:NOTHING_TO_RELEASE");
-        SafeERC20.safeTransfer(IERC20(token), account, payment);
-        emit ERC20PaymentReleased(IERC20(token), account, payment);
+    function _releaseToken(address token, address account, uint256 amount) internal {
+        require(amount > 0, "ESCROW:NOTHING_TO_RELEASE");
+        SafeERC20.safeTransfer(IERC20(token), account, amount);
+        emit ERC20PaymentReleased(IERC20(token), account, amount);
+        emit FundsSent(account, amount, token);
     }
 
     //-- Views
