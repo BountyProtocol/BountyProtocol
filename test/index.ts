@@ -184,7 +184,7 @@ describe("Protocol", function () {
       //Another Mint Call for Same Account Should Fail
       await expect(
         avatarContract.connect(tester).mint(test_uri)
-      ).to.be.revertedWith("Requesting account already has a token");
+      ).to.be.revertedWith("Account already has a token");
     });
 
     it("Should Index Addresses", async function () {
