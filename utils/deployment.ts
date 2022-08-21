@@ -126,5 +126,5 @@ export const verify = async (contractAddress: string, args: any[]) => {
       }
     });
   }
-  else console.log("Skip verification on Chain:"+chain);
+  // else console.log("Skip verification on Chain:"+chain);
 }
