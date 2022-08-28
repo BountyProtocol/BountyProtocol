@@ -47,7 +47,7 @@ const config = {
     hardhat: {
     },
     rinkeby: {
-      url: `https://rinkeby.infura.io/v3/${process.env.INFURA_KEY}`,
+      url: process.env.RINKEBY_RPC || "",
       accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
       gas: 2100000,
       gasPrice: 8000000000
