@@ -5,6 +5,7 @@ pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "../interfaces/IERC1155Tracker.sol";
 import "../interfaces/ISoul.sol";
 
 /**
@@ -14,10 +15,10 @@ import "../interfaces/ISoul.sol";
 abstract contract TrackerUpgradable {
     
     // Target Contract (External Source)
-    address _targetContract;
+    address internal _targetContract;
 
-    /// Get Target Contract
-    // function getTargetContract() public view virtual returns (address) {
+    /// Expose Target Contract
+    // function getTargetContract() public view virtual override returns (address) {
     //     return _targetContract;
     // }
 
