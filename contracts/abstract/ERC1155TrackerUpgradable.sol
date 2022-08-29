@@ -1,27 +1,25 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-// import "hardhat/console.sol";
-
 // import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
 // import "@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155ReceiverUpgradeable.sol";
 // import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-// import "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/IERC1155MetadataURIUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-
 import "../interfaces/IERC1155Tracker.sol";
-// import "../interfaces/ISoul.sol";
 import "../libraries/AddressArray.sol";
 import "../libraries/UintArray.sol";
 import "../abstract/TrackerUpgradable.sol";
 
 /**
  * @title ERC1155 Tracker Upgradable
- * @dev This contract is to be attached to an ERC721 (SoulBoundToken)  contract and mapped to its tokens
+ * @dev This contract is to be attached to an ERC721 (SoulBoundToken) contract and mapped to its tokens
+ * @dev Used for composibility and seamless connection to soulbound identitiy tokens
+ * @dev Balances are registered by owned token
+ * @dev Removed safeTranfer functions since this is not the responsibility of the target contract
  */
 abstract contract ERC1155TrackerUpgradable is 
         Initializable, 
@@ -40,7 +38,7 @@ abstract contract ERC1155TrackerUpgradable is
     // Manage Balances by External Token ID
     mapping(uint256 => mapping(uint256 => uint256)) private _balances;
 
-    //Index Unique Members for each TokenId
+    // Index Unique Members for each TokenId
     mapping(uint256 => uint256[]) internal _uniqueMemberTokens;
 
 
@@ -71,7 +69,6 @@ abstract contract ERC1155TrackerUpgradable is
     function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165Upgradeable, IERC165Upgradeable) returns (bool) {
         return
             // interfaceId == type(IERC1155Upgradeable).interfaceId ||
-            // interfaceId == type(IERC1155MetadataURIUpgradeable).interfaceId ||
             super.supportsInterface(interfaceId);
     }
 
@@ -101,11 +98,8 @@ abstract contract ERC1155TrackerUpgradable is
     function balanceOf(address account, uint256 id) public view override returns (uint256) {
         require(account != address(0), "ERC1155: address zero is not a valid owner");
         // return _balances[id][account];
-        // return _balances[id][getExtTokenId(account)];
-        // return balanceOfToken(getExtTokenId(account), id);
-        return balanceOfToken(_getExtTokenId(account), id); //Won't Fail if Token Doesn't Exist
-        // uint256 sbt = _getExtTokenId(account);
-        // return balanceOfToken(sbt, id);
+        // return balanceOfToken(getExtTokenId(account), id); //Failes if Token doesn't exist
+        return balanceOfToken(_getExtTokenId(account), id); //Won't Fail if Token doesn't exist
     }
 
     /**
@@ -154,137 +148,6 @@ abstract contract ERC1155TrackerUpgradable is
         return _operatorApprovals[account][operator];
     }
 
-    /**
-     * @dev See {IERC1155-safeTransferFrom}.
-     * /
-    function safeTransferFrom(
-        address from,
-        address to,
-        uint256 id,
-        uint256 amount,
-        bytes memory data
-    ) public virtual override {
-        require(
-            from == _msgSender() || isApprovedForAll(from, _msgSender()),
-            "ERC1155: caller is not owner nor approved"
-        );
-        _safeTransferFrom(from, to, id, amount, data);
-    }
-
-    /**
-     * @dev See {IERC1155-safeBatchTransferFrom}.
-     * /
-    function safeBatchTransferFrom(
-        address from,
-        address to,
-        uint256[] memory ids,
-        uint256[] memory amounts,
-        bytes memory data
-    ) public virtual override {
-        require(
-            from == _msgSender() || isApprovedForAll(from, _msgSender()),
-            "ERC1155: transfer caller is not owner nor approved"
-        );
-        _safeBatchTransferFrom(from, to, ids, amounts, data);
-    }
-
-    /**
-     * @dev Transfers `amount` tokens of token type `id` from `from` to `to`.
-     *
-     * Emits a {TransferSingle} event.
-     *
-     * Requirements:
-     *
-     * - `to` cannot be the zero address.
-     * - `from` must have a balance of tokens of type `id` of at least `amount`.
-     * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155Received} and return the
-     * acceptance magic value.
-     * /
-    function _safeTransferFrom(
-        address from,
-        address to,
-        uint256 id,
-        uint256 amount,
-        bytes memory data
-    ) internal virtual {
-        require(to != address(0), "ERC1155: transfer to the zero address");
-
-        address operator = _msgSender();
-        uint256[] memory ids = _asSingletonArray(id);
-        uint256[] memory amounts = _asSingletonArray(amount);
-
-        _beforeTokenTransfer(operator, from, to, ids, amounts, data);
-
-        uint256 sbtFrom = _getExtTokenId(from);
-        uint256 sbtTo = _getExtTokenId(to);
-
-        // uint256 fromBalance = _balances[id][from];
-        uint256 fromBalance = _balances[id][sbtFrom];
-        require(fromBalance >= amount, "ERC1155: insufficient balance for transfer");
-        unchecked {
-            // _balances[id][from] = fromBalance - amount;
-            _balances[id][sbtFrom] = fromBalance - amount;
-        }
-        // _balances[id][to] += amount;
-        _balances[id][sbtTo] += amount;
-
-        emit TransferSingle(operator, from, to, id, amount);
-        emit TransferByToken(operator, sbtFrom, sbtTo, id, amount);
-
-        _afterTokenTransfer(operator, from, to, ids, amounts, data);
-
-        // _doSafeTransferAcceptanceCheck(operator, from, to, id, amount, data);
-    }
-
-    /**
-     * @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {_safeTransferFrom}.
-     *
-     * Emits a {TransferBatch} event.
-     *
-     * Requirements:
-     *
-     * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155BatchReceived} and return the
-     * acceptance magic value.
-     * /
-    function _safeBatchTransferFrom(
-        address from,
-        address to,
-        uint256[] memory ids,
-        uint256[] memory amounts,
-        bytes memory data
-    ) internal virtual {
-        require(ids.length == amounts.length, "ERC1155: ids and amounts length mismatch");
-        require(to != address(0), "ERC1155: transfer to the zero address");
-
-        address operator = _msgSender();
-
-        _beforeTokenTransfer(operator, from, to, ids, amounts, data);
-
-        uint256 sbtFrom = _getExtTokenId(from);
-        uint256 sbtTo = _getExtTokenId(to);
-
-        for (uint256 i = 0; i < ids.length; ++i) {
-            uint256 id = ids[i];
-            uint256 amount = amounts[i];
-
-            // uint256 fromBalance = _balances[id][from];
-            uint256 fromBalance = _balances[id][sbtFrom];
-            require(fromBalance >= amount, "ERC1155: insufficient balance for transfer");
-            unchecked {
-                // _balances[id][from] = fromBalance - amount;
-                _balances[id][sbtFrom] = fromBalance - amount;
-            }
-            // _balances[id][to] += amount;
-            _balances[id][sbtTo] += amount;
-        }
-
-        emit TransferBatch(operator, from, to, ids, amounts);
-        emit TransferBatchByToken(operator, sbtFrom, sbtTo, ids, amounts);
-
-        _afterTokenTransfer(operator, from, to, ids, amounts, data);
-
-        // _doSafeBatchTransferAcceptanceCheck(operator, from, to, ids, amounts, data);
-    }
 
     /**
      * @dev Sets a new URI for all token types, by relying on the token type ID
@@ -605,52 +468,6 @@ abstract contract ERC1155TrackerUpgradable is
             }
         }
     }
-
-    /* Unecessary, because token's aren't really controlled by the account anymore
-    function _doSafeTransferAcceptanceCheck(
-        address operator,
-        address from,
-        address to,
-        uint256 id,
-        uint256 amount,
-        bytes memory data
-    ) private {
-        if (to.isContract()) {
-            try IERC1155ReceiverUpgradeable(to).onERC1155Received(operator, from, id, amount, data) returns (bytes4 response) {
-                if (response != IERC1155ReceiverUpgradeable.onERC1155Received.selector) {
-                    revert("ERC1155: ERC1155Receiver rejected tokens");
-                }
-            } catch Error(string memory reason) {
-                revert(reason);
-            } catch {
-                revert("ERC1155: transfer to non ERC1155Receiver implementer");
-            }
-        }
-    }
-
-    function _doSafeBatchTransferAcceptanceCheck(
-        address operator,
-        address from,
-        address to,
-        uint256[] memory ids,
-        uint256[] memory amounts,
-        bytes memory data
-    ) private {
-        if (to.isContract()) {
-            try IERC1155ReceiverUpgradeable(to).onERC1155BatchReceived(operator, from, ids, amounts, data) returns (
-                bytes4 response
-            ) {
-                if (response != IERC1155ReceiverUpgradeable.onERC1155BatchReceived.selector) {
-                    revert("ERC1155: ERC1155Receiver rejected tokens");
-                }
-            } catch Error(string memory reason) {
-                revert(reason);
-            } catch {
-                revert("ERC1155: transfer to non ERC1155Receiver implementer");
-            }
-        }
-    }
-    */
 
     function _asSingletonArray(uint256 element) private pure returns (uint256[] memory) {
         uint256[] memory array = new uint256[](1);

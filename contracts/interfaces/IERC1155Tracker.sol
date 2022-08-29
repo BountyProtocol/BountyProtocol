@@ -1,19 +1,13 @@
 // SPDX-License-Identifier: MIT
-
-// OpenZeppelin Contracts v4.4.1 (token/ERC1155/IERC1155.sol)
-
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol";
 
 /**
- * @dev Required interface of an ERC1155 compliant contract, as defined in the
- * https://eips.ethereum.org/EIPS/eip-1155[EIP].
- *
- * _Available since v3.1._
+ * @title ERC1155_Tracker Interface
+ * @dev This is a slightly modified version of the IERC1155 interface compliant contract, as defined in the
  */
 interface IERC1155Tracker is IERC165Upgradeable {
-
     
     /// Get Target Contract
     function getTargetContract() external view returns (address);
@@ -21,10 +15,12 @@ interface IERC1155Tracker is IERC165Upgradeable {
     /// Unique Members Addresses
     function uniqueMembers(uint256 id) external view returns (uint256[] memory);
     
-    /// Unique Members Count (w/Token)
+    /**
+     * Unique Members Count (w/Token)
+     * @dev This should be 
+     */
     function uniqueMembersCount(uint256 id) external view returns (uint256);
     
-
     /// Single Token Transfer
     event TransferByToken(address indexed operator, uint256 indexed fromOwnerToken, uint256 indexed toOwnerToken, uint256 id, uint256 value);
 
@@ -37,7 +33,7 @@ interface IERC1155Tracker is IERC165Upgradeable {
         uint256[] values
     );
 
-    //-- Tranditional Functions
+    //-- Tranditional ERC1155 Functions from here on
 
     /**
      * @dev Emitted when `value` tokens of token type `id` are transferred from `from` to `to` by `operator`.
@@ -112,44 +108,4 @@ interface IERC1155Tracker is IERC165Upgradeable {
      */
     function isApprovedForAll(address account, address operator) external view returns (bool);
 
-    /**
-     * @dev Transfers `amount` tokens of token type `id` from `from` to `to`.
-     *
-     * Emits a {TransferSingle} event.
-     *
-     * Requirements:
-     *
-     * - `to` cannot be the zero address.
-     * - If the caller is not `from`, it must be have been approved to spend ``from``'s tokens via {setApprovalForAll}.
-     * - `from` must have a balance of tokens of type `id` of at least `amount`.
-     * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155Received} and return the
-     * acceptance magic value.
-     * /
-    function safeTransferFrom(
-        address from,
-        address to,
-        uint256 id,
-        uint256 amount,
-        bytes calldata data
-    ) external;
-
-    /**
-     * @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {safeTransferFrom}.
-     *
-     * Emits a {TransferBatch} event.
-     *
-     * Requirements:
-     *
-     * - `ids` and `amounts` must have the same length.
-     * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155BatchReceived} and return the
-     * acceptance magic value.
-     * /
-    function safeBatchTransferFrom(
-        address from,
-        address to,
-        uint256[] calldata ids,
-        uint256[] calldata amounts,
-        bytes calldata data
-    ) external;
-    */
 }
