@@ -16,7 +16,7 @@ import "./interfaces/IRules.sol";
 import "./interfaces/IClaim.sol";
 import "./interfaces/IActionRepo.sol";
 import "./interfaces/ICTXEntityUpgradable.sol";
-import "./public/interfaces/IVotesRepoTracker.sol";
+import "./repositories/interfaces/IVotesRepoTracker.sol";
 import "./abstract/ERC1155RolesTrackerUp.sol";
 // import "./abstract/ProtocolEntityUpgradable.sol";
 import "./abstract/CTXEntityUpgradable.sol";
@@ -24,7 +24,7 @@ import "./abstract/Opinions.sol";
 import "./abstract/Posts.sol";
 import "./abstract/ProxyMulti.sol";  //Adds 1.529Kb
 // import "./interfaces/IRulesRepo.sol";
-// import "./public/interfaces/IOpenRepo.sol";
+// import "./repositories/interfaces/IOpenRepo.sol";
 // import "./libraries/DataTypes.sol";
 
 

@@ -9,7 +9,7 @@ import "../interfaces/IProtocolEntity.sol";
 import "../interfaces/IHub.sol";
 import "../libraries/DataTypes.sol";
 import "../abstract/ContractBase.sol";
-import "../public/interfaces/IOpenRepo.sol";
+import "../repositories/interfaces/IOpenRepo.sol";
 import "../libraries/Utils.sol";
 
 /**

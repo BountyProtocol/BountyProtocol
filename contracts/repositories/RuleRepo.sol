@@ -13,7 +13,7 @@ import "../interfaces/IRulesRepo.sol";
 import "../interfaces/IActionRepo.sol";
 import "../interfaces/IProtocolEntity.sol";
 import "../interfaces/IGameUp.sol";
-import "../public/interfaces/IOpenRepo.sol";
+import "../repositories/interfaces/IOpenRepo.sol";
 
 /**
  * @title Rule Repository

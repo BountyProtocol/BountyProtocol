@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.4;
 
-// import "../public/interfaces/IOpenRepo.sol";
+// import "../repositories/interfaces/IOpenRepo.sol";
 import "../abstract/GameExtension.sol";
 
 

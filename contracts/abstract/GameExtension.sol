@@ -3,7 +3,7 @@
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/utils/Context.sol";
-import "../public/interfaces/IOpenRepo.sol";
+import "../repositories/interfaces/IOpenRepo.sol";
 import "../interfaces/IERC1155RolesTracker.sol";
 import "../interfaces/IProtocolEntity.sol";
 import "../interfaces/IGameUp.sol";
