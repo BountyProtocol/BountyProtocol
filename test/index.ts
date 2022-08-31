@@ -753,7 +753,7 @@ describe("Protocol", function () {
       let taskData = {type:"BOUNTY", name: "Test Task", uri: test_uri2};
       let taskAddr = await this.projectContract.connect(admin).callStatic.taskMake(taskData.type, taskData.name, taskData.uri);
       // this.projectContract.connect(admin).taskMake(taskData.name, taskData.uri);
-      this.projectContract.connect(admin).taskMake(taskData.type, taskData.name, taskData.uri, {value}); //Fund on Creation
+      await this.projectContract.connect(admin).taskMake(taskData.type, taskData.name, taskData.uri, {value}); //Fund on Creation
       //Attach
       // this.task1 = await ethers.getContractFactory("TaskUpgradable").then(res => res.attach(taskAddr));
       this.task1 = await ethers.getContractAt('TaskUpgradable', taskAddr, admin);
