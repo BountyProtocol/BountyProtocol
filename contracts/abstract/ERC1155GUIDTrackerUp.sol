@@ -13,7 +13,7 @@ import "../interfaces/IERC1155GUIDTracker.sol";
 
 /**
  * @title 2D ERC1155Tracker -- Members + Groups (Meaningful Global Unique Identifiers for each Token ID)
- * @dev use GUID as a meaningful index
+ * @dev use GUID as a meaningful index that will always represent the same thing
  */
 abstract contract ERC1155GUIDTrackerUp is 
         IERC1155GUIDTracker, 

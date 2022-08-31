@@ -11,7 +11,7 @@ import "./ERC1155GUIDTrackerUp.sol";
 /**
  * @title Sub-Groups with Role NFTs
  * @dev ERC1155 using GUID as Role
- * To Extend Claims & Jutisdictions
+ * To serve as a base for meaningful tokens
  * - Create Roles
  * - Assign Roles
  * - Remove Roles
