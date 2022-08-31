@@ -26,7 +26,9 @@ abstract contract TrackerUpgradable {
     function __setTargetContract(address targetContract) internal virtual {
         //Validate Interfaces
         // require(IERC165(targetContract).supportsInterface(type(IERC721).interfaceId), "Target Expected to Support IERC721"); //Additional 0.238Kb
-        require(IERC165(targetContract).supportsInterface(type(ISoul).interfaceId), "Target contract expected to support ISoul");
+        require(IERC165(targetContract).supportsInterface(type(ISoul).interfaceId)
+            || IERC165(targetContract).supportsInterface(type(IERC721).interfaceId)
+            , "Target contract expected to support ISoul or IERC721");
         _targetContract = targetContract;
     }
 
