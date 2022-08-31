@@ -2,15 +2,16 @@
 pragma solidity ^0.8.0;
 
 // import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
-// import "@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155ReceiverUpgradeable.sol";
 // import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+
 import "../interfaces/IERC1155Tracker.sol";
-import "../libraries/AddressArray.sol";
+// import "../libraries/AddressArray.sol";
 import "../libraries/UintArray.sol";
 import "../abstract/TrackerUpgradable.sol";
 
@@ -29,7 +30,7 @@ abstract contract ERC1155TrackerUpgradable is
         IERC1155Tracker {
 
     using AddressUpgradeable for address;
-    using AddressArray for address[];
+    // using AddressArray for address[];
     using UintArray for uint256[];
     
     // Mapping from account to operator approvals
@@ -68,7 +69,7 @@ abstract contract ERC1155TrackerUpgradable is
      */
     function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165Upgradeable, IERC165Upgradeable) returns (bool) {
         return
-            // interfaceId == type(IERC1155Upgradeable).interfaceId ||
+            interfaceId == type(IERC1155Upgradeable).interfaceId ||
             super.supportsInterface(interfaceId);
     }
 

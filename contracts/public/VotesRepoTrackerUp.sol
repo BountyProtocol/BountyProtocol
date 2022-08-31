@@ -36,7 +36,6 @@ import "../abstract/TrackerUpgradable.sol";
  *
  * _Available since v4.5._
  */
-// abstract contract VotesUpgradeable is Initializable, IVotesUpgradeable, ContextUpgradeable, EIP712Upgradeable {
 contract VotesRepoUpgradable is 
         IVotesRepoTracker, 
         IVotesUpgradeable, 
