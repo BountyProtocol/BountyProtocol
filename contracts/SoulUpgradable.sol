@@ -55,7 +55,7 @@ contract SoulUpgradable is
     /// Initializer
     function initialize (address hub) public initializer {
         //Initializers
-        __ERC721_init("Soulbound Tokens (Persona)", "SOUL");
+        __ERC721_init("Soulbound Tokens (Identity)", "SBT");
         __ERC721URIStorage_init();
         __UUPSUpgradeable_init();
         __ProtocolEntity_init(hub);
@@ -166,7 +166,7 @@ contract SoulUpgradable is
     /// Update Token's Metadata
     function update(uint256 tokenId, string memory uri) external override returns (uint256) {
         //Validate Owner of Token
-        require(_isApprovedOrOwner(_msgSender(), tokenId) || _msgSender() == owner(), "caller is not owner nor approved");
+        require(_isApprovedOrOwner(_msgSender(), tokenId) || _msgSender() == owner(), "caller is not owner or approved");
         _setTokenURI(tokenId, uri);	//This Goes for Specific Metadata Set (IPFS and Such)
         //Emit URI Changed Event
         emit URI(uri, tokenId);
@@ -225,7 +225,7 @@ contract SoulUpgradable is
     /// Transfer Privileges are manged in the _beforeTokenTransfer function
     function transferFrom(address from, address to, uint256 tokenId) public virtual override {
         //solhint-disable-next-line max-line-length
-        // require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: caller is not token owner nor approved");
+        // require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: caller is not token owner or approved");
         _transfer(from, to, tokenId);
     }
 
