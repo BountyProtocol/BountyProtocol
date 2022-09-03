@@ -147,7 +147,7 @@ contract SoulUpgradable is
         return _mint(_msgSender(), tokenURI);
     }
 	
-    /* CANCELLED Lost-Souls Feature
+    /* CANCELLED same as mintFor(self)
     /// Add (Create New Token Without an Owner)
     function add(string memory tokenURI) external override returns (uint256) {
         //Mint
@@ -197,8 +197,9 @@ contract SoulUpgradable is
         super._beforeTokenTransfer(from, to, tokenId);
         //Non-Transferable (by client)
         require(
-            _msgSender() == owner()
-            || from == address(0)   //Minting
+            _msgSender() == owner() //Contract Owner
+            || _msgSender() == address(_HUB) //Hub
+            || from == address(0) //Minting
             , "Sorry, assets are non-transferable"
         );
         
@@ -221,8 +222,7 @@ contract SoulUpgradable is
     }
 
     /// Override transferFrom()
-    /// Remove Approval Check 
-    /// Transfer Privileges are manged in the _beforeTokenTransfer function
+    /// @dev Remove Approval Check. Transfer Privileges are manged in the _beforeTokenTransfer function
     function transferFrom(address from, address to, uint256 tokenId) public virtual override {
         //solhint-disable-next-line max-line-length
         // require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: caller is not token owner or approved");
