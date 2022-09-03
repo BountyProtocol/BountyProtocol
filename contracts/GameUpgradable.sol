@@ -262,34 +262,6 @@ contract GameUpgradable is IGame
     //     emit Nominate(_msgSender(), soulToken, uri_);
     // }
 
-    /* MOVED UP
-    /// Assign Someone Else to a Role
-    function roleAssign(address account, string memory role) public override roleExists(role) AdminOrOwner {
-        _roleAssign(account, role, 1);
-    }
-
-    /// Assign Tethered Token to a Role
-    function roleAssignToToken(uint256 ownerToken, string memory role) public override roleExists(role) AdminOrOwner {
-        _roleAssignToToken(ownerToken, role, 1);
-    }
-
-    /// Remove Someone Else from a Role
-    function roleRemove(address account, string memory role) public override roleExists(role) AdminOrOwner {
-        _roleRemove(account, role, 1);
-    }
-
-    /// Remove Tethered Token from a Role
-    function roleRemoveFromToken(uint256 ownerToken, string memory role) public override roleExists(role) AdminOrOwner {
-        _roleRemoveFromToken(ownerToken, role, 1);
-    }
-
-    /// Change Role Wrapper (Add & Remove)
-    function roleChange(address account, string memory roleOld, string memory roleNew) external override {
-        roleAssign(account, roleNew);
-        roleRemove(account, roleOld);
-    }
-    */
-
     /** TODO: DEPRECATE - Allow Uneven Role Distribution 
     * @dev Hook that is called before any token transfer. This includes minting and burning, as well as batched variants.
     *  - Max of Single Token for each account
