@@ -5,8 +5,8 @@ pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-import "../interfaces/IERC1155Tracker.sol";
 import "../interfaces/ISoul.sol";
+import "../interfaces/IERC1155Tracker.sol";
 
 /**
  * @title Tracker Contract Functions
@@ -27,8 +27,8 @@ abstract contract TrackerUpgradable {
         //Validate Interfaces
         // require(IERC165(targetContract).supportsInterface(type(IERC721).interfaceId), "Target Expected to Support IERC721"); //Additional 0.238Kb
         require(IERC165(targetContract).supportsInterface(type(ISoul).interfaceId)
-            || IERC165(targetContract).supportsInterface(type(IERC721).interfaceId)
-            , "Target contract expected to support ISoul or IERC721");
+            // || IERC165(targetContract).supportsInterface(type(IERC721).interfaceId)  //That actually won't work
+            , "Target contract expected to support ISoul");
         _targetContract = targetContract;
     }
 
@@ -50,12 +50,6 @@ abstract contract TrackerUpgradable {
         require(account != _targetContract, "ERC1155Tracker: source contract address is not a valid account");
         //Run function on destination contract
         return ISoul(_targetContract).tokenByAddress(account);
-        
-        // uint256 ownerToken = ISoul(_targetContract).tokenByAddress(account);
-        //Validate
-        // require(ownerToken != 0, "ERC1155Tracker: account not found on source contract");
-        //Return
-        // return ownerToken;
     }
     
     /// Get Owner Account By Owner Token
