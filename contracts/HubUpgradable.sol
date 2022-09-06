@@ -262,15 +262,6 @@ contract HubUpgradable is
         return address(newProxyContract);
     }
 
-    /// Mint a new SBT for Entity
-    function _mintSoul(address account, string calldata uri_) internal {
-        //Register as a Soul
-        try ISoul(repo().addressGet("SBT")).mintFor(account, uri_) {}   //Failure should not be fatal
-        catch Error(string memory reason) {
-            // console.log("Failed to mint a soul for the new Contract", reason);
-        }
-    }
-
     //--- Reputation
 
     /// Add Reputation (Positive or Negative)
@@ -295,13 +286,27 @@ contract HubUpgradable is
     }
 
     /// Mint an SBT for another account
-    function mintForAccount(address account, string memory tokenURI) external override activeGame returns (uint256) {
-        address SBTAddress = repo().addressGet("SBT");
+    function mintForAccount(address account, string calldata tokenURI) external override activeGame returns (uint256) {
+        // address SBTAddress = repo().addressGet("SBT");
         // uint256 sbt = ISoul(SBTAddress).tokenByAddress(account);
-        uint256 sbt = ISoul(SBTAddress).mintFor(account, tokenURI);
+        // uint256 sbt = ISoul(SBTAddress).mintFor(account, tokenURI);
+        uint256 sbt = _mintSoul(account, tokenURI);
         //Validate
         require(sbt != 0, "Failed to Mint Token");
         return sbt;
+    }
+
+    /// Mint a new SBT for Entity
+    function _mintSoul(address account, string calldata uri_) internal returns (uint256) {
+        //Register as a Soul
+        try ISoul(repo().addressGet("SBT")).mintFor(account, uri_) 
+        returns (uint256 sbt) {
+            return sbt;
+        }
+        catch Error(string memory reason) { //Failure should not be fatal
+            // console.log("Failed to mint a soul for the new Contract", reason);
+            return 0;
+        }
     }
 
     //--- Upgrades
