@@ -1,26 +1,33 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol";
+pragma solidity 0.8.4;
+
+import "@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155Upgradeable.sol";
 
 /**
  * @title ERC1155_Tracker Interface
- * @dev This is a slightly modified version of the IERC1155 interface compliant contract, as defined in the
+ * Based on OpenZeppelin Contracts v4.4.1 (token/ERC1155/IERC1155.sol)
+ * @dev Required interface of an ERC1155 compliant contract, as defined in the
+ * https://eips.ethereum.org/EIPS/eip-1155[EIP].
+ * with Added tracker functionality
  */
-interface IERC1155Tracker is IERC165Upgradeable {
-    
+interface IERC1155Tracker is IERC1155Upgradeable {
+
     /// Get Target Contract
     function getTargetContract() external view returns (address);
 
+    /// Get a Token ID Based on account address (Throws)
+    // function getExtTokenId(address account) external view returns(uint256);
+    
     /// Unique Members Addresses
     function uniqueMembers(uint256 id) external view returns (uint256[] memory);
     
-    /**
-     * Unique Members Count (w/Token)
-     * @dev This should be 
-     */
+    /// Unique Members Count (w/Token)
     function uniqueMembersCount(uint256 id) external view returns (uint256);
     
+    /// Check balance by SBT Token ID
+    function balanceOfToken(uint256 originTokenId, uint256 id) external view returns (uint256);
+
     /// Single Token Transfer
     event TransferByToken(address indexed operator, uint256 indexed fromOwnerToken, uint256 indexed toOwnerToken, uint256 id, uint256 value);
 
@@ -33,79 +40,5 @@ interface IERC1155Tracker is IERC165Upgradeable {
         uint256[] values
     );
 
-    //-- Tranditional ERC1155 Functions from here on
-
-    /**
-     * @dev Emitted when `value` tokens of token type `id` are transferred from `from` to `to` by `operator`.
-     */
-    event TransferSingle(address indexed operator, address indexed from, address indexed to, uint256 id, uint256 value);
-
-    /**
-     * @dev Equivalent to multiple {TransferSingle} events, where `operator`, `from` and `to` are the same for all
-     * transfers.
-     */
-    event TransferBatch(
-        address indexed operator,
-        address indexed from,
-        address indexed to,
-        uint256[] ids,
-        uint256[] values
-    );
-
-    /**
-     * @dev Emitted when `account` grants or revokes permission to `operator` to transfer their tokens, according to
-     * `approved`.
-     */
-    event ApprovalForAll(address indexed account, address indexed operator, bool approved);
-
-    /**
-     * @dev Emitted when the URI for token type `id` changes to `value`, if it is a non-programmatic URI.
-     *
-     * If an {URI} event was emitted for `id`, the standard
-     * https://eips.ethereum.org/EIPS/eip-1155#metadata-extensions[guarantees] that `value` will equal the value
-     * returned by {IERC1155MetadataURI-uri}.
-     */
-    event URI(string value, uint256 indexed id);
-
-    /**
-     * @dev Returns the amount of tokens of token type `id` owned by `account`.
-     *
-     * Requirements:
-     *
-     * - `account` cannot be the zero address.
-     */
-    function balanceOf(address account, uint256 id) external view returns (uint256);
-
-    /**
-     * Check balance by Origin Token ID
-     */
-    function balanceOfToken(uint256 originTokenId, uint256 id) external view returns (uint256);
-
-    /**
-     * @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {balanceOf}.
-     *
-     * Requirements:
-     *
-     * - `accounts` and `ids` must have the same length.
-     */
-    function balanceOfBatch(address[] calldata accounts, uint256[] calldata ids) external view returns (uint256[] memory);
-
-    /**
-     * @dev Grants or revokes permission to `operator` to transfer the caller's tokens, according to `approved`,
-     *
-     * Emits an {ApprovalForAll} event.
-     *
-     * Requirements:
-     *
-     * - `operator` cannot be the caller.
-     */
-    function setApprovalForAll(address operator, bool approved) external;
-
-    /**
-     * @dev Returns true if `operator` is approved to transfer ``account``'s tokens.
-     *
-     * See {setApprovalForAll}.
-     */
-    function isApprovedForAll(address account, address operator) external view returns (bool);
 
 }

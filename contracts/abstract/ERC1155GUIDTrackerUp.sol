@@ -8,7 +8,8 @@ pragma solidity 0.8.4;
 // import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";  //Track Token Supply & Check 
 // import "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
-import "../abstract/ERC1155TrackerUpgradable.sol";
+// import "../abstract/ERC1155TrackerUpgradable.sol";
+import "../abstract/ERC1155TrackerUpMin.sol";
 import "../interfaces/IERC1155GUIDTracker.sol";
 
 /**

@@ -10,7 +10,7 @@ import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-import "../interfaces/IERC1155Tracker.sol";
+import "../interfaces/IERC1155TrackerMin.sol";
 // import "../libraries/AddressArray.sol";
 import "../libraries/UintArray.sol";
 import "../abstract/Tracker.sol";
@@ -156,7 +156,7 @@ abstract contract ERC1155TrackerUpgradable is
 
     /**
      * @dev See {IERC1155-safeTransferFrom}.
-     */
+     * /
     function safeTransferFrom(
         address from,
         address to,
@@ -173,7 +173,7 @@ abstract contract ERC1155TrackerUpgradable is
 
     /**
      * @dev See {IERC1155-safeBatchTransferFrom}.
-     */
+     * /
     function safeBatchTransferFrom(
         address from,
         address to,
@@ -199,7 +199,7 @@ abstract contract ERC1155TrackerUpgradable is
      * - `from` must have a balance of tokens of type `id` of at least `amount`.
      * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155Received} and return the
      * acceptance magic value.
-     */
+     * /
     function _safeTransferFrom(
         address from,
         address to,
@@ -249,7 +249,7 @@ abstract contract ERC1155TrackerUpgradable is
      *
      * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155BatchReceived} and return the
      * acceptance magic value.
-     */
+     * /
     function _safeBatchTransferFrom(
         address from,
         address to,
