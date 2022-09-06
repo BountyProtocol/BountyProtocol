@@ -32,41 +32,24 @@ describe("Deployment", function () {
         openRepoContract = await deployUUPS("OpenRepoUpgradable", []);
 
         //--- Game Implementation
-        gameContract = await ethers.getContractFactory("GameUpgradable").then(res => res.deploy());
+        gameContract = await deployContract("GameUpgradable", []);
         await gameContract.deployed();
 
         //--- Claim Implementation
-        claimContract = await ethers.getContractFactory("ClaimUpgradable").then(res => res.deploy());
+        claimContract = await deployContract("ClaimUpgradable", []);
         await claimContract.deployed();
     });
 
     it("Should Deploy Upgradable Hub Contract", async function () {
-        /*
-        //Deploy Hub Upgradable
-        const proxyHub = await deployUUPS("HubUpgradable", [
-            openRepoContract.address,
-            gameContract.address,
-            claimContract.address
-        ]);
-        await proxyHub.deployed();
-        hubContract = proxyHub;
-        */
         hubContract = await deployHub(openRepoContract.address);
         // console.log("HubUpgradable deployed to:", proxyHub.address);
     });
 
     it("Should Change Hub", async function () {
         //Deploy Another Hub Upgradable
-        /*
-        const proxyHub2 = await deployUUPS("HubUpgradable", [
-            openRepoContract.address,
-            gameContract.address,
-            claimContract.address
-        ]);
-        await proxyHub2.deployed();
-        */
         const proxyHub2 = await deployHub(openRepoContract.address);
         // console.log("Hub Address:", hubContract.address);
+        //Change Hub
         proxyHub2.hubChange(hubContract.address);
     });
 

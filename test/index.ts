@@ -696,13 +696,12 @@ describe("Protocol", function () {
       // await hubContract.gameMake(game.type, game.name, test_uri);
       ++soulTokenId;
 
-      
       // await expect(tx1).to.emit(this.openRepo, 'StringSet').withArgs("type", gameMDAOData.type);
       // await expect(tx1).to.emit(this.openRepo, 'StringSet').withArgs("role", gameMDAOData.type);
 
-
       //Init Game Contract Object
       this.mDAOGameContract = await ethers.getContractFactory("GameUpgradable").then(res => res.attach(gameMDAOAddr));
+      
       //Attach Project Functionality
       this.mDAOContract = await ethers.getContractFactory("MicroDAOExt").then(res => res.attach(gameMDAOAddr));
       //Attach Project Functionality
@@ -726,15 +725,9 @@ describe("Protocol", function () {
       // await expect(tx2).to.emit(this.openRepo, 'StringSet').withArgs("type", game.type);
       // await expect(tx2).to.emit(this.openRepo, 'StringSet').withArgs("role", game.type);
 
-
-
-      
-
       //Init Game Contract Object
-      // this.projectGameContract = await ethers.getContractFactory("GameUpgradable").then(res => res.attach(gameProjAddr));
       this.projectGameContract = await ethers.getContractAt('GameUpgradable', gameProjAddr);
       //Attach Project Functionality
-      // this.projectContract = await ethers.getContractFactory("ProjectExt").then(res => res.attach(gameProjAddr));
       this.projectContract = await ethers.getContractAt('ProjectExt', gameProjAddr);
 
       //Soul Tokens
@@ -1035,7 +1028,8 @@ describe("Protocol", function () {
       expect(claimAddr).to.be.properAddress;
 
       //Init Claim Contract
-      this.claimContract = await ethers.getContractFactory("ClaimUpgradable").then(res => res.attach(claimAddr));
+      // this.claimContract = await ethers.getContractFactory("ClaimUpgradable").then(res => res.attach(claimAddr));
+      this.claimContract = await ethers.getContractAt('ClaimUpgradable', claimAddr);
 
       //Expect Claim Created Event
       // await expect(tx).to.emit(gameContract, 'ClaimCreated').withArgs(1, claimAddr);   //DEPRECATED
