@@ -229,7 +229,6 @@ contract HubUpgradable is
             _beacons["task"],
             abi.encodeWithSelector(
                 IProcedure( payable(address(0)) ).initialize.selector,
-                // type_,          //Type                          //MOVED - DEPRECATE
                 name_,          //Name
                 uri_            //Contract URI
             )

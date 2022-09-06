@@ -26,11 +26,6 @@ contract ClaimUpgradable is IClaim
     using CountersUpgradeable for CountersUpgradeable.Counter;
     CountersUpgradeable.Counter internal _ruleIds;  //Track Last Rule ID
 
-    // // Contract name
-    // string public name;
-    // // Contract symbol
-    // string public symbol;
-
     //Rules Reference
     mapping(uint256 => DataTypes.RuleRef) internal _rules;      // Mapping for Claim Rules
     mapping(uint256 => bool) public decision;                   // Mapping for Rule Decisions
