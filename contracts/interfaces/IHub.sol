@@ -25,6 +25,9 @@ interface IHub {
     /// Register a new upgradable beacon
     function beaconAdd(string memory name, address implementation) external;
 
+    /// Make a new ERC1155Tracker
+    function makeERC1155(string calldata uri_) external returns (address);
+
     /// Make a new Game
     function gameMake(
         string calldata type_,

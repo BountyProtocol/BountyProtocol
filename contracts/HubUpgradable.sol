@@ -49,7 +49,7 @@ contract HubUpgradable is
     string public constant override symbol = "HUB";
     mapping(string => address) internal _beacons; // Mapping for Active Game Contracts
     mapping(address => bool) internal _games; // Mapping for Active Game Contracts
-    mapping(address => address) internal _claims; // Mapping for Claim Contracts  [G] => [R]
+    mapping(address => address) internal _procedures; // Mapping for Claim Contracts  [G] => [R]
 
 
     //--- Modifiers
@@ -193,7 +193,6 @@ contract HubUpgradable is
             _beacons["claim"],
             abi.encodeWithSelector(
                 IProcedure( payable(address(0)) ).initialize.selector,
-                // type_,          //Type
                 name_,          //Name
                 uri_            //Contract URI
             )
@@ -210,7 +209,7 @@ contract HubUpgradable is
         IProcedure(address(newProxyContract)).setParentCTX(_msgSender());
         
         //Remember Parent
-        _claims[address(newProxyContract)] = _msgSender();
+        _procedures[address(newProxyContract)] = _msgSender();
         //Return
         return address(newProxyContract);
     }
@@ -242,7 +241,27 @@ contract HubUpgradable is
         IProcedure(address(newProxyContract)).setParentCTX(_msgSender());
         
         //Remember Parent (Same as Claims)
-        _claims[address(newProxyContract)] = _msgSender();
+        _procedures[address(newProxyContract)] = _msgSender();
+        //Return
+        return address(newProxyContract);
+    }
+
+    /// Make a new ERC1155Tracker
+    function makeERC1155(string calldata uri_) public override returns (address) {
+
+        //Deploy (Same as Claim)
+        BeaconProxy newProxyContract = new BeaconProxy(
+            _beacons["erc1155"],
+            abi.encodeWithSignature("initialize()")
+        );
+        //Register as a Soul
+        _mintSoul(address(newProxyContract), uri_);
+        //Event
+        emit ContractCreated("erc1155", address(newProxyContract));
+        
+        //Remember Parent (Same as Claims)
+        _procedures[address(newProxyContract)] = _msgSender();
+        
         //Return
         return address(newProxyContract);
     }
