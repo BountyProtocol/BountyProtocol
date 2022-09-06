@@ -91,21 +91,6 @@ contract HubUpgradable is
         _beaconAdd("task", taskContract);
     }
 
-    /// Register a new upgradable beacon
-    function beaconAdd(string memory name, address implementation) external onlyOwner override {
-        _beaconAdd(name, implementation);
-    }
-
-    /// Register a new upgradable beacon
-    function _beaconAdd(string memory name, address implementation) internal {
-        //Validate
-        require(_beacons[name] == address(0), "Beacon already exists");
-        //Init Contract Beacon
-        UpgradeableBeacon _beacon = new UpgradeableBeacon(implementation);
-        //Save Address
-        _beacons[name] = address(_beacon);
-    }
-
     /// Upgrade Permissions
     function _authorizeUpgrade(address newImplementation) internal onlyOwner override { }
 
@@ -309,8 +294,23 @@ contract HubUpgradable is
         }
     }
 
-    //--- Upgrades
-    
+    //--- Upgrades & Beacon Management
+ 
+    /// Register a new upgradable beacon
+    function beaconAdd(string memory name, address implementation) external onlyOwner override {
+        _beaconAdd(name, implementation);
+    }
+
+    /// Register a new upgradable beacon
+    function _beaconAdd(string memory name, address implementation) internal {
+        //Validate
+        require(_beacons[name] == address(0), "Beacon already exists");
+        //Init Contract Beacon
+        UpgradeableBeacon _beacon = new UpgradeableBeacon(implementation);
+        //Save Address
+        _beacons[name] = address(_beacon);
+    }
+
     /// Generic ImplementationUpgrade
     function upgradeImplementation(string memory key, address newImplementation) public onlyOwner {
         //Upgrade Beacon
