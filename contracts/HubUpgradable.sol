@@ -84,14 +84,21 @@ contract HubUpgradable is
         //Set Contract URI
         // _setContractURI(uri_);
         //Init Game Contract Beacon
-        UpgradeableBeacon _beaconJ = new UpgradeableBeacon(gameContract);
-        _beacons["game"] = address(_beaconJ);
+        _beaconAdd("game", gameContract);
         //Init Claim Contract Beacon
-        UpgradeableBeacon _beaconC = new UpgradeableBeacon(claimContract);
-        _beacons["claim"] = address(_beaconC);
+        _beaconAdd("claim", claimContract);
         //Init Task Contract Beacon
-        UpgradeableBeacon _beaconT = new UpgradeableBeacon(taskContract);
-        _beacons["task"] = address(_beaconT);
+        _beaconAdd("task", taskContract);
+    }
+
+    /// Register a new upgradable beacon
+    function _beaconAdd(string memory name, address implementation) internal {
+        //Validate
+        require(_beacons[name] == address(0), "Beacon already exists");
+        //Init Contract Beacon
+        UpgradeableBeacon _beacon = new UpgradeableBeacon(implementation);
+        //Save Address
+        _beacons[name] = address(_beacon);
     }
 
     /// Upgrade Permissions
