@@ -196,8 +196,7 @@ contract HubUpgradable is
             _beacons["claim"],
             abi.encodeWithSelector(
                 IProcedure( payable(address(0)) ).initialize.selector,
-                _msgSender(),   //Birth Parent (Container)
-                type_,          //Type
+                // type_,          //Type
                 name_,          //Name
                 uri_            //Contract URI
             )
@@ -230,8 +229,7 @@ contract HubUpgradable is
             _beacons["task"],
             abi.encodeWithSelector(
                 IProcedure( payable(address(0)) ).initialize.selector,
-                _msgSender(),   //Birth Parent (Container)      //MOVED - DEPRECATE
-                type_,          //Type                          //MOVED - DEPRECATE
+                // type_,          //Type                          //MOVED - DEPRECATE
                 name_,          //Name
                 uri_            //Contract URI
             )

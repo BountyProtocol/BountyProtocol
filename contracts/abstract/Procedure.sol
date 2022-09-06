@@ -78,8 +78,6 @@ abstract contract Procedure is IProcedure
 
     /// Initializer
     function initialize (
-        address container,
-        string calldata type_,
         string memory name_, 
         string calldata uri_
     ) public virtual override initializer {

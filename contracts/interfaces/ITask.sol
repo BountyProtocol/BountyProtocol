@@ -3,14 +3,6 @@ pragma solidity 0.8.4;
 
 interface ITask {
 
-    //** Already Supported
-
-    /// Initialize
-    // function initialize(address hub, string calldata name_, string calldata uri_) external payable;
-
-    /// Arbitrary contract symbol
-    // function symbol() external view returns (string memory);
-
     /// Stage: Open
     function stageOpen() external;
 

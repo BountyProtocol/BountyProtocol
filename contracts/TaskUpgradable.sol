@@ -35,12 +35,10 @@ contract TaskUpgradable is ITask
 
     /// Initializer
     function initialize (
-        address container,
-        string calldata type_,
         string memory name_, 
         string calldata uri_ 
     ) public override initializer {
-        super.initialize(container, type_, name_, uri_);
+        super.initialize(name_, uri_);
         symbol = "TASK";
         // _roleAssign(treasury, "donation", 1);    //TODO: Add Donation Config for Treasury? 
     }
