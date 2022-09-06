@@ -1,4 +1,4 @@
-# The Bounty Protocol 
+# The Solidify Protocol 
 
 Using the magic of decentralized cryptography to create a highe-level DeSoc building blocks out of composible smart contracts and NFTs.
 
