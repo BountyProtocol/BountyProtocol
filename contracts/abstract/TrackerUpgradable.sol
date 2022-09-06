@@ -17,10 +17,12 @@ abstract contract TrackerUpgradable {
     // Target Contract (External Source)
     address internal _targetContract;
 
+    /* Need to have this on the child contract
     /// Expose Target Contract
-    // function getTargetContract() public view virtual override returns (address) {
-    //     return _targetContract;
-    // }
+    function getTargetContract() public view virtual returns (address) {
+        return _targetContract;
+    }
+    */
 
     /// Set Target Contract
     function __setTargetContract(address targetContract) internal virtual {
