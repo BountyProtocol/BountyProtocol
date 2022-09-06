@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
-
 pragma solidity 0.8.4;
+
+// import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+// import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721MetadataUpgradeable.sol";
 
 /**
  * @title Soulbound Token Interface
@@ -42,6 +44,9 @@ interface ISoul {
 
     /// Post
     function post(uint256 tokenId, string calldata uri_) external;
+
+    /// Return Token URI by Address
+    function accountURI(address account) external view returns (string memory);
 
     //--- Events
     

@@ -28,13 +28,12 @@ import "./libraries/Utils.sol";
  *  - [TODO] Orphan tokens can be claimed/linked
  */
 contract SoulUpgradable is 
-        ISoul, 
-        Initializable,
+        // Initializable,
         ProtocolEntityUpgradable, 
+        ISoul, 
         UUPSUpgradeable,
         Opinions,
         ERC721URIStorageUpgradeable {
-        // ERC721URIStorage {
     
     //--- Storage
     
@@ -86,8 +85,13 @@ contract SoulUpgradable is
     }
 
     /// Get Token ID by Address
-    function tokenByAddress(address owner) external view override returns (uint256) {
+    function tokenByAddress(address owner) public view override returns (uint256) {
         return _owners[owner];
+    }
+    
+    /// Return Token URI by Address
+    function accountURI(address account) external view override returns (string memory){
+        return tokenURI(tokenByAddress(account));
     }
 
     /**
@@ -132,7 +136,7 @@ contract SoulUpgradable is
     }
     
     //** Token Actions **/
-    
+
     /// Mint (Create New Token for Someone Else)
     function mintFor(address to, string memory tokenURI) public override returns (uint256) {
         //Validate - Contract Owner 
@@ -281,6 +285,12 @@ contract SoulUpgradable is
         require(hasTokenControl(tokenId), "POST:SOUL_NOT_YOURS");
         //Post Event
         emit Post(_msgSender(), tokenId, uri_);
+    }
+
+
+    /// Run Custom Action
+    function runAction() external {
+
     }
 
 }
