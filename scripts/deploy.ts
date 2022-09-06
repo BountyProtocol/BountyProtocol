@@ -29,7 +29,6 @@ async function main() {
   //--- Game Implementation
   if(!contractAddr.game) {
     //Deploy Game
-    // let contract = await ethers.getContractFactory("GameUpgradable").then(res => res.deploy());
     let contract = await deployContract("GameUpgradable", []);
     await contract.deployed();
     

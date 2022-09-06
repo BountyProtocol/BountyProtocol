@@ -1,9 +1,3 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// When running the script with `npx hardhat run <script>` you'll find the Hardhat
-// Runtime Environment's members available in the global scope.
-
 import { ethers } from "hardhat";
 const { upgrades } = require("hardhat");
 
@@ -16,6 +10,7 @@ async function main() {
 
     //Game
     let gameContract = await ethers.getContractFactory("GameUpgradable").then(res => res.attach("0xd474f8655dd1bc1f9d8f78dbec24149a2755da5e"));
+    // let gameContract = await ethers.getContractAt('GameUpgradable', "0xd474f8655dd1bc1f9d8f78dbec24149a2755da5e");
 
     let rolehas = await gameContract.roleHas("0xE1a71E7cCCCc9D06f8bf1CcA3f236C0D04Da741B", "member");
     console.log("Account roleHas Member:", rolehas);

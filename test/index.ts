@@ -700,12 +700,13 @@ describe("Protocol", function () {
       // await expect(tx1).to.emit(this.openRepo, 'StringSet').withArgs("role", gameMDAOData.type);
 
       //Init Game Contract Object
-      this.mDAOGameContract = await ethers.getContractFactory("GameUpgradable").then(res => res.attach(gameMDAOAddr));
-      
+      this.mDAOGameContract = await ethers.getContractAt('GameUpgradable', gameMDAOAddr);
+
       //Attach Project Functionality
-      this.mDAOContract = await ethers.getContractFactory("MicroDAOExt").then(res => res.attach(gameMDAOAddr));
+      this.mDAOContract = await ethers.getContractAt('MicroDAOExt', gameMDAOAddr);
+
       //Attach Project Functionality
-      this.mDAOFundsContract = await ethers.getContractFactory("FundManExt").then(res => res.attach(gameMDAOAddr));
+      this.mDAOFundsContract = await ethers.getContractAt('FundManExt', gameMDAOAddr);
 
       //-- Deploy Project Game Extension
       let projectExtContract = await deployContract("ProjectExt", []);
@@ -748,7 +749,6 @@ describe("Protocol", function () {
       // this.projectContract.connect(admin).taskMake(taskData.name, taskData.uri);
       await this.projectContract.connect(admin).taskMake(taskData.type, taskData.name, taskData.uri, {value}); //Fund on Creation
       //Attach
-      // this.task1 = await ethers.getContractFactory("TaskUpgradable").then(res => res.attach(taskAddr));
       this.task1 = await ethers.getContractAt('TaskUpgradable', taskAddr, admin);
     });
 
@@ -867,7 +867,6 @@ describe("Protocol", function () {
 
       });
 
-      
       it("Project Should Create a new Task ", async function () {
         let value = 100; //ethers.utils.parseEther(0.001);
         let taskData = {type: "Bounty", name: "Test Task", uri: test_uri2};
@@ -876,10 +875,9 @@ describe("Protocol", function () {
         this.projectContract.connect(admin).taskMake(taskData.type, taskData.name, taskData.uri, {value}); //Fund on Creation
         //Attach
         this.task2 = await ethers.getContractFactory("TaskUpgradable").then(res => res.attach(taskAddr));
+        // this.task2 = await ethers.getContractAt('TaskUpgradable', taskAddr);
         // this.task2Procedure = await ethers.getContractFactory("IProcedure").then(res => res.attach(taskAddr));
-
         this.task2Procedure = await ethers.getContractAt('Procedure', taskAddr, admin);
-
       });
       
       it("Should Fund Task (ETH)", async function () {
