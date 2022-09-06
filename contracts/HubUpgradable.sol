@@ -92,6 +92,11 @@ contract HubUpgradable is
     }
 
     /// Register a new upgradable beacon
+    function beaconAdd(string memory name, address implementation) external onlyOwner override {
+        _beaconAdd(name, implementation);
+    }
+
+    /// Register a new upgradable beacon
     function _beaconAdd(string memory name, address implementation) internal {
         //Validate
         require(_beacons[name] == address(0), "Beacon already exists");

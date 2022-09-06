@@ -22,6 +22,9 @@ interface IHub {
     /// Mint an SBT for another account
     function mintForAccount(address account, string memory tokenURI) external returns (uint256);
 
+    /// Register a new upgradable beacon
+    function beaconAdd(string memory name, address implementation) external;
+
     /// Make a new Game
     function gameMake(
         string calldata type_,
