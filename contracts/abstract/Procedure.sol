@@ -84,7 +84,7 @@ abstract contract Procedure is IProcedure
         //Initializers
         // __ProtocolEntity_init(hub);
         __ProtocolEntity_init(msg.sender);  //Sender is the Hub
-        __setTargetContract(getSoulAddr());
+        _setTargetContract(getSoulAddr());
         //Set Contract URI
         _setContractURI(uri_);
         //Identifiers

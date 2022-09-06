@@ -12,27 +12,17 @@ import "../interfaces/IERC1155Tracker.sol";
  * @title Tracker Contract Functions
  * @dev To Extend Contracts with Token Tracking Funtionality
  */
-abstract contract TrackerUpgradable {
+abstract contract Tracker {
     
     // Target Contract (External Source)
     address internal _targetContract;
 
-    /* Need to have this on the child contract
+    /* Expected to be present in the child contract 
     /// Expose Target Contract
     function getTargetContract() public view virtual returns (address) {
         return _targetContract;
     }
-    */
-
-    /// Set Target Contract
-    function __setTargetContract(address targetContract) internal virtual {
-        //Validate Interfaces
-        // require(IERC165(targetContract).supportsInterface(type(IERC721).interfaceId), "Target Expected to Support IERC721"); //Additional 0.238Kb
-        require(IERC165(targetContract).supportsInterface(type(ISoul).interfaceId)
-            // || IERC165(targetContract).supportsInterface(type(IERC721).interfaceId)  //That actually won't work
-            , "Target contract expected to support ISoul");
-        _targetContract = targetContract;
-    }
+   */
 
     /// Get a Token ID Based on account address (Throws)
     function getExtTokenId(address account) public view returns (uint256) {
@@ -44,6 +34,17 @@ abstract contract TrackerUpgradable {
         require(ownerToken != 0, "ERC1155Tracker: requested account not found on source contract");
         //Return
         return ownerToken;
+    }
+    
+    /// Set Target Contract
+    /// @dev Call this on constructor/initializer
+   function _setTargetContract(address targetContract) internal {
+        //Validate Interfaces
+        // require(IERC165(targetContract).supportsInterface(type(IERC721).interfaceId), "Target Expected to Support IERC721"); //Additional 0.238Kb
+        require(IERC165(targetContract).supportsInterface(type(ISoul).interfaceId)
+            // || IERC165(targetContract).supportsInterface(type(IERC721).interfaceId)  //That actually won't work
+            , "Target contract expected to support ISoul");
+        _targetContract = targetContract;
     }
 
     /// Get a Token ID Based on account address

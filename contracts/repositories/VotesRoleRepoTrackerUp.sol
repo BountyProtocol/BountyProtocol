@@ -9,7 +9,7 @@ import "@openzeppelin/contracts-upgradeable/utils/cryptography/draft-EIP712Upgra
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/governance/utils/IVotesUpgradeable.sol";
 import "./interfaces/IVotesRepoTracker.sol";
-import "../abstract/TrackerUpgradable.sol";
+import "../abstract/Tracker.sol";
 
 /**
  * @dev Based on VotesUpgradeable  https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/v4.7.0/contracts/governance/utils/VotesUpgradeable.sol
@@ -41,7 +41,7 @@ contract VotesRoleRepoTrackerUp is
         IVotesRepoTracker, 
         // IVotesUpgradeable, 
         Initializable, 
-        TrackerUpgradable,
+        Tracker,
         ContextUpgradeable, 
         EIP712Upgradeable {
 

@@ -100,7 +100,7 @@ contract GameUpgradable is IGame
         //Initializers
         // __ProtocolEntity_init(hub);
         __ProtocolEntity_init(msg.sender);  //Birth Parent
-        __setTargetContract(repo().addressGetOf(address(_HUB), "SBT"));
+        _setTargetContract(repo().addressGetOf(address(_HUB), "SBT"));
         //Set Contract URI
         _setContractURI(uri_);
         //Identifiers
@@ -370,5 +370,4 @@ contract GameUpgradable is IGame
         _ruleRepo().ruleConfirmationUpdate(id, confirmation);
     }
 
-    
 }
