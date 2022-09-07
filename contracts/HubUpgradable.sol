@@ -238,6 +238,22 @@ contract HubUpgradable is
         
         //Remember Parent (Same as Claims)
         _procedures[address(newProxyContract)] = _msgSender();
+
+        //Return
+        return address(newProxyContract);
+    }
+
+    /// Make a new ERC721Tracker
+    function makeERC721(string calldata name_, string memory symbol_, string calldata uri_) public override returns (address) {
+        //Deploy
+        BeaconProxy newProxyContract = new BeaconProxy(
+            _beacons["erc721"],
+            abi.encodeWithSignature("initialize(string,string)", name_, symbol_)
+        );
+        //Register as a Soul
+        _mintSoul(address(newProxyContract), uri_);
+        //Event
+        emit ContractCreated("erc721", address(newProxyContract));
         //Return
         return address(newProxyContract);
     }
@@ -253,10 +269,6 @@ contract HubUpgradable is
         _mintSoul(address(newProxyContract), uri_);
         //Event
         emit ContractCreated("erc1155", address(newProxyContract));
-        
-        //Remember Parent (Same as Claims)
-        _procedures[address(newProxyContract)] = _msgSender();
-        
         //Return
         return address(newProxyContract);
     }
