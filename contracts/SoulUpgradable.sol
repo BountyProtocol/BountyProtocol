@@ -16,16 +16,16 @@ import "./abstract/ProtocolEntityUpgradable.sol";
 import "./libraries/Utils.sol";
 
 /**
- * @title Soulbound NFT Identity Tokens + Reputation Tracking
- * @dev Version 2.1
+ * @title Soulbound NFT Identity Tokens w/Reputation Tracking
+ * @dev Version 2.2
  *  - Contract is open for everyone to mint.
  *  - Max of one NFT assigned for each account
- *  - Can create un-assigned NFT (Kept on contract)
+ *  - Owner can mint tokens for other entities
+ *  - Lost-souls: Owner can create un-assigned SBTs (owned by this contract and managed by the owner)
  *  - Minted Token's URI is updatable by Token holder
  *  - Assets are non-transferable by owner
- *  - Tokens can be merged (multiple owners)
- *  - Owner can mint tokens for Contracts
- *  - [TODO] Orphan tokens can be claimed/linked
+ *  - Tokens can have multiple owners
+ *  - [TODO] Lost-souls can be claimed/linked
  */
 contract SoulUpgradable is 
         // Initializable,
@@ -58,8 +58,6 @@ contract SoulUpgradable is
         __ERC721URIStorage_init();
         __UUPSUpgradeable_init();
         __ProtocolEntity_init(hub);
-        //Set Contract URI
-        // _setContractURI(uri_);
     }
 
     /// Upgrade Permissions
