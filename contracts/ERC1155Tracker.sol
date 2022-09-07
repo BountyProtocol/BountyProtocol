@@ -20,7 +20,13 @@ contract ERC1155Tracker is ERC1155TrackerUpgradable,
         //Init Protocol Entity (Set Hub)
         __ProtocolEntity_init(msg.sender);
         //Remember Deployer's SBT
-        _deployerSBT = getExtTokenId(tx.origin);
+       _setOwner(getExtTokenId(tx.origin));
+    }
+
+    /// Revert to original Owner function
+    function _setOwner(uint256 ownerSBT) internal virtual {
+        // repo()
+        _deployerSBT = ownerSBT;
     }
 
     /// Owned by Original 
