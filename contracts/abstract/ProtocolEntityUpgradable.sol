@@ -9,7 +9,7 @@ import "../interfaces/IProtocolEntity.sol";
 import "../interfaces/IHub.sol";
 import "../interfaces/ISoul.sol";
 import "../libraries/DataTypes.sol";
-// import "../abstract/ContractBase.sol";
+import "../abstract/ContractBasePlacehodler.sol";
 import "../repositories/interfaces/IOpenRepo.sol";
 import "../libraries/Utils.sol";
 
@@ -18,7 +18,7 @@ import "../libraries/Utils.sol";
  */
 abstract contract ProtocolEntityUpgradable is 
         IProtocolEntity, 
-        // ContractBase, //DEPRECATED - ContractURI would now point to SBT
+        ContractBase, //DEPRECATED - ContractURI would now point to SBT
         OwnableUpgradeable {
     
     //--- Storage
