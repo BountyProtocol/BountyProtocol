@@ -13,14 +13,7 @@ interface IERC721Tracker is IERC721MetadataUpgradeable {
     /// Get Target Contract
     function getTargetContract() external view returns (address);
 
-    /// Unique Members Addresses
-    function uniqueMembers(uint256 id) external view returns (uint256[] memory);
-    
-    /// Unique Members Count (w/Token)
-    function uniqueMembersCount(uint256 id) external view returns (uint256);
-    
     /// Single Token Transfer
-    // event TransferByToken(address indexed operator, uint256 indexed fromOwnerToken, uint256 indexed toOwnerToken, uint256 id, uint256 value);    //ERC1155
-    event TransferByToken(uint256 indexed fromOwnerToken, uint256 indexed toOwnerToken, uint256 indexed id);
+    event TransferByToken(uint256 indexed fromSBT, uint256 indexed toSBT, uint256 indexed id);
 
 }
