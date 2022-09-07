@@ -11,12 +11,21 @@ import "./abstract/ProtocolEntityUpgradable.sol";
 contract ERC1155Tracker is ERC1155TrackerUpgradable,
     ProtocolEntityUpgradable {
 
+    uint256 private _deployerSBT;
+
     /// Initializer
     function initialize () public initializer {
         //Set Tracker
         _setTargetContract(repo().addressGetOf(address(_HUB), "SBT"));
         //Init Protocol Entity (Set Hub)
         __ProtocolEntity_init(msg.sender);
+        //Remember Deployer's SBT
+        _deployerSBT = getExtTokenId(tx.origin);
+    }
+
+    /// Owned by Original 
+    function owner() public view override returns (address) {
+        return _getAccount(_deployerSBT);
     }
 
     function mint(
@@ -24,7 +33,7 @@ contract ERC1155Tracker is ERC1155TrackerUpgradable,
         uint256 id,
         uint256 value,
         bytes memory data
-    ) public {
+    ) public onlyOwner {
         _mint(to, id, value, data);
     }
 
@@ -33,7 +42,7 @@ contract ERC1155Tracker is ERC1155TrackerUpgradable,
         uint256[] memory ids,
         uint256[] memory values,
         bytes memory data
-    ) public {
+    ) public onlyOwner {
         _mintBatch(to, ids, values, data);
     }
 
@@ -41,7 +50,7 @@ contract ERC1155Tracker is ERC1155TrackerUpgradable,
         address owner,
         uint256 id,
         uint256 value
-    ) public {
+    ) public onlyOwner {
         _burn(owner, id, value);
     }
 
@@ -49,7 +58,7 @@ contract ERC1155Tracker is ERC1155TrackerUpgradable,
         address owner,
         uint256[] memory ids,
         uint256[] memory values
-    ) public {
+    ) public onlyOwner {
         _burnBatch(owner, ids, values);
     }
 }

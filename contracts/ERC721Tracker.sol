@@ -11,6 +11,8 @@ import "./abstract/ProtocolEntityUpgradable.sol";
 contract ERC721Tracker is ERC721TrackerUpgradable,
     ProtocolEntityUpgradable {
 
+    uint256 private _deployerSBT;
+
     /// Initializer
     function initialize (string memory name_, string memory symbol_) public initializer {
         //Set Tracker
@@ -19,13 +21,20 @@ contract ERC721Tracker is ERC721TrackerUpgradable,
         __ProtocolEntity_init(msg.sender);
         //ERC721 Init
         __ERC721_init(name_, symbol_);
+        //Remember Deployer's SBT
+        _deployerSBT = getExtTokenId(tx.origin);
     }
 
-    function mint(address to, uint256 id) public {
+    /// Revert to original Owner function
+    function owner() public view override returns (address) {
+        return _getAccount(_deployerSBT);
+    }
+
+    function mint(address to, uint256 id) public onlyOwner {
         _mint(to, id);
     }
 
-    function burn(uint256 id) public {
+    function burn(uint256 id) public onlyOwner {
         _burn(id);
     }
 

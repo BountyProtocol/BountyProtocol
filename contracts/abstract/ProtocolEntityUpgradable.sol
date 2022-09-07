@@ -48,7 +48,7 @@ abstract contract ProtocolEntityUpgradable is
     }    
 
     /// Inherit owner from Protocol's Hub
-    function owner() public view override(IProtocolEntity, OwnableUpgradeable) returns (address) {
+    function owner() public view virtual override(IProtocolEntity, OwnableUpgradeable) returns (address) {
         return _HUB.owner();
     }
 
