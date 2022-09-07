@@ -249,7 +249,6 @@ contract SoulUpgradable is
             hasTokenControlAccount(tokenId, _msgSender()) 
             // solhint-disable-next-line avoid-tx-origin
             || hasTokenControlAccount(tokenId, tx.origin)
-            || _isSecondaryOwner(tokenId)  //Owner of the owner contract
         );
     }
 
@@ -260,6 +259,7 @@ contract SoulUpgradable is
             _isApprovedOrOwner(account, tokenId)  // Token Owner or Approved 
             // ownerAccount == account //Token Owner (Support for Contract as Owner)
             || (ownerAccount == address(this) && owner() == account) //Unclaimed Tokens Controlled by Contract Owner Contract (DAO)
+            || _isSecondaryOwner(tokenId)  //Owner of the owner contract
         );
     }
 
@@ -271,7 +271,7 @@ contract SoulUpgradable is
             returns (address contractOwner) {
                 // console.log("Found Owner", contractOwner);
                 // solhint-disable-next-line avoid-tx-origin
-                return (contractOwner == _msgSender() || contractOwner == tx.origin);
+                return (contractOwner == _msgSender() || contractOwner == tx.origin);   //Ideally, any of the calling addresses in the stack.
             } 
             catch Error(string memory) {}
         }
