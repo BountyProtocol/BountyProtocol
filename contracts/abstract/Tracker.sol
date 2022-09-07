@@ -60,4 +60,9 @@ abstract contract Tracker {
         return IERC721(_targetContract).ownerOf(extTokenId);
     }
 
+    /// An 'owner' Address (Not Address 0 and not Target Contract)
+    function _isOwnerAddress(address addr) internal view returns (bool) {
+        return (addr != address(0) && addr != _targetContract);
+    }
+    
 }
