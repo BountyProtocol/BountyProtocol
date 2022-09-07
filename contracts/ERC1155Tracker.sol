@@ -4,7 +4,6 @@ pragma solidity 0.8.4;
 import "./abstract/ERC1155TrackerUpgradable.sol";
 import "./abstract/ProtocolEntityUpgradable.sol";
 
-
 /**
  * @title ERC1155Tracker
  * This mock just publicizes internal functions for testing purposes
