@@ -64,13 +64,6 @@ abstract contract ERC1155TrackerUpgradable is
         return uniqueMembers(id).length;
     }
 
-    /* MOVED Upwards
-    /// An 'owner' Address (Not Address 0 and not Target Contract)
-    function _isOwnerAddress(address addr) internal view returns (bool) {
-        return (addr != address(0) && addr != _targetContract);
-    }
-    */
-    
     /**
      * @dev See {IERC165-supportsInterface}.
      */
