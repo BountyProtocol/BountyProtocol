@@ -8,10 +8,7 @@ interface IProcedure {
     //-- Functions
 
     /// Initialize
-    function initialize(
-        string memory name_, 
-        string calldata uri_
-    ) external;
+    function initialize(string memory name_) external;
 
     /// Set Parent Container
     function setParentCTX(address container) external;

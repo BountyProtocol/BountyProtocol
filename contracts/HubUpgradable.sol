@@ -191,8 +191,7 @@ contract HubUpgradable is
             _beacons["claim"],
             abi.encodeWithSelector(
                 IProcedure( payable(address(0)) ).initialize.selector,
-                name_,          //Name
-                uri_            //Contract URI
+                name_
             )
         );
         //Register as a Soul
@@ -223,8 +222,7 @@ contract HubUpgradable is
             _beacons["task"],
             abi.encodeWithSelector(
                 IProcedure( payable(address(0)) ).initialize.selector,
-                name_,          //Name
-                uri_            //Contract URI
+                name_
             )
         );
         //Register as a Soul

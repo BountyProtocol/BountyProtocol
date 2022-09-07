@@ -77,10 +77,7 @@ abstract contract Procedure is IProcedure
     */
 
     /// Initializer
-    function initialize (
-        string memory name_, 
-        string calldata uri_
-    ) public virtual override initializer {
+    function initialize(string memory name_) public virtual override initializer {
         //Initializers
         // __ProtocolEntity_init(hub);
         __ProtocolEntity_init(msg.sender);  //Sender is the Hub

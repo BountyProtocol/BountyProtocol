@@ -7,7 +7,6 @@ import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "./libraries/DataTypes.sol";
 import "./interfaces/IClaim.sol";
 import "./interfaces/IRules.sol";
-import "./interfaces/ISoul.sol";
 import "./interfaces/IERC1155RolesTracker.sol";
 import "./interfaces/IGameUp.sol";
 import "./abstract/CTXEntityUpgradable.sol";
@@ -15,12 +14,10 @@ import "./abstract/ERC1155RolesTrackerUp.sol";
 import "./abstract/Procedure.sol";
 
 /**
- * @title Upgradable Claim Contract
- * @dev Version 2.2.0
+ * @title Upgradable Claim (Proven) Contract
+ * @dev Version 2.2.1
  */
-contract ClaimUpgradable is IClaim
-    , Procedure
-    {
+contract ClaimUpgradable is IClaim, Procedure {
 
     //--- Storage
     using CountersUpgradeable for CountersUpgradeable.Counter;
@@ -40,11 +37,8 @@ contract ClaimUpgradable is IClaim
     }
 
     /// Initializer
-    function initialize (
-        string memory name_, 
-        string calldata uri_
-    ) public virtual override initializer {
-        super.initialize(name_, uri_);
+    function initialize (string memory name_) public virtual override initializer {
+        super.initialize(name_);
         symbol = "CLAIM";
     }
 
