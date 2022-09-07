@@ -67,8 +67,6 @@ contract OpenRepoUpgradable is
     function initialize () public initializer {
         //Initializers
         __Ownable_init();
-        //Set Contract URI
-        // _setContractURI(uri_);
     }
 
     /// Upgrade Permissions
