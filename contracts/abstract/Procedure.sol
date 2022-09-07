@@ -86,7 +86,7 @@ abstract contract Procedure is IProcedure
         __ProtocolEntity_init(msg.sender);  //Sender is the Hub
         _setTargetContract(getSoulAddr());
         //Set Contract URI
-        _setContractURI(uri_);
+        // _setContractURI(uri_);       //DEPRECATE
         //Identifiers
         name = name_;
         //Auto-Set Creator Wallet as Admin

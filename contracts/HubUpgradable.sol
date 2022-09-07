@@ -81,8 +81,6 @@ contract HubUpgradable is
         //Initializers
         __Ownable_init();
         __UUPSUpgradeable_init();
-        //Set Contract URI
-        // _setContractURI(uri_);
         //Init Game Contract Beacon
         _beaconAdd("game", gameContract);
         //Init Claim Contract Beacon
@@ -248,8 +246,7 @@ contract HubUpgradable is
 
     /// Make a new ERC1155Tracker
     function makeERC1155(string calldata uri_) public override returns (address) {
-
-        //Deploy (Same as Claim)
+        //Deploy
         BeaconProxy newProxyContract = new BeaconProxy(
             _beacons["erc1155"],
             abi.encodeWithSignature("initialize()")

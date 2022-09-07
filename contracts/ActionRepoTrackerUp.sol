@@ -44,8 +44,6 @@ contract ActionRepoTrackerUp is
         __UUPSUpgradeable_init();
         __ProtocolEntity_init(hub);
         _setTargetContract( repo().addressGetOf(address(_HUB), "SBT") );
-        //Set Contract URI
-        // _setContractURI(uri_);
     }
 
     /// Upgrade Permissions

@@ -3,10 +3,6 @@ pragma solidity 0.8.4;
 
 // import "hardhat/console.sol";
 
-// import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
-// import "../interfaces/ISoul.sol";
-// import "../interfaces/IERC1155RolesTracker.sol";
-
 import "../interfaces/ICTXEntityUpgradable.sol";
 import "../abstract/ProtocolEntityUpgradable.sol";
 import "../abstract/ERC1155RolesTrackerUp.sol";
@@ -35,11 +31,7 @@ abstract contract CTXEntityUpgradable is
     /// Permissions Modifier
     modifier AdminOrOwner() virtual {
        //Validate Permissions
-        // require(owner() == _msgSender()      //Owner
-        //     || roleHas(tx.origin, "admin")    //Admin Role
-        //     || roleHas(_msgSender(), "admin")    //Admin Role
-        //     , "INVALID_PERMISSIONS");
-            require(_isAdminOrOwner(), "INVALID_PERMISSIONS");
+        require(_isAdminOrOwner(), "INVALID_PERMISSIONS");
         _;
     }
 
@@ -129,10 +121,10 @@ abstract contract CTXEntityUpgradable is
         _setRoleURI(role, _tokenURI);
     }
    
-    /// Set Contract URI    //DEPRECATE - Use Souls to track Contract data
+    /// Set Contract URI
     function setContractURI(string calldata contract_uri) external override AdminOrOwner {
+        //Set
         _setContractURI(contract_uri);
     }
-    
 
 }

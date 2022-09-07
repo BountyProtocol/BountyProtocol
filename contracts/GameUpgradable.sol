@@ -92,17 +92,16 @@ contract GameUpgradable is IGame
 
     /// Initializer
     function initialize (
-        // address hub, 
-        string calldata type_,
+        string calldata type_,      //DEPRECATE - Separate Call
         string calldata name_, 
         string calldata uri_
     ) public override initializer {
         //Initializers
         // __ProtocolEntity_init(hub);
-        __ProtocolEntity_init(msg.sender);  //Birth Parent
+        __ProtocolEntity_init(msg.sender);
         _setTargetContract(repo().addressGetOf(address(_HUB), "SBT"));
         //Set Contract URI
-        _setContractURI(uri_);
+        // _setContractURI(uri_);  //DEPRECATE - Use Soul
         //Identifiers
         name = name_;
         //Assign Creator as Admin & Member
@@ -116,9 +115,6 @@ contract GameUpgradable is IGame
         // _setRoleURI("admin", "");
         // _setRoleURI("member", "");
         // _setRoleURI("authority", "");
-        
-        //Set Entity  Type        
-        // confSet("type", type_);  //Moved to the HUB, After making a soul
     }
 
     //** Claim Functions
@@ -369,5 +365,24 @@ contract GameUpgradable is IGame
     function ruleConfirmationUpdate(uint256 id, DataTypes.Confirmation memory confirmation) external {
         _ruleRepo().ruleConfirmationUpdate(id, confirmation);
     }
+
+ 
+
+
+    /**
+     * https://github.com/makerdao/multicall/blob/master/src/Multicall.sol
+     * https://github.com/makerdao/multicall/blob/master/src/Multicall2.sol
+     * Structure Call: https://github.com/safe-global/safe-contracts/blob/da66b45ec87d2fb6da7dfd837b29eacdb9a604c5/src/utils/execution.ts
+     */
+    /// Run Custom Action
+    function runAction(bytes32 actionGUID) external {
+        if(actionGUID == actionGUID){
+            // address targetContract = '';
+            // (bool success, bytes memory result) = address(this).delegatecall(data[i]);
+
+        }
+    }
+
+    mapping(bytes32 => bytes) internal availableActions;
 
 }

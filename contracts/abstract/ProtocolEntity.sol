@@ -6,13 +6,18 @@ pragma solidity 0.8.4;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "../interfaces/IProtocolEntity.sol";
 import "../interfaces/IHub.sol";
+import "../interfaces/ISoul.sol";
+import "../repositories/interfaces/IOpenRepo.sol";
 import "../libraries/DataTypes.sol";
-import "../abstract/ContractBase.sol";
+// import "../abstract/ContractBase.sol";
+import "../libraries/Utils.sol";
 
 /**
  * Common Protocol Functions
  */
-abstract contract ProtocolEntity is IProtocolEntity, ContractBase, Ownable {
+abstract contract ProtocolEntity is IProtocolEntity, 
+        // ContractBase, 
+        Ownable {
     
     //--- Storage
 
@@ -25,6 +30,12 @@ abstract contract ProtocolEntity is IProtocolEntity, ContractBase, Ownable {
     constructor(address hub) {
         //Set Protocol's Hub Address
         _setHub(hub);
+    }
+
+    /// Contract URI
+    function contractURI() public view override returns (string memory) {
+         //Run function on destination contract
+        return ISoul(getSoulAddr()).accountURI(address(this));
     }
 
     /// Inherit owner from Protocol's Hub
@@ -54,6 +65,33 @@ abstract contract ProtocolEntity is IProtocolEntity, ContractBase, Ownable {
         require(Utils.stringMatch(IHub(hubAddr).role(), "Hub"), "Invalid Hub Contract");
         //Set
         _HUB = IHub(hubAddr);
+    }
+
+    //** Data Repository 
+    
+    //Get Data Repo Address (From Hub)
+    function getRepoAddr() public view override returns (address) {
+        return _HUB.getRepoAddr();
+    }
+
+    //Get Assoc Repo
+    function repo() internal view returns (IOpenRepo) {
+        return IOpenRepo(getRepoAddr());
+    }
+
+    /// Get Soul Contract Address
+    function getSoulAddr() internal view returns (address) {
+        return repo().addressGetOf(address(_HUB), "SBT");
+    }
+
+    /// Generic Config Get Function
+    // function confGet(string memory key) public view override returns (string memory) {
+    //     return repo().stringGet(key);
+    // }
+
+    /// Generic Config Set Function
+    function _confSet(string memory key, string memory value) internal {
+        repo().stringSet(key, value);
     }
 
 }

@@ -7,8 +7,9 @@ pragma solidity 0.8.4;
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "../interfaces/IProtocolEntity.sol";
 import "../interfaces/IHub.sol";
+import "../interfaces/ISoul.sol";
 import "../libraries/DataTypes.sol";
-import "../abstract/ContractBase.sol";
+// import "../abstract/ContractBase.sol";
 import "../repositories/interfaces/IOpenRepo.sol";
 import "../libraries/Utils.sol";
 
@@ -17,7 +18,7 @@ import "../libraries/Utils.sol";
  */
 abstract contract ProtocolEntityUpgradable is 
         IProtocolEntity, 
-        ContractBase, 
+        // ContractBase, //DEPRECATED - ContractURI would now point to SBT
         OwnableUpgradeable {
     
     //--- Storage
@@ -33,6 +34,18 @@ abstract contract ProtocolEntityUpgradable is
         //Set Protocol's Hub Address
         _setHub(hub);
     }
+
+    /// Contract URI
+    function contractURI() public view override returns (string memory) {
+        //Run function on destination contract
+        return ISoul(getSoulAddr()).accountURI(address(this));
+    }
+
+    /// Set Contract URI
+    function _setContractURI(string calldata contract_uri) internal {
+        uint256 tokenId = ISoul(getSoulAddr()).tokenByAddress(address(this));
+        ISoul(getSoulAddr()).update(tokenId, contract_uri);
+    }    
 
     /// Inherit owner from Protocol's Hub
     function owner() public view override(IProtocolEntity, OwnableUpgradeable) returns (address) {

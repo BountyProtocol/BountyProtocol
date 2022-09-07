@@ -18,4 +18,7 @@ interface IProtocolEntity {
     //Repo Address
     function getRepoAddr() external view returns (address);
 
+    /// Contract URI
+    function contractURI() external view returns (string memory);
+
 }
