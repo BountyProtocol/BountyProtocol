@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
-import "@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol";
+// import "@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol";
 
 /**
  * @title A slightly smaller version of the ERC1155_Tracker Interface to save on contract size
   */
-interface IERC1155Tracker is IERC165Upgradeable {
+interface IERC1155Tracker 
+        // is IERC165Upgradeable
+        {
     
     /// Get Target Contract
     function getTargetContract() external view returns (address);
