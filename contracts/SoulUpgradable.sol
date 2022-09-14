@@ -137,8 +137,11 @@ contract SoulUpgradable is
 
     /// Mint (Create New Token for Someone Else)
     function mintFor(address to, string memory tokenURI) public override returns (uint256) {
-        //Validate - Contract Owner 
-        require(_msgSender() == owner() || _msgSender() == address(_HUB), "Only Owner or Hub");
+        //Require Additional Privileges To Set URI
+        if (!Utils.stringMatch(tokenURI, "")) {
+            //Validate - Contract Owner 
+            require(_msgSender() == owner() || _msgSender() == address(_HUB), "Only Owner or Hub");
+        }
         //Mint
         return _mint(to, tokenURI);
     }
