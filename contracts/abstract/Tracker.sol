@@ -27,11 +27,11 @@ abstract contract Tracker {
     /// Get a Token ID Based on account address (Throws)
     function getExtTokenId(address account) public view returns (uint256) {
         //Validate Input
-        require(account != _targetContract, "ERC1155Tracker: source contract address is not a valid account");
+        require(account != _targetContract, "Tracker: source contract address is not a valid account");
         //Get
         uint256 ownerToken = _getExtTokenId(account);
         //Validate Output
-        require(ownerToken != 0, "ERC1155Tracker: requested account not found on source contract");
+        require(ownerToken != 0, "Tracker: requested account not found on source contract");
         //Return
         return ownerToken;
     }
@@ -64,5 +64,5 @@ abstract contract Tracker {
     function _isOwnerAddress(address addr) internal view returns (bool) {
         return (addr != address(0) && addr != _targetContract);
     }
-    
+
 }
