@@ -35,6 +35,15 @@ abstract contract Tracker {
         //Return
         return ownerToken;
     }
+
+    /// Get SBT for Account. Mint if needed.
+    function _getExtTokenIdOrMake(address account) internal returns (uint256) {
+        uint256 tokenId = _getExtTokenId(account);
+        if(tokenId == 0){
+            tokenId = ISoul(_targetContract).mintFor(account, "");
+        }
+        return tokenId;
+    }
     
     /// Set Target Contract
     /// @dev Call this on constructor/initializer
