@@ -12,6 +12,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
 import "./interfaces/ISoul.sol";
 import "./abstract/Opinions.sol";
+import "./abstract/SoulBonds.sol";
 import "./abstract/ProtocolEntityUpgradable.sol";
 import "./libraries/Utils.sol";
 
@@ -33,6 +34,7 @@ contract SoulUpgradable is
         ISoul, 
         UUPSUpgradeable,
         Opinions,
+        SoulBonds,
         ERC721URIStorageUpgradeable {
     
     //--- Storage
@@ -68,6 +70,12 @@ contract SoulUpgradable is
         return interfaceId == type(ISoul).interfaceId
             || interfaceId == type(IERC721Upgradeable).interfaceId 
             || super.supportsInterface(interfaceId);
+    }
+
+    /// Get the SBT ID of the current user (msg.sender)
+    function _getCurrentSBT() internal view override returns (uint256) { 
+        return tokenByAddress(_msgSender());
+        
     }
 
     //** Token Owner Index **/
