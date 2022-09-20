@@ -16,7 +16,6 @@ contract SafeERC721 is ERC721TrackerUpgradable,
     using CountersUpgradeable for CountersUpgradeable.Counter;
     CountersUpgradeable.Counter private _tokenIds;
 
-    uint256 private _deployerSBT;
 
     /// Initializer
     function initialize (
@@ -39,16 +38,13 @@ contract SafeERC721 is ERC721TrackerUpgradable,
 
     /// Revert to original Owner function
     function _setOwner(uint256 ownerSBT) internal virtual {
-        _deployerSBT = ownerSBT;
-        
-        // relation().set( _getExtTokenIdOrMake(tx.origin) );
-
-        ISoulBonds(getSoulAddr()).relSet("owner", ownerSBT);
+        ISoulBonds(_targetContract).relSet("owner", ownerSBT);
     }
 
     /// Revert to original Owner function
     function owner() public view override returns (address) {
-        return _getAccount(_deployerSBT);
+        uint256 ownerSBT = ISoulBonds(_targetContract).relGet("owner");
+        return _getAccount(ownerSBT);
     }
 
     /// Mint NFT

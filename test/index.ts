@@ -1353,7 +1353,11 @@ describe("Protocol", function () {
         toSBT: await soulContract.tokenByAddress(this.adminAddr),
       };
       await expect(tx).to.emit(soulContract, "RelSet").withArgs(eventData.fromSBT, eventData.key, eventData.toSBT);
-      
+    });
+    
+    it("Should be owned by deployer", async function () {
+      //Check Owner
+      expect(await this.safeERC721.owner()).to.equal(this.adminAddr);
     });
     
     it("Should mint", async function () {
@@ -1389,7 +1393,11 @@ describe("Protocol", function () {
       };
       await expect(tx).to.emit(soulContract, "RelSet")
         .withArgs(eventData.fromSBT, eventData.key, eventData.toSBT);
-      
+    });
+
+    it("Should be owned by deployer", async function () {
+      //Check Owner
+      expect(await this.safeERC1155.owner()).to.equal(this.adminAddr);
     });
     
     it("Should mint", async function () {

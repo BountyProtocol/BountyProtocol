@@ -13,8 +13,6 @@ import "./abstract/ProtocolEntityUpgradable.sol";
 contract SafeERC1155 is ERC1155TrackerUpgradable,
     ProtocolEntityUpgradable {
 
-    uint256 private _deployerSBT;
-
     /// Initializer
     function initialize (string calldata uri_, address owner_) public initializer {
         //Init Protocol Entity (Set Hub)
@@ -33,15 +31,14 @@ contract SafeERC1155 is ERC1155TrackerUpgradable,
 
     /// Revert to original Owner function
     function _setOwner(uint256 ownerSBT) internal virtual {
-        _deployerSBT = ownerSBT;
-        //Soul to Soul Connection
-        //A:SBT1 r:owner b:SBT2
-        ISoulBonds(getSoulAddr()).relSet("owner", ownerSBT);
+        //Soul to Soul Connection (A:SBT1 r:owner b:SBT2)
+        ISoulBonds(_targetContract).relSet("owner", ownerSBT);
     }
 
     /// Owned by Original 
     function owner() public view override returns (address) {
-        return _getAccount(_deployerSBT);
+        uint256 ownerSBT = ISoulBonds(_targetContract).relGet("owner");
+        return _getAccount(ownerSBT);
     }
 
     function mint(
