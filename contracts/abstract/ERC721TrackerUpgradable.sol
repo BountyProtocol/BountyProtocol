@@ -34,6 +34,9 @@ abstract contract ERC721TrackerUpgradable is
     // Token symbol
     string private _symbol;
 
+    // Optional mapping for token URIs
+    mapping(uint256 => string) private _tokenURIs;
+
     // Mapping from token ID to owner address
     // mapping(uint256 => address) private _owners;
     mapping(uint256 => uint256) private _owners;    //tokenId => sbtId
@@ -115,8 +118,33 @@ abstract contract ERC721TrackerUpgradable is
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         _requireMinted(tokenId);
 
-        string memory baseURI = _baseURI();
-        return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, tokenId.toString())) : "";
+        string memory _tokenURI = _tokenURIs[tokenId];
+        string memory base = _baseURI();
+
+        // If there is no base URI, return the token URI.
+        if (bytes(base).length == 0) {
+            return _tokenURI;
+        }
+        // If both are set, concatenate the baseURI and tokenURI (via abi.encodePacked).
+        if (bytes(_tokenURI).length > 0) {
+            return string(abi.encodePacked(base, _tokenURI));
+        }
+
+        return bytes(base).length > 0 ? string(abi.encodePacked(base, tokenId.toString())) : "";
+    }
+
+    /**
+     * @dev Sets `_tokenURI` as the tokenURI of `tokenId`.
+     *
+     * Requirements:
+     *
+     * - `tokenId` must exist.
+     */
+    function _setTokenURI(uint256 tokenId, string memory _tokenURI) internal virtual {
+        require(_exists(tokenId), "ERC721URIStorage: URI set of nonexistent token");
+        _tokenURIs[tokenId] = _tokenURI;
+        //Emit URI Changed Event
+        emit URI(_tokenURI, tokenId);
     }
 
     /**
@@ -339,6 +367,10 @@ abstract contract ERC721TrackerUpgradable is
         _balances[fromSBT] -= 1;
         delete _owners[fromSBT];
 
+        if (bytes(_tokenURIs[tokenId]).length != 0) {
+            delete _tokenURIs[tokenId];
+        }
+        
         emit Transfer(from, address(0), tokenId);
         emit TransferByToken(fromSBT, 0, tokenId);
 

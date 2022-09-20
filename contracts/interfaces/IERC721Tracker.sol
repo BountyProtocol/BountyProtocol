@@ -16,4 +16,7 @@ interface IERC721Tracker is IERC721MetadataUpgradeable {
     /// Single Token Transfer
     event TransferByToken(uint256 indexed fromSBT, uint256 indexed toSBT, uint256 indexed id);
 
+    /// Token URI Changed Event
+    event URI(string value, uint256 indexed id);
+
 }

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
+import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "./abstract/ERC721TrackerUpgradable.sol";
 import "./abstract/ProtocolEntityUpgradable.sol";
 
@@ -10,6 +11,9 @@ import "./abstract/ProtocolEntityUpgradable.sol";
  */
 contract ERC721Tracker is ERC721TrackerUpgradable,
     ProtocolEntityUpgradable {
+
+    using CountersUpgradeable for CountersUpgradeable.Counter;
+    CountersUpgradeable.Counter private _tokenIds;
 
     uint256 private _deployerSBT;
 
@@ -27,7 +31,9 @@ contract ERC721Tracker is ERC721TrackerUpgradable,
 
     /// Revert to original Owner function
     function _setOwner(uint256 ownerSBT) internal virtual {
-        // repo()
+        
+        // relation().set( getExtTokenId(tx.origin) );
+
         _deployerSBT = ownerSBT;
     }
 
@@ -36,10 +42,21 @@ contract ERC721Tracker is ERC721TrackerUpgradable,
         return _getAccount(_deployerSBT);
     }
 
-    function mint(address to, uint256 id) public onlyOwner {
-        _mint(to, id);
+    /// Mint NFT
+    function mint(address to, string memory uri) public onlyOwner returns (uint256) {
+        //Make sure account has SBT 
+        _getExtTokenIdOrMake(to);
+        //Mint
+        _tokenIds.increment();
+        uint256 newItemId = _tokenIds.current();
+        _mint(to, newItemId);
+        //Set URI
+        _setTokenURI(newItemId, uri);	//This Goes for Specific Metadata Set (IPFS and Such)
+        //Done
+        return newItemId;
     }
 
+    /// Burn NFT
     function burn(uint256 id) public onlyOwner {
         _burn(id);
     }
