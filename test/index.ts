@@ -22,7 +22,7 @@ const soulTokens: any = {};  //Soul Token Assignment
 describe("Protocol", function () {
   //Contract Instances
   let hubContract: Contract;
-  let avatarContract: Contract;
+  let soulContract: Contract;
   let actionContract: Contract;
   let gameContract: Contract;
   // let unOwnedTokenId: number;
@@ -70,6 +70,12 @@ describe("Protocol", function () {
     //--- Deploy Hub (UUPS)
     hubContract = await deployHub(this.openRepo.address);
 
+    //Deploy Additional Beacons
+    let erc721 = await deployContract("SafeERC721", []);
+    hubContract.beaconAdd("ERC721", erc721.address);
+    let erc1155 = await deployContract("SafeERC1155", []);
+    hubContract.beaconAdd("ERC1155", erc1155.address);
+
     //--- Deploy All Game Extensions
     deployGameExt(hubContract);
   
@@ -79,15 +85,15 @@ describe("Protocol", function () {
     await hubContract.assocSet("RULE_REPO", this.ruleRepo.address);
 
     //--- Soul Upgradable (UUPS)
-    avatarContract = await deployUUPS("SoulUpgradable", [hubContract.address]);
+    soulContract = await deployUUPS("SoulUpgradable", [hubContract.address]);
 
     //Set Avatar Contract to Hub
-    await hubContract.assocSet("SBT", avatarContract.address);
+    await hubContract.assocSet("SBT", soulContract.address);
 
     //--- History Upgradable (UUPS)
     actionContract = await deployUUPS("ActionRepoTrackerUp", [hubContract.address]);
 
-    //Set Avatar Contract to Hub
+    //Set History Contract to Hub
     await hubContract.assocSet("history", actionContract.address);
 
   });
@@ -146,36 +152,36 @@ describe("Protocol", function () {
   describe("Soul", function () {
 
     it("Should inherit protocol owner", async function () {
-      expect(await avatarContract.owner()).to.equal(this.ownerAddr);
+      expect(await soulContract.owner()).to.equal(this.ownerAddr);
     });
     
     it("Can mint", async function () {
       //SBT Tokens
       
-      let tx = await avatarContract.connect(tester).mint(test_uri);
+      let tx = await soulContract.connect(tester).mint(test_uri);
       tx.wait();
       //Fetch Token
-      let result = await avatarContract.ownerOf(soulTokenId);
+      let result = await soulContract.ownerOf(soulTokenId);
       //Check Owner
       expect(result).to.equal(this.testerAddr);
       //Check URI
-      expect(await avatarContract.tokenURI(soulTokenId)).to.equal(test_uri);
+      expect(await soulContract.tokenURI(soulTokenId)).to.equal(test_uri);
       ++soulTokenId;
       
-      await avatarContract.connect(owner).mint(test_uri);
-      soulTokens.owner = await avatarContract.tokenByAddress(this.ownerAddr);
+      await soulContract.connect(owner).mint(test_uri);
+      soulTokens.owner = await soulContract.tokenByAddress(this.ownerAddr);
       ++soulTokenId;
 
-      await avatarContract.connect(admin).mint(test_uri);
-      soulTokens.admin = await avatarContract.tokenByAddress(this.adminAddr);
+      await soulContract.connect(admin).mint(test_uri);
+      soulTokens.admin = await soulContract.tokenByAddress(this.adminAddr);
       ++soulTokenId;
       
-      await avatarContract.connect(admin2).mint(test_uri);
-      soulTokens.admin2 = await avatarContract.tokenByAddress(this.admin2Addr);
+      await soulContract.connect(admin2).mint(test_uri);
+      soulTokens.admin2 = await soulContract.tokenByAddress(this.admin2Addr);
       ++soulTokenId;
 
-      await avatarContract.connect(tester2).mint(test_uri);
-      soulTokens.tester2 = await avatarContract.tokenByAddress(this.tester2Addr);
+      await soulContract.connect(tester2).mint(test_uri);
+      soulTokens.tester2 = await soulContract.tokenByAddress(this.tester2Addr);
       ++soulTokenId;
 
     });
@@ -183,7 +189,7 @@ describe("Protocol", function () {
     it("Can mint only one", async function () {
       //Another Mint Call for Same Account Should Fail
       await expect(
-        avatarContract.connect(tester).mint(test_uri)
+        soulContract.connect(tester).mint(test_uri)
       ).to.be.revertedWith("Account already has a token");
     });
 
@@ -191,27 +197,27 @@ describe("Protocol", function () {
       //Expected Token ID
       let tokenId = 1;
       //Fetch Token ID By Address
-      let result = await avatarContract.tokenByAddress(this.testerAddr);
+      let result = await soulContract.tokenByAddress(this.testerAddr);
       //Check Token
       expect(result).to.equal(tokenId);
     });
 
-    it("Allow Multiple Owner Accounts per Avatar", async function () {
+    it("Allow Multiple Owner Accounts per Soul", async function () {
       let miscAddr = await addrs[0].getAddress();
       let tokenId = 1;
       //Fetch Token ID By Address
-      let tx = await avatarContract.tokenOwnerAdd(miscAddr, tokenId);
+      let tx = await soulContract.tokenOwnerAdd(miscAddr, tokenId);
       tx.wait();
       //Expected Event
-      await expect(tx).to.emit(avatarContract, 'Transfer').withArgs(ZERO_ADDR, miscAddr, tokenId);
+      await expect(tx).to.emit(soulContract, 'Transfer').withArgs(ZERO_ADDR, miscAddr, tokenId);
       //Fetch Token For Owner
-      let result = await avatarContract.tokenByAddress(miscAddr);
+      let result = await soulContract.tokenByAddress(miscAddr);
       //Validate
       expect(result).to.equal(tokenId);
     });
 
     it("Should Post as Owned-Soul", async function () {
-      soulTokens.tester = await avatarContract.tokenByAddress(this.testerAddr);
+      soulTokens.tester = await soulContract.tokenByAddress(this.testerAddr);
       let post = {
         tokenId: soulTokens.tester,
         uri:test_uri,
@@ -220,31 +226,31 @@ describe("Protocol", function () {
       //Validate Permissions
       await expect(
         //Failed Post
-        avatarContract.connect(tester4).post(post.tokenId, post.uri)
+        soulContract.connect(tester4).post(post.tokenId, post.uri)
       ).to.be.revertedWith("POST:SOUL_NOT_YOURS");
 
       //Successful Post
-      let tx = await avatarContract.connect(tester).post(post.tokenId, post.uri);
+      let tx = await soulContract.connect(tester).post(post.tokenId, post.uri);
       await tx.wait();  //wait until the transaction is mined
       //Expect Event
-      await expect(tx).to.emit(avatarContract, 'Post').withArgs(this.testerAddr, post.tokenId, post.uri);
+      await expect(tx).to.emit(soulContract, 'Post').withArgs(this.testerAddr, post.tokenId, post.uri);
     });
 
     /* CANCELLED Lost-Souls Feature
     it("Can add other people", async function () {
-      unOwnedTokenId = await avatarContract.connect(tester).callStatic.add(test_uri);
-      await avatarContract.connect(tester).add(test_uri);
-      await avatarContract.connect(tester).add(test_uri);
-      let tx = await avatarContract.connect(tester).add(test_uri);
+      unOwnedTokenId = await soulContract.connect(tester).callStatic.add(test_uri);
+      await soulContract.connect(tester).add(test_uri);
+      await soulContract.connect(tester).add(test_uri);
+      let tx = await soulContract.connect(tester).add(test_uri);
       soulTokenId = soulTokenId + 3;
       tx.wait();
       // console.log("minting", tx);
       //Fetch Token
-      let result = await avatarContract.ownerOf(unOwnedTokenId);
+      let result = await soulContract.ownerOf(unOwnedTokenId);
       //Check Owner
-      expect(result).to.equal(await avatarContract.address);
+      expect(result).to.equal(await soulContract.address);
       //Check URI
-      expect(await avatarContract.tokenURI(3)).to.equal(test_uri);
+      expect(await soulContract.tokenURI(3)).to.equal(test_uri);
     });
     
     it("Should Post as a Lost-Soul", async function () {
@@ -255,18 +261,18 @@ describe("Protocol", function () {
       //Validate Permissions
       await expect(
         //Failed Post
-        avatarContract.connect(tester4).post(post.tokenId, post.uri)
+        soulContract.connect(tester4).post(post.tokenId, post.uri)
       ).to.be.revertedWith("POST:SOUL_NOT_YOURS");
 
       //Successful Post
-      let tx = await avatarContract.post(post.tokenId, post.uri);
+      let tx = await soulContract.post(post.tokenId, post.uri);
       await tx.wait();  //wait until the transaction is mined
       //Expect Event
-      await expect(tx).to.emit(avatarContract, 'Post').withArgs(this.ownerAddr, post.tokenId, post.uri);
+      await expect(tx).to.emit(soulContract, 'Post').withArgs(this.ownerAddr, post.tokenId, post.uri);
     });
     */
 
-    // it("[TBD] Should Merge Avatars", async function () {
+    // it("[TBD] Should Merge Souls", async function () {
 
     // });
     
@@ -275,16 +281,16 @@ describe("Protocol", function () {
       let fromAddr = await tester.getAddress();
       let toAddr = await tester2.getAddress();
       await expect(
-        avatarContract.connect(tester).transferFrom(fromAddr, toAddr, 1)
+        soulContract.connect(tester).transferFrom(fromAddr, toAddr, 1)
       ).to.be.revertedWith("Sorry, assets are non-transferable");
     });
 
     it("Can update token's metadata", async function () {
       let test_uri = "TEST_URI_UPDATED";
       //Update URI
-      await avatarContract.connect(tester).update(1, test_uri);
+      await soulContract.connect(tester).update(1, test_uri);
       //Check URI
-      expect(await avatarContract.connect(tester).tokenURI(1)).to.equal(test_uri);
+      expect(await soulContract.connect(tester).tokenURI(1)).to.equal(test_uri);
     });
 
     it("Should protect from unauthorized reputation changes", async function () {
@@ -292,7 +298,7 @@ describe("Protocol", function () {
       let repCall = { tokenId:1, domain:"personal", rating:1, amount:2};
       //Should Fail - Require Permissions
       await expect(
-        avatarContract.repAdd(repCall.tokenId, repCall.domain, repCall.rating, repCall.amount)
+        soulContract.repAdd(repCall.tokenId, repCall.domain, repCall.rating, repCall.amount)
       ).to.be.revertedWith("UNAUTHORIZED_ACCESS");
     });
 
@@ -304,13 +310,13 @@ describe("Protocol", function () {
   describe("Game", function () {
     
     before(async function () {
-      //Mint Avatars for Participants
-      // await avatarContract.connect(owner).mint(test_uri);
-      // await avatarContract.connect(admin).mint(test_uri);
-      // await avatarContract.connect(tester3).mint(test_uri);
-      await avatarContract.connect(tester4).mint(test_uri);
-      await avatarContract.connect(tester5).mint(test_uri);
-      await avatarContract.connect(authority).mint(test_uri);
+      //Mint Souls for Participants
+      // await soulContract.connect(owner).mint(test_uri);
+      // await soulContract.connect(admin).mint(test_uri);
+      // await soulContract.connect(tester3).mint(test_uri);
+      await soulContract.connect(tester4).mint(test_uri);
+      await soulContract.connect(tester5).mint(test_uri);
+      await soulContract.connect(authority).mint(test_uri);
       soulTokenId = soulTokenId + 3;
       let game = {
         name: "Test Game",
@@ -329,7 +335,7 @@ describe("Protocol", function () {
       expect(gameAddr).to.be.properAddress;
       //Expect Claim Created Event
       await expect(tx).to.emit(hubContract, 'ContractCreated').withArgs("game", gameAddr);
-      await expect(tx).to.emit(avatarContract, 'SoulType').withArgs(soulTokenId, "GAME");
+      await expect(tx).to.emit(soulContract, 'SoulType').withArgs(soulTokenId, "GAME");
       await expect(tx).to.emit(this.openRepo, 'StringSet').withArgs(gameAddr, "type", game.type);
       await expect(tx).to.emit(this.openRepo, 'StringSet').withArgs(gameAddr, "role", game.type);
 
@@ -369,7 +375,7 @@ describe("Protocol", function () {
       expect(await this.gameContract.roleHas(this.testerAddr, "member")).to.equal(true);
     });
 
-    it("Role Should Track Avatar Owner", async function () {
+    it("Role Should Track Soul's Owner", async function () {
       //Check Before
       expect(await this.gameContract.roleHas(this.tester5Addr, "member")).to.equal(false);
       // expect(await this.gameContract.roleHas(this.tester5Addr, "member")).to.equal(false);
@@ -377,20 +383,20 @@ describe("Protocol", function () {
       await this.gameContract.connect(tester5).join();
       //Check
       expect(await this.gameContract.roleHas(this.tester5Addr, "member")).to.equal(true);
-      //Get Tester5's Avatar TokenID
-      let tokenId = await avatarContract.tokenByAddress(this.tester5Addr);
-      // console.log("Tester5 Avatar Token ID: ", tokenId);
-      //Move Avatar Token to Tester3
-      let tx = await avatarContract.transferFrom(this.tester5Addr, this.tester3Addr, tokenId);
+      //Get Tester5's Soul TokenID
+      let tokenId = await soulContract.tokenByAddress(this.tester5Addr);
+      // console.log("Tester5 Soul Token ID: ", tokenId);
+      //Move Soul Token to Tester3
+      let tx = await soulContract.transferFrom(this.tester5Addr, this.tester3Addr, tokenId);
       await tx.wait();
-      await expect(tx).to.emit(avatarContract, 'Transfer').withArgs(this.tester5Addr, this.tester3Addr, tokenId);
+      await expect(tx).to.emit(soulContract, 'Transfer').withArgs(this.tester5Addr, this.tester3Addr, tokenId);
       //Expect Change of Ownership
-      expect(await avatarContract.ownerOf(tokenId)).to.equal(this.tester3Addr);
+      expect(await soulContract.ownerOf(tokenId)).to.equal(this.tester3Addr);
       //Check Membership
       expect(await this.gameContract.roleHas(this.tester3Addr, "member")).to.equal(true);
       // expect(await this.gameContract.roleHas(this.tester5Addr, "member")).to.equal(false);
 
-      //Should Fail - No Avatar For Contract
+      //Should Fail - No Soul For Contract
       // await expect(
       //   this.gameContract.roleHas(this.tester5Addr, "member")
       // ).to.be.revertedWith("ERC1155Tracker: requested account not found on source contract");
@@ -732,8 +738,8 @@ describe("Protocol", function () {
       this.projectContract = await ethers.getContractAt('ProjectExt', gameProjAddr);
 
       //Soul Tokens
-      soulTokens.mDAO1 = await avatarContract.tokenByAddress(gameMDAOAddr);
-      soulTokens.proj1 = await avatarContract.tokenByAddress(gameProjAddr);
+      soulTokens.mDAO1 = await soulContract.tokenByAddress(gameMDAOAddr);
+      soulTokens.proj1 = await soulContract.tokenByAddress(gameProjAddr);
       // console.log("[DEBUG] mDAO is:", soulTokens.mDAO1, gameMDAOAddr);
     });
 
@@ -772,14 +778,14 @@ describe("Protocol", function () {
     });
 
     it("Should Apply to Project (as Individual)", async function () {
-      /// Apply (Nominte Self)
+      /// Apply (Nominate Self)
       let tx = await this.task1.connect(tester).application(test_uri);
       //Expect Event
       await expect(tx).to.emit(this.task1, 'Nominate').withArgs(this.testerAddr, soulTokens.tester, test_uri);
     });
 
     it("Should Apply to Project (as mDAO)", async function () {
-      /// Apply (Nominte Self)
+      /// Apply (Nominate Self)
       let tx = await this.mDAOContract.connect(admin2).applyToTask(this.task1.address, test_uri);
       //Expect Event
       await expect(tx).to.emit(this.task1, 'Nominate').withArgs(this.mDAOContract.address, soulTokens.mDAO1, test_uri);
@@ -808,7 +814,7 @@ describe("Protocol", function () {
         this.mDAOContract.connect(tester4).deliverTask(post.taskAddr, post.uri)
       // ).to.be.revertedWith("ADMIN_ONLY");  //Would work once the proxy returns errors
       ).to.be.reverted;
-      /// Apply (Nominte Self)
+      /// Apply (Nominate Self)
       let tx = await this.mDAOContract.connect(admin2).deliverTask(post.taskAddr, post.uri);
       //Expect Event
       await expect(tx).to.emit(this.task1, 'Post').withArgs(this.admin2Addr, soulTokens.mDAO1, "applicant", test_uri2);
@@ -982,8 +988,8 @@ describe("Protocol", function () {
 
     it("Should be Created (by Game)", async function () {
       //Soul Tokens
-      soulTokens.admin = await avatarContract.tokenByAddress(this.adminAddr);
-      soulTokens.tester3 = await avatarContract.tokenByAddress(this.tester3Addr);
+      soulTokens.admin = await soulContract.tokenByAddress(this.adminAddr);
+      soulTokens.tester3 = await soulContract.tokenByAddress(this.tester3Addr);
     
       let claimName = "Test Claim #1";
       let ruleRefArr = [
@@ -1085,7 +1091,7 @@ describe("Protocol", function () {
 
     it("Should be Created & Closed (by Game)", async function () {
       //Soul Tokens
-      soulTokens.authority = await avatarContract.tokenByAddress(this.authorityAddr);
+      soulTokens.authority = await soulContract.tokenByAddress(this.authorityAddr);
       const claim = {type:"CLAIM", name:"Test Claim #3"}
       let ruleRefArr = [
         {
@@ -1297,22 +1303,104 @@ describe("Protocol", function () {
 
       //TODO: Tests for Collect Rating
       // let repCall = { tokenId:?, domain:?, rating:?};
-      // let result = this.gameContract.getRepForDomain(avatarContract.address,repCall. tokenId, repCall.domain, repCall.rating);
+      // let result = this.gameContract.getRepForDomain(soulContract.address,repCall. tokenId, repCall.domain, repCall.rating);
 
       // //Expect Event
-      // await expect(tx).to.emit(avatarContract, 'ReputationChange').withArgs(repCall.tokenId, repCall.domain, repCall.rating, repCall.amount);
+      // await expect(tx).to.emit(soulContract, 'ReputationChange').withArgs(repCall.tokenId, repCall.domain, repCall.rating, repCall.amount);
 
       //Validate State
       // getRepForDomain(address contractAddr, uint256 tokenId, string domain, bool rating) public view override returns (uint256) {
 
-      // let rep = await avatarContract.getRepForDomain(repCall.tokenId, repCall.domain, repCall.rating);
+      // let rep = await soulContract.getRepForDomain(repCall.tokenId, repCall.domain, repCall.rating);
       // expect(rep).to.equal(repCall.amount);
 
       // //Other Domain Rep - Should be 0
-      // expect(await avatarContract.getRepForDomain(repCall.tokenId, repCall.domain + 1, repCall.rating)).to.equal(0);
+      // expect(await soulContract.getRepForDomain(repCall.tokenId, repCall.domain + 1, repCall.rating)).to.equal(0);
 
     // });
 
   }); //Court Game Flow
+
+  
+  /**
+   * Safe ERC
+   */
+  describe("SafeERC721", function () {
+    before(async function () {
+      const nft = {
+        name: 'SafeERC721',
+        symbol: 'SAFENFT',
+        uri: test_uri,
+      };
+
+      //Deploy SafeNFT
+      const safeERCAddr = await hubContract.connect(admin).callStatic.makeERC721(nft.name, nft.symbol, nft.uri);
+      let tx = await hubContract.connect(admin).makeERC721(nft.name, nft.symbol, nft.uri);
+      //Expect Valid Address
+      expect(safeERCAddr).to.be.properAddress;
+      ++soulTokenId;
+
+      //Attach Contract
+      this.safeERC721 = await ethers.getContractFactory("SafeERC721").then(res => res.attach(safeERCAddr));
+      //Verify Config
+      expect(await this.safeERC721.name()).to.equal(nft.name);
+      expect(await this.safeERC721.symbol()).to.equal(nft.symbol);
+
+      //Event: Set Owner Tracker
+      let eventData = {
+        fromSBT: await soulContract.tokenByAddress(this.safeERC721.address),
+        key: "owner",
+        toSBT: await soulContract.tokenByAddress(this.adminAddr),
+      };
+      await expect(tx).to.emit(soulContract, "RelSet").withArgs(eventData.fromSBT, eventData.key, eventData.toSBT);
+      
+    });
     
+    it("Should mint", async function () {
+      let tx = await this.safeERC721.connect(admin).mint(this.testerAddr, test_uri+"xx1");
+      tx.wait();
+      //Check Owner
+      expect(await this.safeERC721.ownerOf(1)).to.equal(this.testerAddr);
+      //Check URI
+      expect(await this.safeERC721.tokenURI(1)).to.equal(test_uri+"xx1");
+    });
+
+  });
+
+  describe("SafeERC1155", function () {
+    before(async function () {
+
+      //Deploy SafeNFT
+      const safeERCAddr = await hubContract.connect(admin).callStatic.makeERC1155(test_uri);
+      let tx = await hubContract.connect(admin).makeERC1155(test_uri);
+
+      //Expect Valid Address
+      expect(safeERCAddr).to.be.properAddress;
+
+      ++soulTokenId;
+      //Attach Contract
+      this.safeERC1155 = await ethers.getContractFactory("SafeERC1155").then(res => res.attach(safeERCAddr));
+
+      //Events
+      let eventData = {
+        fromSBT: await soulContract.tokenByAddress(this.safeERC1155.address),
+        key: "owner",
+        toSBT: await soulContract.tokenByAddress(this.adminAddr),
+      };
+      await expect(tx).to.emit(soulContract, "RelSet")
+        .withArgs(eventData.fromSBT, eventData.key, eventData.toSBT);
+      
+    });
+    
+    it("Should mint", async function () {
+      let tx = await this.safeERC1155.connect(admin).mint(this.testerAddr, 1, 1, test_uri+"xx2");
+      tx.wait();
+      //Check Owner
+      expect(await this.safeERC1155.balanceOf(this.testerAddr, 1)).to.equal(1);
+      //Check URI
+      // expect(await this.safeERC1155.tokenURI(1)).to.equal(test_uri+"xx2");
+    });
+
+  });
+  
 });
