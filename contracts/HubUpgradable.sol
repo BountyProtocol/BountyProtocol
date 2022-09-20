@@ -244,16 +244,18 @@ contract HubUpgradable is
     }
 
     /// Make a new ERC721Tracker
-    function makeERC721(string calldata name_, string memory symbol_, string calldata uri_) public override returns (address) {
+    function makeERC721(
+        string calldata name_, 
+        string memory symbol_, 
+        string calldata uri_
+    ) public override returns (address) {
         //Deploy
         BeaconProxy newProxyContract = new BeaconProxy(
-            _beacons["erc721"],
-            abi.encodeWithSignature("initialize(string,string)", name_, symbol_)
+            _beacons["ERC721"],
+            abi.encodeWithSignature("initialize(string,string,string,address)", name_, symbol_, uri_, _msgSender())
         );
-        //Register as a Soul
-        _mintSoul(address(newProxyContract), uri_);
         //Event
-        emit ContractCreated("erc721", address(newProxyContract));
+        emit ContractCreated("ERC721", address(newProxyContract));
         //Return
         return address(newProxyContract);
     }
@@ -262,13 +264,11 @@ contract HubUpgradable is
     function makeERC1155(string calldata uri_) public override returns (address) {
         //Deploy
         BeaconProxy newProxyContract = new BeaconProxy(
-            _beacons["erc1155"],
-            abi.encodeWithSignature("initialize()")
+            _beacons["ERC1155"],
+            abi.encodeWithSignature("initialize(string,address)", uri_, _msgSender())
         );
-        //Register as a Soul
-        _mintSoul(address(newProxyContract), uri_);
         //Event
-        emit ContractCreated("erc1155", address(newProxyContract));
+        emit ContractCreated("ERC1155", address(newProxyContract));
         //Return
         return address(newProxyContract);
     }
@@ -338,10 +338,10 @@ contract HubUpgradable is
     }
 
     /// Generic ImplementationUpgrade
-    function upgradeImplementation(string memory key, address newImplementation) public onlyOwner {
+    function upgradeImplementation(string memory name, address newImplementation) public onlyOwner {
         //Upgrade Beacon
-        UpgradeableBeacon(_beacons[key]).upgradeTo(newImplementation);
+        UpgradeableBeacon(_beacons[name]).upgradeTo(newImplementation);
         //Upgrade Event
-        emit UpdatedImplementation(key, newImplementation);
+        emit UpdatedImplementation(name, newImplementation);
     }
 }
