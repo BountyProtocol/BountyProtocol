@@ -23,7 +23,7 @@ contract CourtExt is ICourtExt, GameExtension {
         //Validate Caller Permissions (Member of Game)
         require(gameRoles().roleHas(_msgSender(), "member"), "Members Only");
         //Create new Claim
-        address claimContract = hub().claimMake("CLAIM", name_, uri_);
+        address claimContract = hub().makeClaim("CLAIM", name_, uri_);
         //Register New Contract
         _registerNewClaim(claimContract);
         //Create Custom Roles
@@ -68,7 +68,7 @@ contract CourtExt is ICourtExt, GameExtension {
         //Validate Caller Permissions (Member of Game)
         require(gameRoles().roleHas(_msgSender(), "member"), "Members Only");
         //Create new Claim
-        address claimContract = hub().claimMake(name_, uri_);
+        address claimContract = hub().makeClaim(name_, uri_);
         //Register New Contract
         _registerNewClaim(claimContract);
         //Create Custom Roles

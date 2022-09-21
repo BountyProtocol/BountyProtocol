@@ -325,12 +325,12 @@ describe("Protocol", function () {
 
 
       //Simulate to Get New Game Address
-      let gameAddr = await hubContract.callStatic.gameMake(game.type, game.name, test_uri);
-      // let gameAddr = await hubContract.connect(admin).callStatic.gameMake(game.type, game.name, test_uri);
+      let gameAddr = await hubContract.callStatic.makeGame(game.type, game.name, test_uri);
+      // let gameAddr = await hubContract.connect(admin).callStatic.makeGame(game.type, game.name, test_uri);
 
       //Create New Game
-      // let tx = await hubContract.connect(admin).gameMake(game.type, game.name, test_uri);
-      let tx = await hubContract.gameMake(game.type, game.name, test_uri);
+      // let tx = await hubContract.connect(admin).makeGame(game.type, game.name, test_uri);
+      let tx = await hubContract.makeGame(game.type, game.name, test_uri);
       //Expect Valid Address
       expect(gameAddr).to.be.properAddress;
       //Expect Claim Created Event
@@ -695,11 +695,11 @@ describe("Protocol", function () {
       //-- Deploy a new Game:MicroDAO
       let gameMDAOData = {name: "Test mDAO", type: "MDAO"};
       //Simulate to Get New Game Address
-      let gameMDAOAddr = await hubContract.connect(admin2).callStatic.gameMake(gameMDAOData.type, gameMDAOData.name, test_uri);
-      // let gameAddr = await hubContract.callStatic.gameMake(game.type, game.name, test_uri);
+      let gameMDAOAddr = await hubContract.connect(admin2).callStatic.makeGame(gameMDAOData.type, gameMDAOData.name, test_uri);
+      // let gameAddr = await hubContract.callStatic.makeGame(game.type, game.name, test_uri);
       //Create New Game
-      let tx1 = await hubContract.connect(admin2).gameMake(gameMDAOData.type, gameMDAOData.name, test_uri);
-      // await hubContract.gameMake(game.type, game.name, test_uri);
+      let tx1 = await hubContract.connect(admin2).makeGame(gameMDAOData.type, gameMDAOData.name, test_uri);
+      // await hubContract.makeGame(game.type, game.name, test_uri);
       ++soulTokenId;
 
       // await expect(tx1).to.emit(this.openRepo, 'StringSet').withArgs("type", gameMDAOData.type);
@@ -722,11 +722,11 @@ describe("Protocol", function () {
       //-- Deploy a new Game:Project        
       let game = {name: "Test Project", type: "PROJECT"};
       //Simulate to Get New Game Address
-      let gameProjAddr = await hubContract.connect(admin).callStatic.gameMake(game.type, game.name, test_uri);
-      // let gameProjAddr = await hubContract.callStatic.gameMake(game.type, game.name, test_uri);
+      let gameProjAddr = await hubContract.connect(admin).callStatic.makeGame(game.type, game.name, test_uri);
+      // let gameProjAddr = await hubContract.callStatic.makeGame(game.type, game.name, test_uri);
       //Create New Game
-      let tx2 = await hubContract.connect(admin).gameMake(game.type, game.name, test_uri);
-      // await hubContract.gameMake(game.type, game.name, test_uri);
+      let tx2 = await hubContract.connect(admin).makeGame(game.type, game.name, test_uri);
+      // await hubContract.makeGame(game.type, game.name, test_uri);
       ++soulTokenId;
       
       // await expect(tx2).to.emit(this.openRepo, 'StringSet').withArgs("type", game.type);
@@ -751,9 +751,9 @@ describe("Protocol", function () {
     it("Project Should Create a Task ", async function () {
       let value = 100; //ethers.utils.parseEther(0.001);
       let taskData = {type:"BOUNTY", name: "Test Task", uri: test_uri2};
-      let taskAddr = await this.projectContract.connect(admin).callStatic.taskMake(taskData.type, taskData.name, taskData.uri);
-      // this.projectContract.connect(admin).taskMake(taskData.name, taskData.uri);
-      await this.projectContract.connect(admin).taskMake(taskData.type, taskData.name, taskData.uri, {value}); //Fund on Creation
+      let taskAddr = await this.projectContract.connect(admin).callStatic.makeTask(taskData.type, taskData.name, taskData.uri);
+      // this.projectContract.connect(admin).makeTask(taskData.name, taskData.uri);
+      await this.projectContract.connect(admin).makeTask(taskData.type, taskData.name, taskData.uri, {value}); //Fund on Creation
       //Attach
       this.task1 = await ethers.getContractAt('TaskUpgradable', taskAddr, admin);
     });
@@ -876,9 +876,9 @@ describe("Protocol", function () {
       it("Project Should Create a new Task ", async function () {
         let value = 100; //ethers.utils.parseEther(0.001);
         let taskData = {type: "Bounty", name: "Test Task", uri: test_uri2};
-        let taskAddr = await this.projectContract.connect(admin).callStatic.taskMake(taskData.type, taskData.name, taskData.uri);
-        // this.projectContract.connect(admin).taskMake(taskData.type, taskData.name, taskData.uri);
-        this.projectContract.connect(admin).taskMake(taskData.type, taskData.name, taskData.uri, {value}); //Fund on Creation
+        let taskAddr = await this.projectContract.connect(admin).callStatic.makeTask(taskData.type, taskData.name, taskData.uri);
+        // this.projectContract.connect(admin).makeTask(taskData.type, taskData.name, taskData.uri);
+        this.projectContract.connect(admin).makeTask(taskData.type, taskData.name, taskData.uri, {value}); //Fund on Creation
         //Attach
         this.task2 = await ethers.getContractFactory("TaskUpgradable").then(res => res.attach(taskAddr));
         // this.task2 = await ethers.getContractAt('TaskUpgradable', taskAddr);

@@ -47,7 +47,7 @@ async function main() {
      ];
 
      //Simulate - Get New Claim Address
-     let claimAddr = await gameContract.callStatic.claimMake(claimName, test_uri, ruleRefArr, roleRefArr, posts);
+     let claimAddr = await gameContract.callStatic.makeClaim(claimName, test_uri, ruleRefArr, roleRefArr, posts);
      console.log("New Claim Address: ", claimAddr);
 
 }

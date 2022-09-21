@@ -32,21 +32,21 @@ interface IHub {
     function makeERC1155(string calldata uri_) external returns (address);
 
     /// Make a new Game
-    function gameMake(
+    function makeGame(
         string calldata type_,
         string calldata name_, 
         string calldata uri_
     ) external returns (address);
 
     /// Make a new Claim
-    function claimMake(
+    function makeClaim(
         string calldata type_, 
         string calldata name_, 
         string calldata uri_
     ) external returns (address);
 
     /// Make a new Task
-    function taskMake(
+    function makeTask(
         string calldata type_, 
         string calldata name_, 
         string calldata uri_
