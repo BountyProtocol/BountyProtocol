@@ -28,8 +28,6 @@ library Utils {
         if (account.isContract() && account != address(this)) {
             // console.log("THIS IS A Contract:", account);
             try IToken(account).symbol() returns (string memory response) {
-                // console.log("* * * Contract Symbol:", account, response);
-
                 //Contract's Symbol
                 return response;
             } catch {

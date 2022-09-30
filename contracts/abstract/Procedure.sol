@@ -82,8 +82,6 @@ abstract contract Procedure is IProcedure
         // __ProtocolEntity_init(hub);
         __ProtocolEntity_init(msg.sender);  //Sender is the Hub
         _setTargetContract(getSoulAddr());
-        //Set Contract URI
-        // _setContractURI(uri_);       //DEPRECATE
         //Identifiers
         name = name_;
         //Auto-Set Creator Wallet as Admin
@@ -97,14 +95,6 @@ abstract contract Procedure is IProcedure
         //Custom Roles
         // _roleCreate("witness");     //Witnesses
         // _roleCreate("affected");    //Affected Party (For reparations)
-
-        /* Moved to the HUB, After making a soul
-        //Set Parent Container
-        _setParentCTX(container);
-        //Set Entity Type        
-        confSet("type", type_);  
-        */
-
     }
     /// Change Claim Stage
     function _setStage(DataTypes.ClaimStage stage_) internal {
@@ -122,7 +112,6 @@ abstract contract Procedure is IProcedure
         emit Cancelled(uri_, _msgSender());
     }
 
-    /* DEPRECATED - For external use
     /// Set Parent Container
     function _setParentCTX(address container) internal {
         //Validate
@@ -132,34 +121,6 @@ abstract contract Procedure is IProcedure
         repo().addressSet("container", container);
         // _assocSet("container", container);
     }
-    */
-    /// Set Parent Container (Movable Components)
-    function setParentCTX(address container) external override {
-        //Validate
-        require(container != address(0), "Invalid Container Address");
-        require(IERC165(container).supportsInterface(type(IGame).interfaceId), "Implmementation Does Not Support Game Interface");  //Might Cause Problems on Interface Update. Keep disabled for now.
-        require(
-            owner() == _msgSender()      //Owner
-            || roleHas(_msgSender(), "admin")    //Admin Role
-            || msg.sender == address(_HUB)   //Through the Hub
-            , "INVALID_PERMISSIONS");
-
-        //Set to OpenRepo
-        repo().addressSet("container", container);
-    }
-
-    /* Maybe Generic... Though just for parentCTX for now...
-    /// Set Association
-    function assocSet(string memory key, address contractAddr) external {
-        //Validate Permissions
-            require(
-                owner() == _msgSender()      //Owner
-                || roleHas(_msgSender(), "admin")    //Admin Role
-                || msg.sender == address(_HUB)   //Through the Hub
-                , "INVALID_PERMISSIONS");
-        repo().addressSet(key, contractAddr);
-    }
-    */
 
     /// Get Container Address
     function getContainerAddr() internal view returns (address) {
