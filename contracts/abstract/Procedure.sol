@@ -111,6 +111,11 @@ abstract contract Procedure is IProcedure
         //Cancellation Event
         emit Cancelled(uri_, _msgSender());
     }
+     
+    /// Set Parent Container
+    function setParentCTX(address container) external override HubOnly {
+        _setParentCTX(container);
+    }
 
     /// Set Parent Container
     function _setParentCTX(address container) internal {
@@ -119,7 +124,6 @@ abstract contract Procedure is IProcedure
         require(IERC165(container).supportsInterface(type(IGame).interfaceId), "Implmementation Does Not Support Game Interface");  //Might Cause Problems on Interface Update. Keep disabled for now.
         //Set to OpenRepo
         repo().addressSet("container", container);
-        // _assocSet("container", container);
     }
 
     /// Get Container Address

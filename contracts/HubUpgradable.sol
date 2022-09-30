@@ -212,6 +212,7 @@ contract HubUpgradable is
     }
 
     /// Make a new Task
+    /// @dev created by & in an active game
     function makeTask(
         string calldata type_, 
         string calldata name_, 
