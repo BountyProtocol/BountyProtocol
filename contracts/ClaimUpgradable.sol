@@ -135,7 +135,10 @@ contract ClaimUpgradable is IClaim, Procedure {
     }   
 
     /// Stage: Place Verdict  --> Closed
-    function stageDecision(DataTypes.InputDecision[] calldata verdict, string calldata uri_) public override {
+    function stageDecision(
+        DataTypes.InputDecision[] calldata verdict, 
+        string calldata uri_
+    ) public override {
         require(_msgSender() == getContainerAddr()  //Parent Contract
             || roleHas(_msgSender(), "authority")   //Authority
             , "ROLE:AUTHORITY_ONLY");

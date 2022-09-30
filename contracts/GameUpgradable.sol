@@ -123,7 +123,7 @@ contract GameUpgradable is IGame
     function reportEvent(
         uint256 ruleId, 
         address account,
-        string calldata detailsURI_     //TODO: What about this?
+        string calldata detailsURI_
     ) external override {
         //Validate Role
         require(roleHas(_msgSender(), "authority") , "ROLE:AUTHORITY_ONLY");
@@ -131,6 +131,7 @@ contract GameUpgradable is IGame
         uint256 sbToken = _getExtTokenId(account);
         //Mint SBT for that Account if doesn't exist
         if(sbToken == 0) _HUB.mintForAccount(account, "");
+        emit EventConfirmed(ruleId, detailsURI_);
         //Execute Effects on that SBT
         _effectsExecute(ruleId, getSoulAddr(), sbToken);
     }
@@ -142,7 +143,8 @@ contract GameUpgradable is IGame
         uint256 targetTokenId
     ) external override {
         //Validate - Called by Child Claim
-        require(claimHas(msg.sender), "NOT A VALID INCIDENT");
+        require(claimHas(msg.sender), "INVALID CLAIM");
+        emit EventConfirmed(ruleId, "");
         _effectsExecute(ruleId, targetContract, targetTokenId);
     }
 

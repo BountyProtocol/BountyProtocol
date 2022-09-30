@@ -66,7 +66,8 @@ interface IGame {
 
     //--- Events
 
-    /// Effect
+    event EventConfirmed(uint256 indexed ruleId, string uri);
+
     event EffectsExecuted(uint256 indexed targetTokenId, uint256 indexed ruleId, bytes data);
 
 }
