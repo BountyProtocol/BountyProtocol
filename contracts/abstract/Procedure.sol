@@ -111,9 +111,41 @@ abstract contract Procedure is IProcedure
         //Cancellation Event
         emit Cancelled(uri_, _msgSender());
     }
-     
-    /// Set Parent Container
-    function setParentCTX(address container) external override HubOnly {
+
+    /// Execute Reaction
+    function _execute() internal {
+
+        //Validate Stage
+        require(stage == DataTypes.ClaimStage.Execution , "STAGE:EXECUSION_ONLY");
+
+        //Validate Stage Requirements
+        // require(uniqueRoleMembersCount("subject") > 0 , "NO_WINNERS_PICKED");
+
+        //Push to Stage:Closed
+        _setStage(DataTypes.ClaimStage.Closed);
+        
+        //Get Reactions? 
+
+        //Run Reactions
+            // Disburse (function on self)
+            // Execute Rules
+                // IGame(getContainerAddr()).onClaimConfirmed(parentRuleId, getSoulAddr(), tokenId);
+            //Execute Repository Action
+                // Re-actionId
+                // IGame(getContainerAddr()).runAction(actionId);
+
+        //Emit Execusion Event
+        // emit Executed(_msgSender());
+    }
+    
+    /// Set Parent Container (Movable Components)
+    function setParentCTX(address container) external override {
+    	//Validate
+	    require(
+            owner() == _msgSender()      //Owner
+            || roleHas(_msgSender(), "admin")    //Admin Role
+            || msg.sender == address(_HUB)   //Through the Hub
+            , "INVALID_PERMISSIONS");
         _setParentCTX(container);
     }
 

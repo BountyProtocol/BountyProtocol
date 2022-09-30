@@ -59,7 +59,7 @@ interface IGame {
     // function repAdd(address contractAddr, uint256 tokenId, string calldata domain, bool rating, uint8 amount) external;
 
     /// Execute Rule's Effects (By Claim Contreact)
-    function effectsExecute(uint256 ruleId, address targetContract, uint256 targetTokenId) external;
+    function onClaimConfirmed(uint256 ruleId, address targetContract, uint256 targetTokenId) external;
 
     /// Register an Incident (happening of a valued action)
     function reportEvent(uint256 ruleId, address account, string calldata detailsURI_) external;

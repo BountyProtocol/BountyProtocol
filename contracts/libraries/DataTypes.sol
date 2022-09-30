@@ -72,9 +72,16 @@ library DataTypes {
         string name;
         uint8 value;    // value: 5
         bool direction; // Direction: -
+        // bytes32 action; //Action GUID
         // bytes data;  //[TBD]
     }
     
+    //Stored Reactions
+    struct Reaction {
+        address target;
+        bytes data;
+    }
+
     //Rule Confirmation Method
     struct Confirmation {
         string ruling;

@@ -136,14 +136,22 @@ contract GameUpgradable is IGame
     }
 
     /// Execute Rule's Effects (By Claim Contreact)
-    function effectsExecute(uint256 ruleId, address targetContract, uint256 targetTokenId) external override {
+    function onClaimConfirmed(
+        uint256 ruleId, 
+        address targetContract, 
+        uint256 targetTokenId
+    ) external override {
         //Validate - Called by Child Claim
         require(claimHas(msg.sender), "NOT A VALID INCIDENT");
         _effectsExecute(ruleId, targetContract, targetTokenId);
     }
 
     /// Execute Rule's Effects
-    function _effectsExecute(uint256 ruleId, address targetContract, uint256 targetTokenId) internal {
+    function _effectsExecute(
+        uint256 ruleId, 
+        address targetContract, 
+        uint256 targetTokenId
+    ) internal {
         //Fetch Rule's Effects
         DataTypes.Effect[] memory effects = effectsGet(ruleId);
         //Run Each Effect

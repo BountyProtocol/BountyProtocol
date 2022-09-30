@@ -152,7 +152,7 @@ contract ClaimUpgradable is IClaim, Procedure {
                     uint256 tokenId = subjects[s];
                     uint256 parentRuleId = _rules[verdict[i].ruleId].ruleId;
                     //Execute Rule
-                    IGame(getContainerAddr()).effectsExecute(parentRuleId, getSoulAddr(), tokenId);
+                    IGame(getContainerAddr()).onClaimConfirmed(parentRuleId, getSoulAddr(), tokenId);
                 }
                 //Rule Confirmed Event
                 emit RuleConfirmed(verdict[i].ruleId);

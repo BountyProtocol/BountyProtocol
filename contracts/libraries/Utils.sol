@@ -40,6 +40,26 @@ library Utils {
         return "";
     }
 
+    /*
+    /// Concatenate Arrays (A Suboptimal Solution -- ~800Bytes)
+    function arrayConcat(address[] memory Accounts, address[] memory Accounts2) private pure returns (address[] memory) {
+        //Create a new container array
+        address[] memory returnArr = new address[](Accounts.length + Accounts2.length);
+        uint i=0;
+        if(Accounts.length > 0) {
+            for (; i < Accounts.length; i++) {
+                returnArr[i] = Accounts[i];
+            }
+        }
+        uint j=0;
+        if(Accounts2.length > 0) {
+            while (j < Accounts.length) {
+                returnArr[i++] = Accounts2[j++];
+            }
+        }
+        return returnArr;
+    }
+    */
 }
 
 /// Generic Interface used to get Token's Symbol
