@@ -19,7 +19,6 @@ abstract contract CTXEntityUpgradable is
 
     //--- Modifiers
 
-    /// Permissions Modifier
     modifier AdminOnly() virtual {
        //Validate Permissions
         require(roleHas(tx.origin, "admin")    //Admin Role
@@ -28,10 +27,15 @@ abstract contract CTXEntityUpgradable is
         _;
     }
 
-    /// Permissions Modifier
     modifier AdminOrOwner() virtual {
        //Validate Permissions
         require(_isAdminOrOwner(), "INVALID_PERMISSIONS");
+        _;
+    }
+
+    modifier HubOnly() virtual {
+       //Validate - Only By Hub
+        require(_msgSender() == address(_HUB), "UNAUTHORIZED_ACCESS");
         _;
     }
 
