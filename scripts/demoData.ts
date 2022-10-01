@@ -1,6 +1,3 @@
-/**
- * Deploy Demo Data
- */
 import { ethers } from "hardhat";
 const { upgrades } = require("hardhat");
 const hre = require("hardhat");
@@ -9,9 +6,10 @@ import contractAddrs from "./_contractAddr";
 const contractAddr = contractAddrs[chain];
 
 /**
- * Migrate Contracts Between Hubs
+ * Deploy Demo Data
  */
 async function main() {
+  //Demo Souls
   let soulContract = await ethers.getContractFactory("SoulUpgradable").then(res => res.attach(contractAddr.avatar));
   for(let soul of getSoulsData()){
     try{
@@ -20,6 +18,9 @@ async function main() {
     }catch(error){
       console.log("[CAUGHT] Skip Account:"+soul.owner, error);}
   }
+
+  //TODO: Demo DAOs & Pods
+  
 }
 
 // We recommend this pattern to be able to use async/await everywhere
