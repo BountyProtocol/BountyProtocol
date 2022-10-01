@@ -52,7 +52,7 @@ export const deployGameExt = async (hubContract: Contract) => {
   });
   //Game Extension: Fund Management
   await deployContract("FundManExt", []).then(async res => {
-    await hubContract.assocAdd("GAME_DAO", res.address);
+    // await hubContract.assocAdd("GAME_DAO", res.address);
     await hubContract.assocAdd("GAME_MDAO", res.address);
     await hubContract.assocAdd("GAME_PROJECT", res.address);
     console.log("(i) Deployed Game FundManExt Extension ", res.address);
