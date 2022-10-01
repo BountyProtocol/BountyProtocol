@@ -12,6 +12,7 @@ import "../abstract/Escrow.sol";
 
 /**
  * @title Game Extension: Escrow Capabilities (Receive and Send funds)
+ * This extension allows a game to send funds
  */
 contract FundManExt is IFundManExt, GameExtension, Escrow {
 

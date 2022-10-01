@@ -76,7 +76,16 @@ library DataTypes {
         // bytes data;  //[TBD]
     }
     
-    //Stored Reactions
+    // Stored Reactions [Action -> Reaction]
+    /*
+        action => contract + function + parameters
+
+        
+        Parameters: [param]:[type:key]  E.g.
+            to => Role:subject
+            amount => RepoUint:prize
+            / amount => function:getBalance() + Parameters...
+    */
     struct Reaction {
         address target;
         bytes data;

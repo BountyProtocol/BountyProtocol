@@ -2,16 +2,15 @@
 
 pragma solidity ^0.8.4;
 
-import "hardhat/console.sol";
+// import "hardhat/console.sol";
 
-// import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-// import "./interfaces/IProjectExt.sol";
 import "../abstract/GameExtension.sol";
 import "../interfaces/ICTXEntityUpgradable.sol";
 import "../interfaces/ITask.sol";
 
 /**
  * @title Game Extension: Project Functionality
+ * This extension allows a Game to create Tasks Procedures
  */
 contract ProjectExt is GameExtension {
 
@@ -32,9 +31,6 @@ contract ProjectExt is GameExtension {
         ICTXEntityUpgradable(newContract).roleCreate("applicant");    //Applicants (Can Deliver Results)
         //Fund Task
         if(msg.value > 0){
-            // console.log("Moving ETH to New Contract", msg.value);
-            // payable(newContract).transfer(msg.value);
-            // bool sent = payable(newContract).send(msg.value);
             (bool sent, ) = payable(newContract).call{value: msg.value}("");
             require(sent, "Failed to forward Ether to new contract");
         }
