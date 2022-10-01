@@ -13,6 +13,7 @@ import "../interfaces/IProcedure.sol";
 
 /**
  * @title Game Extension: Court of Law 
+ * This extension allows a Game to create Case Procedures
  */
 contract CourtExt is ICourtExt, GameExtension {
 
@@ -29,7 +30,6 @@ contract CourtExt is ICourtExt, GameExtension {
         //Create Custom Roles
         ICTXEntityUpgradable(claimContract).roleCreate("witness");     //Witnesses
         ICTXEntityUpgradable(claimContract).roleCreate("affected");    //Affected Party (For reparations)
-        
         //Return new Contract Address
         return claimContract;
     }
@@ -52,7 +52,6 @@ contract CourtExt is ICourtExt, GameExtension {
         for (uint256 i = 0; i < posts.length; ++i) {
             IProcedure(newContract).post(posts[i].entRole, posts[i].tokenId, posts[i].uri);
         }
-
     }
 
     /// Make a new Case
@@ -64,17 +63,6 @@ contract CourtExt is ICourtExt, GameExtension {
         DataTypes.InputRoleToken[] calldata assignRoles, 
         DataTypes.PostInput[] calldata posts
     ) public override returns (address) {
-        /* MOVED OUT
-        //Validate Caller Permissions (Member of Game)
-        require(gameRoles().roleHas(_msgSender(), "member"), "Members Only");
-        //Create new Claim
-        address claimContract = hub().makeClaim(name_, uri_);
-        //Register New Contract
-        _registerNewClaim(claimContract);
-        //Create Custom Roles
-        ICTXEntityUpgradable(claimContract).roleCreate("witness");     //Witnesses
-        ICTXEntityUpgradable(claimContract).roleCreate("affected");    //Affected Party (For reparations)
-        */
         address claimContract =_caseMake(name_, uri_);
         _onCreation(claimContract, rules, assignRoles, posts);
         //Return new Contract Address
@@ -122,7 +110,6 @@ contract CourtExt is ICourtExt, GameExtension {
         // address claimContract = caseMake(name_, uri_, rules, assignRoles, posts);
         //Make Claim & Open
         // address claimContract = caseMakeOpen(name_, uri_, rules, assignRoles, posts);
-        
 
         address claimContract =_caseMake(name_, uri_);
         _onCreation(claimContract, rules, assignRoles, posts);
