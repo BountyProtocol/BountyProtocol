@@ -1,9 +1,6 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// When running the script with `npx hardhat run <script>` you'll find the Hardhat
-// Runtime Environment's members available in the global scope.
-
+/**
+ * Deploy Demo Data
+ */
 import { ethers } from "hardhat";
 const { upgrades } = require("hardhat");
 const hre = require("hardhat");
@@ -11,13 +8,12 @@ const chain = hre.hardhatArguments.network;
 import contractAddrs from "./_contractAddr";
 const contractAddr = contractAddrs[chain];
 
-
 /**
  * Migrate Contracts Between Hubs
  */
 async function main() {
   let soulContract = await ethers.getContractFactory("SoulUpgradable").then(res => res.attach(contractAddr.avatar));
-  for(let soul of getData()){
+  for(let soul of getSoulsData()){
     try{
       await soulContract.mintFor(soul.owner, soul.uri);
       console.log(`Soul Added for Account:'${soul.owner}'`)
@@ -33,7 +29,7 @@ main().catch((error) => {
   process.exitCode = 1;
 });
 
-const getData = () => [
+const getSoulsData = () => [
     {
       "id": "1",
       "type": "",
