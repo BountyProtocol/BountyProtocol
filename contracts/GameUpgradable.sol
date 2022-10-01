@@ -123,7 +123,7 @@ contract GameUpgradable is IGame
     function reportEvent(
         uint256 ruleId, 
         address account,
-        string calldata detailsURI_
+        string calldata detailsURI
     ) external override {
         //Validate Role
         require(roleHas(_msgSender(), "authority") , "ROLE:AUTHORITY_ONLY");
@@ -131,7 +131,7 @@ contract GameUpgradable is IGame
         uint256 sbToken = _getExtTokenId(account);
         //Mint SBT for that Account if doesn't exist
         if(sbToken == 0) _HUB.mintForAccount(account, "");
-        emit EventConfirmed(ruleId, detailsURI_);
+        emit EventConfirmed(ruleId, detailsURI);
         //Execute Effects on that SBT
         _effectsExecute(ruleId, getSoulAddr(), sbToken);
     }
