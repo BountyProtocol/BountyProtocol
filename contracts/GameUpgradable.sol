@@ -93,11 +93,8 @@ contract GameUpgradable is IGame
     /// Initializer
     function initialize (string calldata name_) public override initializer {
         //Initializers
-        // __ProtocolEntity_init(hub);
         __ProtocolEntity_init(msg.sender);
         _setTargetContract(dataRepo().addressGetOf(address(_HUB), "SBT"));
-        //Set Contract URI
-        // _setContractURI(uri_);  //DEPRECATE - Use Soul
         //Identifiers
         name = name_;
         //Assign Creator as Admin & Member
