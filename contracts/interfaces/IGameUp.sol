@@ -9,7 +9,7 @@ interface IGame {
     //--- Functions
 
     /// Initialize
-    function initialize(string calldata type_, string calldata name_, string calldata uri_) external;
+    function initialize(string calldata name_) external;
 
     /// Symbol As Arbitrary contract designation signature
     function symbol() external view returns (string memory);

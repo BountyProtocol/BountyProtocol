@@ -91,11 +91,7 @@ contract GameUpgradable is IGame
     }
 
     /// Initializer
-    function initialize (
-        string calldata type_,      //DEPRECATE - Separate Call
-        string calldata name_, 
-        string calldata uri_
-    ) public override initializer {
+    function initialize (string calldata name_) public override initializer {
         //Initializers
         // __ProtocolEntity_init(hub);
         __ProtocolEntity_init(msg.sender);
