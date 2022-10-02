@@ -78,13 +78,17 @@ library DataTypes {
     
     // Stored Reactions [Action -> Reaction]
     /*
-        action => contract + function + parameters
+        action => Contract + Function + Parameters
 
-        
-        Parameters: [param]:[type:key]  E.g.
+        * Target Contract: Repo:string => address 
+        * Function: Function signature (string)
+        * Parameters: [param]:[type:key]  E.g.
             to => Role:subject
             amount => RepoUint:prize
             / amount => function:getBalance() + Parameters...
+
+        
+        sig + param type (by source) => topic
     */
     struct Reaction {
         address target;

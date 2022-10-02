@@ -56,7 +56,7 @@ contract RuleRepo is IRules {
         return IProtocolEntity(msg.sender).getRepoAddr();
     }
 
-    //Get Assoc Repo
+    //Get Data Repo
     function dataRepo() internal view returns (IOpenRepo) {
         return IOpenRepo(getRepoAddr());
     }
