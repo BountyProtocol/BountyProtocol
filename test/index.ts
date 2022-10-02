@@ -65,10 +65,10 @@ describe("Protocol", function () {
     this.token.mint(this.testerAddr, 1000);
 
     //--- OpenRepo Upgradable (UUPS)
-    this.openRepo = await deployUUPS("OpenRepoUpgradable", []);
+    this.dataRepo = await deployUUPS("OpenRepoUpgradable", []);
 
     //--- Deploy Hub (UUPS)
-    hubContract = await deployHub(this.openRepo.address);
+    hubContract = await deployHub(this.dataRepo.address);
 
     //Deploy Additional Beacons
     let erc721 = await deployContract("SafeERC721", []);
@@ -103,9 +103,9 @@ describe("Protocol", function () {
 
     it("Should Get Empty Value", async function () {
       //Change to Closed Game
-      await this.openRepo.stringGet("TestKey");
-      await this.openRepo.boolGet("TestKey");
-      await this.openRepo.addressGet("TestKey");
+      await this.dataRepo.stringGet("TestKey");
+      await this.dataRepo.boolGet("TestKey");
+      await this.dataRepo.addressGet("TestKey");
     });
 
   });
@@ -336,8 +336,8 @@ describe("Protocol", function () {
       //Expect Claim Created Event
       await expect(tx).to.emit(hubContract, 'ContractCreated').withArgs("game", gameAddr);
       await expect(tx).to.emit(soulContract, 'SoulType').withArgs(soulTokenId, "GAME");
-      await expect(tx).to.emit(this.openRepo, 'StringSet').withArgs(gameAddr, "type", game.type);
-      await expect(tx).to.emit(this.openRepo, 'StringSet').withArgs(gameAddr, "role", game.type);
+      await expect(tx).to.emit(this.dataRepo, 'StringSet').withArgs(gameAddr, "type", game.type);
+      await expect(tx).to.emit(this.dataRepo, 'StringSet').withArgs(gameAddr, "role", game.type);
 
       // const receipt = await tx.wait()
       // console.log("makeGame Logs: ", receipt.logs);
@@ -603,7 +603,7 @@ describe("Protocol", function () {
         //Change to Closed Game
         let tx = await this.gameContract.connect(admin).confSet("isClosed", "true");
         //Expect Claim Created Event
-        await expect(tx).to.emit(this.openRepo, 'StringSet').withArgs(this.gameContract.address, "isClosed", "true");
+        await expect(tx).to.emit(this.dataRepo, 'StringSet').withArgs(this.gameContract.address, "isClosed", "true");
         //Validate
         expect(await this.gameContract.confGet("isClosed")).to.equal("true");
       });
@@ -702,8 +702,8 @@ describe("Protocol", function () {
       // await hubContract.makeGame(game.type, game.name, test_uri);
       ++soulTokenId;
 
-      // await expect(tx1).to.emit(this.openRepo, 'StringSet').withArgs("type", gameMDAOData.type);
-      // await expect(tx1).to.emit(this.openRepo, 'StringSet').withArgs("role", gameMDAOData.type);
+      // await expect(tx1).to.emit(this.dataRepo, 'StringSet').withArgs("type", gameMDAOData.type);
+      // await expect(tx1).to.emit(this.dataRepo, 'StringSet').withArgs("role", gameMDAOData.type);
 
       //Init Game Contract Object
       this.mDAOGameContract = await ethers.getContractAt('GameUpgradable', gameMDAOAddr);
@@ -729,8 +729,8 @@ describe("Protocol", function () {
       // await hubContract.makeGame(game.type, game.name, test_uri);
       ++soulTokenId;
       
-      // await expect(tx2).to.emit(this.openRepo, 'StringSet').withArgs("type", game.type);
-      // await expect(tx2).to.emit(this.openRepo, 'StringSet').withArgs("role", game.type);
+      // await expect(tx2).to.emit(this.dataRepo, 'StringSet').withArgs("type", game.type);
+      // await expect(tx2).to.emit(this.dataRepo, 'StringSet').withArgs("role", game.type);
 
       //Init Game Contract Object
       this.projectGameContract = await ethers.getContractAt('GameUpgradable', gameProjAddr);
