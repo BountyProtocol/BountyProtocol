@@ -32,7 +32,7 @@ abstract contract SoulBonds is ISoulBonds
     /// Get the SBT ID of the current user (msg.sender)
     /// @dev Implementing contract must override this!
     function _getCurrentSBT() internal view virtual returns (uint256) { 
-        revert("_getCurrentSBT() function must be overriden");
+        revert("Must override _getCurrentSBT()");
         // return _getExtTokenIdOrMake(_msgSender());   //For Tracker
         // return tokenByAddress(_msgSender()); //For Soul
     }
