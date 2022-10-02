@@ -43,7 +43,7 @@ abstract contract GameExtension is Context {
     }
 
     /// Get Assoc Repo
-    function repo() internal view returns (IOpenRepo) {
+    function dataRepo() internal view returns (IOpenRepo) {
         return IOpenRepo(getRepoAddr());
     }
 
@@ -59,7 +59,7 @@ abstract contract GameExtension is Context {
 
     /// Get Soul Contract Address
     function getSoulAddr() internal view returns (address) {
-        return repo().addressGetOf(getHubAddress(), "SBT");
+        return dataRepo().addressGetOf(getHubAddress(), "SBT");
     }
 
     /// Get Soul Contract

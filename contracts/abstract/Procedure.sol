@@ -66,13 +66,13 @@ abstract contract Procedure is IProcedure
 
     /// Set Association
     function _assocSet(string memory key, address contractAddr) internal {
-        repo().addressSet(key, contractAddr);
+        dataRepo().addressSet(key, contractAddr);
     }
 
     /// Get Contract Association
     function assocGet(string memory key) public view override returns (address) {
         //Return address from the Repo
-        return repo().addressGet(key);
+        return dataRepo().addressGet(key);
     }
     */
 
@@ -155,12 +155,12 @@ abstract contract Procedure is IProcedure
         require(container != address(0), "Invalid Container Address");
         require(IERC165(container).supportsInterface(type(IGame).interfaceId), "Implmementation Does Not Support Game Interface");  //Might Cause Problems on Interface Update. Keep disabled for now.
         //Set to OpenRepo
-        repo().addressSet("container", container);
+        dataRepo().addressSet("container", container);
     }
 
     /// Get Container Address
     function getContainerAddr() internal view returns (address) {
-        return repo().addressGet("container");
+        return dataRepo().addressGet("container");
     }
 
     //** Role Management

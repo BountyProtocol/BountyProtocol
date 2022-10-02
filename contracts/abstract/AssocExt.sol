@@ -25,7 +25,7 @@ abstract contract AssocExt {
     }
 
     //Get Assoc Repo
-    function repo() internal view returns (IOpenRepo) {
+    function dataRepo() internal view returns (IOpenRepo) {
         return _OpenRepo;
     }
     

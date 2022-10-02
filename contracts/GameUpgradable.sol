@@ -99,7 +99,7 @@ contract GameUpgradable is IGame
         //Initializers
         // __ProtocolEntity_init(hub);
         __ProtocolEntity_init(msg.sender);
-        _setTargetContract(repo().addressGetOf(address(_HUB), "SBT"));
+        _setTargetContract(dataRepo().addressGetOf(address(_HUB), "SBT"));
         //Set Contract URI
         // _setContractURI(uri_);  //DEPRECATE - Use Soul
         //Identifiers
@@ -172,12 +172,12 @@ contract GameUpgradable is IGame
     function claimDisable(address claimContract) public override onlyOwner {
         //Validate
         require(claimHas(claimContract), "Claim Not Active");
-        repo().addressRemove("claim", claimContract);
+        dataRepo().addressRemove("claim", claimContract);
     }
 
     /// Check if Claim is Owned by This Contract (& Active)
     function claimHas(address claimContract) public view override returns (bool) {
-        return repo().addressHas("claim", claimContract);
+        return dataRepo().addressHas("claim", claimContract);
     }
 
     /// Add Post 
@@ -210,7 +210,7 @@ contract GameUpgradable is IGame
         //UID
         string memory gameTypeFull = string(abi.encodePacked("GAME_", gameType));
         //Fetch Implementations
-        implementationAddresses = repo().addressGetAllOf(address(_HUB), gameTypeFull); //Specific
+        implementationAddresses = dataRepo().addressGetAllOf(address(_HUB), gameTypeFull); //Specific
         require(implementationAddresses.length > 0, "NO_FALLBACK_CONTRACTS");
 
         // console.log("[DEBUG] Has Implementations For: ", gameTypeFull);
@@ -224,8 +224,8 @@ contract GameUpgradable is IGame
         //UID
         string memory gameType = string(abi.encodePacked("GAME_", confGet("type")));
         //Fetch Implementations
-        address[] memory implementationAddresses = repo().addressGetAllOf(address(_HUB), gameType); //Specific
-        address[] memory implementationAddressesAll = repo().addressGetAllOf(address(_HUB), "GAME_ALL"); //General
+        address[] memory implementationAddresses = dataRepo().addressGetAllOf(address(_HUB), gameType); //Specific
+        address[] memory implementationAddressesAll = dataRepo().addressGetAllOf(address(_HUB), "GAME_ALL"); //General
         return arrayConcat(implementationAddressesAll, implementationAddresses);
     }
     
@@ -304,7 +304,7 @@ contract GameUpgradable is IGame
     ) internal virtual override {
         super._afterTokenTransferTracker(operator, fromToken, toToken, ids, amounts, data);
         //-- Track Voting Power by SBT
-        address votesRepoAddr = repo().addressGetOf(address(_HUB), "VOTES_REPO");
+        address votesRepoAddr = dataRepo().addressGetOf(address(_HUB), "VOTES_REPO");
         // console.log("Votes Repo: ", votesRepoAddr);
         if(votesRepoAddr != address(0)) {
             for (uint256 i = 0; i < ids.length; ++i) {
@@ -325,7 +325,7 @@ contract GameUpgradable is IGame
     
     //Get Rules Repo
     function _ruleRepo() internal view returns (IRules) {
-        address ruleRepoAddr = repo().addressGetOf(address(_HUB), "RULE_REPO");
+        address ruleRepoAddr = dataRepo().addressGetOf(address(_HUB), "RULE_REPO");
         return IRules(ruleRepoAddr);
     }
 

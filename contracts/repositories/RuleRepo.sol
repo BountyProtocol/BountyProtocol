@@ -57,7 +57,7 @@ contract RuleRepo is IRules {
     }
 
     //Get Assoc Repo
-    function repo() internal view returns (IOpenRepo) {
+    function dataRepo() internal view returns (IOpenRepo) {
         return IOpenRepo(getRepoAddr());
     }
 
@@ -97,7 +97,7 @@ contract RuleRepo is IRules {
         require(IERC1155RolesTracker(msg.sender).roleHas(tx.origin, "admin"), "Admin Only");
         
         //Validate rule.about -- actionGUID Exists
-        address actionRepo = repo().addressGetOf(getHubAddress(), "history");
+        address actionRepo = dataRepo().addressGetOf(getHubAddress(), "history");
 
         IActionRepo(actionRepo).actionGet(rule.about);  //Revetrs if does not exist
         //Add Rule

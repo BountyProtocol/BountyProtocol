@@ -43,7 +43,7 @@ contract ActionRepoTrackerUp is
         //Initializers
         __UUPSUpgradeable_init();
         __ProtocolEntity_init(hub);
-        _setTargetContract( repo().addressGetOf(address(_HUB), "SBT") );
+        _setTargetContract( dataRepo().addressGetOf(address(_HUB), "SBT") );
     }
 
     /// Upgrade Permissions

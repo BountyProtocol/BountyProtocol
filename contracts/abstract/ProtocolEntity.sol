@@ -75,23 +75,23 @@ abstract contract ProtocolEntity is IProtocolEntity,
     }
 
     //Get Assoc Repo
-    function repo() internal view returns (IOpenRepo) {
+    function dataRepo() internal view returns (IOpenRepo) {
         return IOpenRepo(getRepoAddr());
     }
 
     /// Get Soul Contract Address
     function getSoulAddr() internal view returns (address) {
-        return repo().addressGetOf(address(_HUB), "SBT");
+        return dataRepo().addressGetOf(address(_HUB), "SBT");
     }
 
     /// Generic Config Get Function
     // function confGet(string memory key) public view override returns (string memory) {
-    //     return repo().stringGet(key);
+    //     return dataRepo().stringGet(key);
     // }
 
     /// Generic Config Set Function
     function _confSet(string memory key, string memory value) internal {
-        repo().stringSet(key, value);
+        dataRepo().stringSet(key, value);
     }
 
 }

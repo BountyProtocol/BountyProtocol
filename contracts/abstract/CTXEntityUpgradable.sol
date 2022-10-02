@@ -64,7 +64,7 @@ abstract contract CTXEntityUpgradable is
     
     /// Generic Config Get Function
     function confGet(string memory key) public view override returns (string memory) {
-        return repo().stringGet(key);
+        return dataRepo().stringGet(key);
     }
     
     /// Generic Config Set Function

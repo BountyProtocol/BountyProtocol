@@ -100,13 +100,13 @@ contract HubUpgradable is
     /// Update Hub
     function hubChange(address newHubAddr) external override onlyOwner {
         //Avatar
-        address SBTAddress = repo().addressGet("SBT");
+        address SBTAddress = dataRepo().addressGet("SBT");
         if(SBTAddress != address(0)) {
             try IProtocolEntity(SBTAddress).setHub(newHubAddr) {}  //Failure should not be fatal
             catch Error(string memory /*reason*/) {}
         }
         //History
-        address actionRepo = repo().addressGet("history");
+        address actionRepo = dataRepo().addressGet("history");
         if(actionRepo != address(0)) {
             try IProtocolEntity(actionRepo).setHub(newHubAddr) {}   //Failure should not be fatal
             catch Error(string memory reason) {
@@ -122,27 +122,27 @@ contract HubUpgradable is
     /// Get Contract Association
     function assocGet(string memory key) public view override returns (address) {
         //Return address from the Repo
-        return repo().addressGet(key);
+        return dataRepo().addressGet(key);
     }
 
     /// Set Association
     function assocSet(string memory key, address contractAddr) external onlyOwner {
-        repo().addressSet(key, contractAddr);
+        dataRepo().addressSet(key, contractAddr);
     }
     
     /// Add Association
     function assocAdd(string memory key, address contractAddr) external onlyOwner {
-        repo().addressAdd(key, contractAddr);
+        dataRepo().addressAdd(key, contractAddr);
     }
 
     /// Remove Association
     function assocRemove(string memory key, address contractAddr) external onlyOwner {
-        repo().addressRemove(key, contractAddr);
+        dataRepo().addressRemove(key, contractAddr);
     }
 
     //Repo Address
     function getRepoAddr() external view override returns (address) {
-        return address(repo());
+        return address(dataRepo());
     }
 
     //--- Factory 
@@ -175,7 +175,7 @@ contract HubUpgradable is
         //Remember
         _games[address(newProxyContract)] = true;
         //Register Game to Repo
-        repo().addressAdd("game", address(newProxyContract));
+        dataRepo().addressAdd("game", address(newProxyContract));
         //Return
         return address(newProxyContract);
     }
@@ -284,7 +284,7 @@ contract HubUpgradable is
         uint8 amount
     ) public override activeGame {
         //Update SBT's Reputation
-        address SBTAddress = repo().addressGet("SBT");
+        address SBTAddress = dataRepo().addressGet("SBT");
         if(SBTAddress != address(0) && SBTAddress == contractAddr) {
             _repAddAvatar(tokenId, domain, rating, amount);
         }
@@ -292,7 +292,7 @@ contract HubUpgradable is
 
     /// Add Repuation to SBT Token
     function _repAddAvatar(uint256 tokenId, string calldata domain, bool rating, uint8 amount) internal {
-        address SBTAddress = repo().addressGet("SBT");
+        address SBTAddress = dataRepo().addressGet("SBT");
         try ISoul(SBTAddress).repAdd(tokenId, domain, rating, amount) {}   //Failure should not be fatal
         catch Error(string memory /*reason*/) {}
     }
@@ -309,7 +309,7 @@ contract HubUpgradable is
     /// Mint a new SBT for Entity
     function _mintSoul(address account, string calldata uri_) internal returns (uint256) {
         //Register as a Soul
-        try ISoul(repo().addressGet("SBT")).mintFor(account, uri_) 
+        try ISoul(dataRepo().addressGet("SBT")).mintFor(account, uri_) 
         returns (uint256 sbt) {
             return sbt;
         }

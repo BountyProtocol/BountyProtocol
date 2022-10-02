@@ -19,7 +19,7 @@ contract SafeERC1155 is ERC1155TrackerUpgradable,
         __ProtocolEntity_init(msg.sender);
         
         //Set Tracker's SBT Contract
-        _setTargetContract(repo().addressGetOf(address(_HUB), "SBT"));
+        _setTargetContract(dataRepo().addressGetOf(address(_HUB), "SBT"));
 
         //Represent the Self
         ISoul(_targetContract).mint(uri_);

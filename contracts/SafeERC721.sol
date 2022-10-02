@@ -29,7 +29,7 @@ contract SafeERC721 is ERC721TrackerUpgradable,
         //ERC721 Init
         __ERC721_init(name_, symbol_);
         //Set Tracker
-        _setTargetContract(repo().addressGetOf(address(_HUB), "SBT"));
+        _setTargetContract(dataRepo().addressGetOf(address(_HUB), "SBT"));
         //Represent the Self
         ISoul(_targetContract).mint(uri_);
         //Remember Deployer's SBT

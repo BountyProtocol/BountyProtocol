@@ -127,7 +127,7 @@ contract CourtExt is ICourtExt, GameExtension {
     /// Register New Claim Contract
     function _registerNewClaim(address claimContract) private {
         //Register Child Contract
-        repo().addressAdd("claim", claimContract);
+        dataRepo().addressAdd("claim", claimContract);
         //New Claim Created Event
         // emit ClaimCreated(claimId, claimContract);  //CANCELLED
     }
