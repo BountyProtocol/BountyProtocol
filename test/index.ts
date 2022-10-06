@@ -69,6 +69,11 @@ describe("Protocol", function () {
 
     //--- Deploy Hub (UUPS)
     hubContract = await deployHub(this.dataRepo.address);
+    
+    //--- Rule Repository
+    this.ruleRepo = await deployContract("RuleRepo", []);
+    //Set to Hub
+    await hubContract.assocSet("RULE_REPO", this.ruleRepo.address);
 
     //Deploy Additional Beacons
     let erc721 = await deployContract("SafeERC721", []);
@@ -79,14 +84,8 @@ describe("Protocol", function () {
     //--- Deploy All Game Extensions
     deployGameExt(hubContract);
   
-    //--- Rule Repository
-    this.ruleRepo = await deployContract("RuleRepo", []);
-    //Set to Hub
-    await hubContract.assocSet("RULE_REPO", this.ruleRepo.address);
-
     //--- Soul Upgradable (UUPS)
     soulContract = await deployUUPS("SoulUpgradable", [hubContract.address]);
-
     //Set Avatar Contract to Hub
     await hubContract.assocSet("SBT", soulContract.address);
 
@@ -96,6 +95,12 @@ describe("Protocol", function () {
     //Set History Contract to Hub
     await hubContract.assocSet("history", actionContract.address);
 
+    //--- Votes Repository Upgradable (UUPS)
+    this.votesRepo = await deployUUPS("VotesRepoTrackerUp", [hubContract.address]);
+    // this.votesRepo = await deployUUPS("VotesRepoTrackerUpInt", [hubContract.address]);
+    //Set to Hub
+    await hubContract.assocSet("VOTES_REPO", this.votesRepo.address);
+        
   });
 
 
@@ -323,13 +328,9 @@ describe("Protocol", function () {
         type: "",
       };
 
-
       //Simulate to Get New Game Address
       let gameAddr = await hubContract.callStatic.makeGame(game.type, game.name, test_uri);
-      // let gameAddr = await hubContract.connect(admin).callStatic.makeGame(game.type, game.name, test_uri);
-
       //Create New Game
-      // let tx = await hubContract.connect(admin).makeGame(game.type, game.name, test_uri);
       let tx = await hubContract.makeGame(game.type, game.name, test_uri);
       //Expect Valid Address
       expect(gameAddr).to.be.properAddress;
@@ -373,6 +374,10 @@ describe("Protocol", function () {
       await this.gameContract.connect(tester).join();
       //Check After
       expect(await this.gameContract.roleHas(this.testerAddr, "member")).to.equal(true);
+    });
+
+    it("Members receive voting power", async function () {
+      expect(await this.gameContract.getVotes(this.testerAddr)).to.equal(1);
     });
 
     it("Role Should Track Soul's Owner", async function () {
