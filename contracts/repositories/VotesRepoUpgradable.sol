@@ -2,6 +2,8 @@
 // OpenZeppelin Contracts (last updated v4.6.0) (governance/utils/Votes.sol)
 pragma solidity ^0.8.0;
 
+import "hardhat/console.sol";
+
 import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CheckpointsUpgradeable.sol";
@@ -12,29 +14,10 @@ import "./interfaces/IVotesRepo.sol";
 
 
 /**
- * @dev Based on VotesUpgradeable  https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/v4.7.0/contracts/governance/utils/VotesUpgradeable.sol
  * @title Votes Repository
  * @dev Retains Voting Power History for other Contracts
+ * @dev Based on VotesUpgradeable  https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/v4.7.0/contracts/governance/utils/VotesUpgradeable.sol
  * Version 1.0.0
- *
- * @dev This is a base abstract contract that tracks voting units, which are a measure of voting power that can be
- * transferred, and provides a system of vote delegation, where an account can delegate its voting units to a sort of
- * "representative" that will pool delegated voting units from different accounts and can then use it to vote in
- * decisions. In fact, voting units _must_ be delegated in order to count as actual votes, and an account has to
- * delegate those votes to itself if it wishes to participate in decisions and does not have a trusted representative.
- *
- * This contract is often combined with a token contract such that voting units correspond to token units. For an
- * example, see {ERC721Votes}.
- *
- * The full history of delegate votes is tracked on-chain so that governance protocols can consider votes as distributed
- * at a particular block number to protect against flash loans and double voting. The opt-in delegate system makes the
- * cost of this history tracking optional.
- *
- * When using this module the derived contract must implement {_getVotingUnits} (for example, make it return
- * {ERC721-balanceOf}), and can use {_transferVotingUnits} to track a change in the distribution of those units (in the
- * previous example, it would be included in {ERC721-_beforeTokenTransfer}).
- *
- * _Available since v4.5._
  */
 // abstract contract VotesUpgradeable is Initializable, IVotesUpgradeable, ContextUpgradeable, EIP712Upgradeable {
 contract VotesRepoUpgradable is IVotesRepo, Initializable, IVotesUpgradeable, ContextUpgradeable, EIP712Upgradeable {
@@ -61,16 +44,8 @@ contract VotesRepoUpgradable is IVotesRepo, Initializable, IVotesUpgradeable, Co
 
     //** Core
 
-    /* UNECESSARY
-    function __Votes_init() internal onlyInitializing {
-    }
-    function __Votes_init_unchained() internal onlyInitializing {
-    }
-    */
-
     using CheckpointsUpgradeable for CheckpointsUpgradeable.History;
     using CountersUpgradeable for CountersUpgradeable.Counter;
-
 
     bytes32 private constant _DELEGATION_TYPEHASH = keccak256("Delegation(address delegatee,uint256 nonce,uint256 expiry)");
 
@@ -90,6 +65,7 @@ contract VotesRepoUpgradable is IVotesRepo, Initializable, IVotesUpgradeable, Co
      * @dev Returns the current amount of votes that `account` has.
      */
     function getVotes(address account) public view virtual override returns (uint256) {
+        console.log("[DEBUG] getVotes() STARTED", account);
         return _delegateCheckpoints[msg.sender][account].latest();
     }
 
