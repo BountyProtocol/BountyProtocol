@@ -191,7 +191,7 @@ describe("Protocol", function () {
 
       //Mint a Lost-Soul
       await soulContract.mintFor(soulContract.address, test_uri);
-      this.unOwnedTokenId = soulTokenId;
+      soulTokens.unOwned = soulTokenId;
       ++soulTokenId;
     });
 
@@ -247,16 +247,16 @@ describe("Protocol", function () {
 
     it("Can add other people (lost-souls)", async function () {
       //Fetch Token
-      let result = await soulContract.ownerOf(this.unOwnedTokenId);
+      let result = await soulContract.ownerOf(soulTokens.unOwned);
       //Check Owner
       expect(result).to.equal(await soulContract.address);
       //Check URI
-      expect(await soulContract.tokenURI(this.unOwnedTokenId)).to.equal(test_uri);
+      expect(await soulContract.tokenURI(soulTokens.unOwned)).to.equal(test_uri);
     });
 
     it("Owner can post as a lost-soul", async function () {
       let post = {
-        tokenId: this.unOwnedTokenId,
+        tokenId: soulTokens.unOwned,
         uri: test_uri,
       };
       //Validate Permissions
@@ -338,7 +338,6 @@ describe("Protocol", function () {
       // console.log("makeGame Event count: ", receipt.events.length);
       // console.log("Repo Addr: ", this?.openRepo?.address); //V
 
-
       // console.log("Current soulTokenId", soulTokenId);
       ++soulTokenId;
       //Init Game Contract Object
@@ -347,15 +346,7 @@ describe("Protocol", function () {
 
       expect(await this.gameContract.confGet("type")).to.equal(game.type);
       expect(await this.gameContract.confGet("role")).to.equal(game.type);
-
     });
-    
-    // it("Should NOT be transferable", async function () {
-    //   //Should Fail to transfer -- "Sorry, assets are non-transferable"
-    //   await expect(
-    //     this.gameContract.connect(tester).transferFrom(this.testerAddr, this.tester2Addr, 1)
-    //   ).to.be.revertedWith("Sorry, assets are non-transferable");
-    // });
 
     it("Should Update Contract URI", async function () {
       //Before
@@ -443,17 +434,15 @@ describe("Protocol", function () {
       expect(await this.gameContract.roleHas(this.authorityAddr, "authority")).to.equal(true);
     });
     
-    /* CANCELLED Lost-Souls Feature   
     it("Admin can Assign Roles to Lost-Souls", async function () {
       //Check Before
-      expect(await this.gameContract.roleHasByToken(unOwnedTokenId, "authority")).to.equal(false);
+      expect(await this.gameContract.roleHasByToken(soulTokens.unOwned, "authority")).to.equal(false);
       //Assign Authority
-      await this.gameContract.connect(admin).roleAssignToToken(unOwnedTokenId, "authority")
+      await this.gameContract.connect(admin).roleAssignToToken(soulTokens.unOwned, "authority")
       //Check After
-      expect(await this.gameContract.roleHasByToken(unOwnedTokenId, "authority")).to.equal(true);
+      expect(await this.gameContract.roleHasByToken(soulTokens.unOwned, "authority")).to.equal(true);
     });
-    */
-
+    
     it("Can change Roles (Promote / Demote)", async function () {
       //Check Before
       expect(await this.gameContract.roleHas(this.tester4Addr, "admin")).to.equal(false);
