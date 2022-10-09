@@ -1,8 +1,9 @@
+//TODO: Reinstate Lost Souls
+
 // DataTypes.Rule memory rule = ruleGet(ruleId);
 import { expect } from "chai";
 import { Contract, Signer } from "ethers";
 import { ethers } from "hardhat";
-import { task } from "hardhat/config";
 import { 
   deployContract, 
   deployUUPS, 
@@ -162,7 +163,6 @@ describe("Protocol", function () {
     
     it("Can mint", async function () {
       //SBT Tokens
-      
       let tx = await soulContract.connect(tester).mint(test_uri);
       tx.wait();
       //Fetch Token
@@ -187,6 +187,11 @@ describe("Protocol", function () {
 
       await soulContract.connect(tester2).mint(test_uri);
       soulTokens.tester2 = await soulContract.tokenByAddress(this.tester2Addr);
+      ++soulTokenId;
+
+      //Mint a Lost-Soul
+      await soulContract.mintFor(soulContract.address, test_uri);
+      this.unOwnedTokenId = soulTokenId;
       ++soulTokenId;
 
     });
@@ -241,26 +246,18 @@ describe("Protocol", function () {
       await expect(tx).to.emit(soulContract, 'Post').withArgs(this.testerAddr, post.tokenId, post.uri);
     });
 
-    /* CANCELLED Lost-Souls Feature
-    it("Can add other people", async function () {
-      unOwnedTokenId = await soulContract.connect(tester).callStatic.add(test_uri);
-      await soulContract.connect(tester).add(test_uri);
-      await soulContract.connect(tester).add(test_uri);
-      let tx = await soulContract.connect(tester).add(test_uri);
-      soulTokenId = soulTokenId + 3;
-      tx.wait();
-      // console.log("minting", tx);
+    it("Can add other people (lost-souls)", async function () {
       //Fetch Token
-      let result = await soulContract.ownerOf(unOwnedTokenId);
+      let result = await soulContract.ownerOf(this.unOwnedTokenId);
       //Check Owner
       expect(result).to.equal(await soulContract.address);
       //Check URI
-      expect(await soulContract.tokenURI(3)).to.equal(test_uri);
+      expect(await soulContract.tokenURI(this.unOwnedTokenId)).to.equal(test_uri);
     });
-    
-    it("Should Post as a Lost-Soul", async function () {
+
+    it("Owner can post as a lost-soul", async function () {
       let post = {
-        tokenId: unOwnedTokenId,
+        tokenId: this.unOwnedTokenId,
         uri: test_uri,
       };
       //Validate Permissions
@@ -268,15 +265,13 @@ describe("Protocol", function () {
         //Failed Post
         soulContract.connect(tester4).post(post.tokenId, post.uri)
       ).to.be.revertedWith("POST:SOUL_NOT_YOURS");
-
       //Successful Post
       let tx = await soulContract.post(post.tokenId, post.uri);
       await tx.wait();  //wait until the transaction is mined
       //Expect Event
       await expect(tx).to.emit(soulContract, 'Post').withArgs(this.ownerAddr, post.tokenId, post.uri);
     });
-    */
-
+    
     // it("[TBD] Should Merge Souls", async function () {
 
     // });
@@ -444,7 +439,7 @@ describe("Protocol", function () {
       expect(await this.gameContract.roleHas(this.authorityAddr, "authority")).to.equal(true);
     });
     
-    /* CANCELLED Lost-Souls Feature
+    /* CANCELLED Lost-Souls Feature   
     it("Admin can Assign Roles to Lost-Souls", async function () {
       //Check Before
       expect(await this.gameContract.roleHasByToken(unOwnedTokenId, "authority")).to.equal(false);
