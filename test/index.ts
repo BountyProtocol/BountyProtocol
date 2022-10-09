@@ -193,7 +193,6 @@ describe("Protocol", function () {
       await soulContract.mintFor(soulContract.address, test_uri);
       this.unOwnedTokenId = soulTokenId;
       ++soulTokenId;
-
     });
 
     it("Can mint only one", async function () {
@@ -276,12 +275,10 @@ describe("Protocol", function () {
 
     // });
     
-    it("Should NOT be transferable", async function () {
+    it("Tokens should NOT be transferable", async function () {
       //Should Fail to transfer -- "Sorry, assets are non-transferable"
-      let fromAddr = await tester.getAddress();
-      let toAddr = await tester2.getAddress();
       await expect(
-        soulContract.connect(tester).transferFrom(fromAddr, toAddr, 1)
+        soulContract.connect(tester).transferFrom(this.testerAddr, this.tester2Addr, 1)
       ).to.be.revertedWith("Sorry, assets are non-transferable");
     });
 
@@ -317,7 +314,7 @@ describe("Protocol", function () {
       await soulContract.connect(tester4).mint(test_uri);
       await soulContract.connect(tester5).mint(test_uri);
       await soulContract.connect(authority).mint(test_uri);
-      soulTokenId = soulTokenId + 3;
+      soulTokenId += 3;
       let game = {
         name: "Test Game",
         type: "",
@@ -352,6 +349,13 @@ describe("Protocol", function () {
       expect(await this.gameContract.confGet("role")).to.equal(game.type);
 
     });
+    
+    // it("Should NOT be transferable", async function () {
+    //   //Should Fail to transfer -- "Sorry, assets are non-transferable"
+    //   await expect(
+    //     this.gameContract.connect(tester).transferFrom(this.testerAddr, this.tester2Addr, 1)
+    //   ).to.be.revertedWith("Sorry, assets are non-transferable");
+    // });
 
     it("Should Update Contract URI", async function () {
       //Before
