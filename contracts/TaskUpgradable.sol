@@ -6,7 +6,6 @@ pragma solidity 0.8.4;
 import "./ClaimUpgradable.sol";
 import "./abstract/CTXEntityUpgradable.sol";
 import "./abstract/ERC1155RolesTrackerUp.sol";
-// import "./abstract/Posts.sol";
 import "./abstract/Escrow.sol";
 import "./abstract/Procedure.sol";
 import "./interfaces/ITask.sol";

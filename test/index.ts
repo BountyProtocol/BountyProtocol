@@ -230,19 +230,20 @@ describe("Protocol", function () {
       let post = {
         tokenId: soulTokens.tester,
         uri:test_uri,
+        context: '',
       };
 
       //Validate Permissions
       await expect(
         //Failed Post
-        soulContract.connect(tester4).post(post.tokenId, post.uri)
+        soulContract.connect(tester4).post(post.tokenId, post.uri, post.context)
       ).to.be.revertedWith("POST:SOUL_NOT_YOURS");
 
       //Successful Post
-      let tx = await soulContract.connect(tester).post(post.tokenId, post.uri);
+      let tx = await soulContract.connect(tester).post(post.tokenId, post.uri, post.context);
       await tx.wait();  //wait until the transaction is mined
       //Expect Event
-      await expect(tx).to.emit(soulContract, 'Post').withArgs(this.testerAddr, post.tokenId, post.uri);
+      await expect(tx).to.emit(soulContract, 'Post').withArgs(this.testerAddr, post.tokenId, post.uri, post.context);
     });
 
     it("Can add other people (lost-souls)", async function () {
@@ -258,17 +259,18 @@ describe("Protocol", function () {
       let post = {
         tokenId: soulTokens.unOwned,
         uri: test_uri,
+        context: soulContract.address,
       };
       //Validate Permissions
       await expect(
         //Failed Post
-        soulContract.connect(tester4).post(post.tokenId, post.uri)
+        soulContract.connect(tester4).post(post.tokenId, post.uri, post.context)
       ).to.be.revertedWith("POST:SOUL_NOT_YOURS");
       //Successful Post
-      let tx = await soulContract.post(post.tokenId, post.uri);
+      let tx = await soulContract.post(post.tokenId, post.uri, post.context);
       await tx.wait();  //wait until the transaction is mined
       //Expect Event
-      await expect(tx).to.emit(soulContract, 'Post').withArgs(this.ownerAddr, post.tokenId, post.uri);
+      await expect(tx).to.emit(soulContract, 'Post').withArgs(this.ownerAddr, post.tokenId, post.uri, post.context);
     });
     
     // it("[TBD] Should Merge Souls", async function () {

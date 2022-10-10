@@ -289,13 +289,19 @@ contract SoulUpgradable is
     }
 
     /// Post
-    function post(uint256 tokenId, string calldata uri_) external override {
+    // function post(uint256 tokenId, string calldata uri_) external override {
+    //     //Validate that User Controls The Token
+    //     require(hasTokenControl(tokenId), "POST:SOUL_NOT_YOURS");
+    //     //Post Event
+    //     emit Post(_msgSender(), tokenId, uri_);
+    // }
+    /// Post
+    function post(uint256 tokenId, string calldata uri_, string calldata context) external override {
         //Validate that User Controls The Token
         require(hasTokenControl(tokenId), "POST:SOUL_NOT_YOURS");
         //Post Event
-        emit Post(_msgSender(), tokenId, uri_);
+        emit Post(_msgSender(), tokenId, uri_, context);
     }
-
 
     /// [WIP] Run Custom Action
     function runAction() external {
