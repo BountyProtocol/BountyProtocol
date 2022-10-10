@@ -24,11 +24,14 @@ interface IVotesRepoTracker {
     /// Expose Target Contract
     function getTargetContract() external returns (address);
 
+    function delegateFrom(address from, address to) external;
 
-    function delegatesToken(uint256 accountToken) external view returns (uint256);
+    function delegatesToken(uint256 sbt) external view returns (uint256);
 
-    function getVotesForToken(uint256 account) external view returns (uint256);
+    function delegatesTokenOf(address contractAddr, uint256 sbt) external view returns (uint256);
 
-    function getPastVotesForToken(uint256 account, uint256 blockNumber) external view returns (uint256);
+    function getVotesForToken(uint256 sbt) external view returns (uint256);
+
+    function getPastVotesForToken(uint256 sbt, uint256 blockNumber) external view returns (uint256);
 
 }
