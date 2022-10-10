@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
-// import "hardhat/console.sol";
+import "hardhat/console.sol";
 
 import "@openzeppelin/contracts/utils/Strings.sol";
 // import "@openzeppelin/contracts/utils/Counters.sol";
@@ -16,16 +16,18 @@ import "./interfaces/IRules.sol";
 import "./interfaces/IClaim.sol";
 import "./interfaces/IActionRepo.sol";
 import "./interfaces/ICTXEntityUpgradable.sol";
-import "./repositories/interfaces/IVotesRepoTracker.sol";
-import "./abstract/ERC1155RolesTrackerUp.sol";
 // import "./abstract/ProtocolEntityUpgradable.sol";
 import "./abstract/CTXEntityUpgradable.sol";
+import "./abstract/ERC1155RolesTrackerUp.sol";
 import "./abstract/Opinions.sol";
 import "./abstract/Posts.sol";
 import "./abstract/ProxyMulti.sol";  //Adds 1.529Kb
 // import "./interfaces/IRulesRepo.sol";
 // import "./repositories/interfaces/IOpenRepo.sol";
 // import "./libraries/DataTypes.sol";
+
+import "./abstract/VotesTracker.sol";
+// import "./repositories/interfaces/IVotesRepoTracker.sol";    //Included above
 
 
 /**
@@ -56,6 +58,7 @@ contract GameUpgradable is IGame
         , ProxyMulti
         // VotesUpgradeable,
         , CTXEntityUpgradable
+        , VotesTracker
         {
 
     //--- Storage
@@ -79,7 +82,7 @@ contract GameUpgradable is IGame
      * @dev Returns the balance of `account`.
      * /
     function _getVotingUnits(address account) internal view virtual override returns (uint256) {
-        return balanceOf(account, _roleToId("member"));
+        return balanceOf(account, roleToId("member"));
     }
     */
 
@@ -297,23 +300,40 @@ contract GameUpgradable is IGame
     ) internal virtual override {
         super._afterTokenTransferTracker(operator, fromToken, toToken, ids, amounts, data);
         //-- Track Voting Power by SBT
-        address votesRepoAddr = dataRepo().addressGetOf(address(_HUB), "VOTES_REPO");
-        // console.log("Votes Repo: ", votesRepoAddr);
-        if(votesRepoAddr != address(0)) {
+        // address votesRepoAddr_ = dataRepo().addressGetOf(address(_HUB), "VOTES_REPO");
+        address votesRepoAddr_ = votesRepoAddr();
+        // console.log("Votes Repo Addr: ", votesRepoAddr_);
+        if(votesRepoAddr_ != address(0)) {
             for (uint256 i = 0; i < ids.length; ++i) {
+
                 //Only "member" tokens give voting rights
-                if(_roleToId("member") == ids[i]) {
+                if(roleExist("member") && roleToId("member") == ids[i]) {
                     // uint256 id = ids[i];
                     uint256 amount = amounts[i];
+
                     //Votes Changes
-                    IVotesRepoTracker(votesRepoAddr).transferVotingUnits(fromToken, toToken, amount);
+                    IVotesRepoTracker(votesRepoAddr_).transferVotingUnits(fromToken, toToken, amount);
+
                 }
+                
             }
         }
-        // else{ console.log("No Votes Repo Configured", votesRepoAddr); }
+        // else{ console.log("No Votes Repo Configured", votesRepoAddr_); }
     }
 
+    /// Get the Votes Repo Address
+    function votesRepoAddr() public view returns (address){
+        return dataRepo().addressGetOf(address(_HUB), "VOTES_REPO");
+    }
 
+    /// @dev Override _votesRepo() for votes implementation
+    function _votesRepo() internal view override returns (IVotesUpgradeable){
+        // address votesRepoAddr_ = votesRepoAddr();
+        // return IVotesUpgradeable(votesRepoAddr_);
+        return IVotesUpgradeable(votesRepoAddr());
+    }
+
+    
     //** Rule Management    //Maybe Offload to a GameExtension
     
     //Get Rules Repo

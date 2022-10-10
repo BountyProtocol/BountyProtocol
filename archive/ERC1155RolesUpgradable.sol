@@ -71,12 +71,12 @@ abstract contract ERC1155RolesUpgradable is IERC1155Roles, ERC1155GUIDUpgradable
 
     /// Unique Members Count (w/Token)
     function uniqueRoleMembers(string memory role) public override view returns (address[] memory) {
-        return uniqueMembers(_roleToId(role));
+        return uniqueMembers(roleToId(role));
     }
 
     /// Unique Members Count (w/Token)
     function uniqueRoleMembersCount(string memory role) public override view returns (uint256) {
-        return uniqueMembers(_roleToId(role)).length;
+        return uniqueMembers(roleToId(role)).length;
     }
 
     /// Check if Role Exists
@@ -112,7 +112,7 @@ abstract contract ERC1155RolesUpgradable is IERC1155Roles, ERC1155GUIDUpgradable
     }
 
     /// Translate Role to Token ID
-    function _roleToId(string memory role) internal view roleExists(role) returns (uint256) {
+    function roleToId(string memory role) internal view roleExists(role) returns (uint256) {
         return _GUIDToId(_stringToBytes32(role));
     }
 
@@ -129,12 +129,12 @@ abstract contract ERC1155RolesUpgradable is IERC1155Roles, ERC1155GUIDUpgradable
 
     /// Get Metadata URI by Role
     function roleURI(string calldata role) public view override roleExists(role) returns (string memory) {
-        return _tokenURIs[_roleToId(role)];
+        return _tokenURIs[roleToId(role)];
     }
     
     /// Set Role's Metadata URI
     function _setRoleURI(string memory role, string memory _tokenURI) internal virtual roleExists(role) {
-        uint256 tokenId = _roleToId(role);
+        uint256 tokenId = roleToId(role);
         _tokenURIs[tokenId] = _tokenURI;
         //URI Changed Event
         emit RoleURIChange(_tokenURI, role);
