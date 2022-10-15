@@ -253,11 +253,7 @@ contract SoulUpgradable is
 
     /// Check if the Current Account has Control over a Token   //DEPRECATE?
     function hasTokenControl(uint256 tokenId) public view override returns (bool) {
-        return (
-            hasTokenControlAccount(tokenId, _msgSender()) 
-            // solhint-disable-next-line avoid-tx-origin
-            || hasTokenControlAccount(tokenId, tx.origin)
-        );
+        return hasTokenControlAccount(tokenId, _msgSender());
     }
 
     /// Check if a Specific Account has control over a Token
@@ -277,9 +273,7 @@ contract SoulUpgradable is
         if(ownerAccount.isContract()){
             try OwnableUpgradeable(ownerAccount).owner() //Failure should not be fatal
             returns (address contractOwner) {
-                // console.log("Found Owner", contractOwner);
-                // solhint-disable-next-line avoid-tx-origin
-                return (contractOwner == _msgSender() || contractOwner == tx.origin);   //Ideally, any of the calling addresses in the stack.
+                return (contractOwner == _msgSender());   //Ideally, any of the calling addresses in the stack.
             } 
             catch Error(string memory) {}
         }
