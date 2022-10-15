@@ -7,8 +7,8 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 // import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 // import "@openzeppelin/contracts/governance/utils/Votes.sol";
-// import "./abstract/Votes.sol";
 // import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/draft-ERC721VotesUpgradeable.sol";
+// import "./abstract/Votes.sol";
 import "@openzeppelin/contracts-upgradeable/governance/utils/VotesUpgradeable.sol"; //Adds 3.486Kb
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
 import "./interfaces/IGameUp.sol";
@@ -20,10 +20,10 @@ import "./abstract/CTXEntityUpgradable.sol";
 import "./abstract/ERC1155RolesTrackerUp.sol";
 import "./abstract/Posts.sol";
 import "./abstract/ProxyMulti.sol";  //Adds 1.529Kb
-import "./interfaces/IRulesRepo.sol";
-// import "./repositories/interfaces/IOpenRepo.sol";
-// import "./libraries/DataTypes.sol";
 import "./abstract/VotesTracker.sol";
+import "./interfaces/IRulesRepo.sol";
+// import "./libraries/DataTypes.sol";
+// import "./repositories/interfaces/IOpenRepo.sol";
 // import "./repositories/interfaces/IVotesRepoTracker.sol";    //Included above
 
 
@@ -51,7 +51,7 @@ import "./abstract/VotesTracker.sol";
 contract GameUpgradable is IGame
         , Posts
         , ProxyMulti
-        // VotesUpgradeable,
+        // , VotesUpgradeable
         , CTXEntityUpgradable
         , VotesTracker
         {
@@ -334,7 +334,6 @@ contract GameUpgradable is IGame
         return IVotesRepoTracker(votesRepoAddr());
     }
 
-    
     //** Rule Management    //Maybe Offload to a GameExtension
     
     //Get Rules Repo
