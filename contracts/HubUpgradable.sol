@@ -18,13 +18,11 @@ import "./interfaces/IHub.sol";
 import "./interfaces/IGameUp.sol";
 import "./interfaces/IClaim.sol";
 import "./interfaces/IProcedure.sol";
-// import "./interfaces/ITask.sol";
 import "./interfaces/ISoul.sol";
 import "./interfaces/IRules.sol";
 import "./libraries/DataTypes.sol";
 import "./abstract/ContractBase.sol";
 import "./abstract/AssocExt.sol";
-
 
 /**
  * Hub Contract
@@ -272,9 +270,10 @@ contract HubUpgradable is
         return address(newProxyContract);
     }
 
+    /* DEPRECATED - moved to subjective reputation
     //--- Reputation
 
-    /// Add Reputation (Positive or Negative)
+    /// Global Reputation Changes
     function repAdd(address contractAddr, 
         uint256 tokenId, 
         string calldata domain, 
@@ -292,9 +291,13 @@ contract HubUpgradable is
     function _repAddAvatar(uint256 tokenId, string calldata domain, bool rating, uint8 amount) internal {
         address SBTAddress = dataRepo().addressGet("SBT");
         try ISoul(SBTAddress).repAdd(tokenId, domain, rating, amount) {}   //Failure should not be fatal
-        catch Error(string memory /*reason*/) {}
-    }
 
+        // address contractAddr, uint256 tokenId, uint256 domain, int256 score
+
+        catch Error(string memory) {}
+    }
+    */
+    
     /// Mint an SBT for another account
     function mintForAccount(address account, string calldata tokenURI) external override activeGame returns (uint256) {
         //Mint

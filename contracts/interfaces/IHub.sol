@@ -56,7 +56,7 @@ interface IHub {
     function hubChange(address newHubAddr) external;
 
     /// Add Reputation (Positive or Negative)       /// Opinion Updated
-    function repAdd(address contractAddr, uint256 tokenId, string calldata domain, bool rating, uint8 amount) external;
+    // function repAdd(address contractAddr, uint256 tokenId, string calldata domain, bool rating, uint8 amount) external;
 
     //Get Contract Association
     function assocGet(string memory key) external view returns (address);
