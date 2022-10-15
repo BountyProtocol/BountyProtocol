@@ -16,11 +16,16 @@ library Utils {
         return (keccak256(abi.encodePacked(str1)) == keccak256(abi.encodePacked(str2)));
     }
 
-    /// Translate string Roles to GUID hashes
-    // function _stringToBytes32(string memory str) public pure returns (bytes32) {
-    //     require(bytes(str).length <= 32, "String is too long. Max 32 chars");
-    //     return keccak256(abi.encode(str));
-    // }
+    /// Convert string to bytes32
+    function _stringToBytes32(string memory str) public pure returns (bytes32) {
+        require(bytes(str).length <= 32, "String is too long. Max 32 chars");
+        return keccak256(abi.encode(str));
+    }
+
+    /// Convert bytes32 to string
+    function bytes32ToString(bytes32 input_) public pure returns (string memory){
+         return string(abi.encodePacked(input_));
+    }
 
     /// Contract Type Logic
     function getAddressType(address account) internal view returns (string memory) {
