@@ -92,23 +92,37 @@ abstract contract VotesTracker is IVotesUpgradeable {
     //-- IVotes INTERFACE https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.7.3/contracts/governance/utils/IVotes.sol
     
     /// Get Current Power
+    /// @dev Returns the current amount of votes that `account` has.
     function getVotes(address account) external view override returns (uint256) {
         return _votesRepo().getVotes(account);
     }
-
+    
     /// Get Past Power
     function getPastVotes(address account, uint256 blockNumber) public view virtual override returns (uint256) {
         return _votesRepo().getPastVotes(account, blockNumber);
     }
 
+    /**
+     * @dev Returns the total supply of votes available at the end of a past block (`blockNumber`).
+     *
+     * NOTE: This value is the sum of all available votes, which is not necessarily the sum of all delegated votes.
+     * Votes that have not been delegated are still part of total supply, even though they would not participate in a
+     * vote.
+     */
     function getPastTotalSupply(uint256 blockNumber) public view virtual override returns (uint256) {
         return _votesRepo().getPastTotalSupply(blockNumber);
     }
 
+    /**
+     * @dev Returns the delegate that `account` has chosen.
+     */
     function delegates(address account) public view virtual override returns (address) {
         return _votesRepo().delegates(account);
     }
-
+    
+    /**
+     * @dev Delegates votes from the sender to `delegatee`.
+     */
     function delegate(address delegatee) public virtual override {
         _votesRepo().delegateFrom(msg.sender, delegatee);
     }
@@ -117,51 +131,11 @@ abstract contract VotesTracker is IVotesUpgradeable {
     //     _votesRepo().delegateFrom(fromSBT, delegateeSBT);
     // }
 
+    /**
+     * @dev Delegates votes from signer to `delegatee`.
+     */
     function delegateBySig(address delegatee, uint256 nonce, uint256 expiry, uint8 v, bytes32 r, bytes32 s) public virtual override {
         _votesRepo().delegateBySig(delegatee, nonce, expiry, v, r, s);
     }
-
-    /**
-     * @dev Returns the current amount of votes that `account` has.
-     * /
-    function getVotes(address account) external view returns (uint256);
-
-    /**
-     * @dev Returns the amount of votes that `account` had at the end of a past block (`blockNumber`).
-     * /
-    function getPastVotes(address account, uint256 blockNumber) external view returns (uint256);
-
-    /**
-     * @dev Returns the total supply of votes available at the end of a past block (`blockNumber`).
-     *
-     * NOTE: This value is the sum of all available votes, which is not necessarily the sum of all delegated votes.
-     * Votes that have not been delegated are still part of total supply, even though they would not participate in a
-     * vote.
-     * /
-    function getPastTotalSupply(uint256 blockNumber) external view returns (uint256);
-
-    /**
-     * @dev Returns the delegate that `account` has chosen.
-     * /
-    function delegates(address account) external view returns (address);
-
-    /**
-     * @dev Delegates votes from the sender to `delegatee`.
-     * /
-    function delegate(address delegatee) external;
-
-    /**
-     * @dev Delegates votes from signer to `delegatee`.
-     * /
-    function delegateBySig(
-        address delegatee,
-        uint256 nonce,
-        uint256 expiry,
-        uint8 v,
-        bytes32 r,
-        bytes32 s
-    ) external;
-    
-    */
 
 }
