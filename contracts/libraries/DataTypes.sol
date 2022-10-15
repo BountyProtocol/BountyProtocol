@@ -76,7 +76,16 @@ library DataTypes {
         // bytes data;  //[TBD]
         bool disabled;  //1 - Rule Disabled
     }
-    
+
+    // Effect Structure (Reputation Changes)
+    struct RepChange {
+        // uint256 domain;
+        string domain;
+        int256 value;    // value: 5
+        // bytes32 action; //Action GUID
+        // bytes data;  //[TBD]
+        bool disabled;  //1 - Rule Disabled
+    }
     // Stored Reactions [Action -> Reaction]
     /*
         action => Contract + Function + Parameters
