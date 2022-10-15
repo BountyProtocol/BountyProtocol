@@ -17,13 +17,13 @@ library Utils {
     }
 
     /// Convert string to bytes32
-    function _stringToBytes32(string memory str) internal pure returns (bytes32) {
+    function stringToBytes32(string memory str) public pure returns (bytes32) {
         require(bytes(str).length <= 32, "String is too long. Max 32 chars");
         return keccak256(abi.encode(str));
     }
 
     /// Convert bytes32 to string
-    function _bytes32ToString(bytes32 input_) internal pure returns (string memory){
+    function bytes32ToString(bytes32 input_) public pure returns (string memory){
          return string(abi.encodePacked(input_));
     }
 
