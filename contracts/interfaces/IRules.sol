@@ -12,7 +12,7 @@ interface IRules {
     function ruleGet(uint256 id) external view returns (DataTypes.Rule memory);
 
     /// Get Rule's Effects
-    function effectsGet(uint256 id) external view returns (DataTypes.Effect[] memory);
+    function effectsGet(uint256 id) external view returns (DataTypes.RepChange[] memory);
 
     /// Get Rule's Confirmation Method
     function confirmationGet(uint256 id) external view returns (DataTypes.Confirmation memory);
@@ -30,14 +30,14 @@ interface IRules {
     function ruleAdd(
         DataTypes.Rule memory rule, 
         DataTypes.Confirmation memory confirmation, 
-        DataTypes.Effect[] memory effects
+        DataTypes.RepChange[] memory effects
     ) external returns (uint256);
 
     /// Update Rule
     function ruleUpdate(
         uint256 id, 
         DataTypes.Rule memory rule, 
-        DataTypes.Effect[] memory effects
+        DataTypes.RepChange[] memory effects
     ) external;
     
     /// Set Disable Status for Rule
@@ -62,8 +62,10 @@ interface IRules {
 
     /// Rule's Effects
     // event RuleEffects(uint256 indexed id, int8 environmental, int8 personal, int8 social, int8 professional);
-    /// Generic Role Effect
-    event RuleEffect(uint256 indexed id, bool direction, uint8 value, string name);
+
+    /// Generic Role Effect (on reputation)
+    // event RuleEffect(uint256 indexed id, bool direction, uint8 value, string name);
+    event RuleEffect(uint256 indexed id, string domain, int256 value);
 
     /// Action Confirmation Change
     event Confirmation(uint256 indexed id, string ruling, bool evidence, uint witness);

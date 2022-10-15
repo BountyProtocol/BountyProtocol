@@ -13,10 +13,8 @@ import "@openzeppelin/contracts-upgradeable/utils/math/SafeCastUpgradeable.sol";
  *
  * To create a history of checkpoints define a variable type `Checkpoints.History` in your contract, and store a new
  * checkpoint for the current transaction block using the {push} function.
- *
- * _Available since v4.5._
  */
-library CheckpointsUpgradeable {
+library CheckpointsUpgradeableInt {
     struct Checkpoint {
         uint32 _blockNumber;
         int224 _value;

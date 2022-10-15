@@ -16,16 +16,14 @@ import "./interfaces/IRules.sol";
 import "./interfaces/IClaim.sol";
 import "./interfaces/IActionRepo.sol";
 import "./interfaces/ICTXEntityUpgradable.sol";
-// import "./abstract/ProtocolEntityUpgradable.sol";
 import "./abstract/CTXEntityUpgradable.sol";
 import "./abstract/ERC1155RolesTrackerUp.sol";
-import "./abstract/Opinions.sol";
+// import "./abstract/Opinions2.sol";
 import "./abstract/Posts.sol";
 import "./abstract/ProxyMulti.sol";  //Adds 1.529Kb
-// import "./interfaces/IRulesRepo.sol";
+import "./interfaces/IRulesRepo.sol";
 // import "./repositories/interfaces/IOpenRepo.sol";
 // import "./libraries/DataTypes.sol";
-
 import "./abstract/VotesTracker.sol";
 // import "./repositories/interfaces/IVotesRepoTracker.sol";    //Included above
 
@@ -53,7 +51,7 @@ import "./abstract/VotesTracker.sol";
  */
 contract GameUpgradable is IGame
         // IRules,
-        , Opinions
+        // , Opinions2
         , Posts
         , ProxyMulti
         // VotesUpgradeable,
@@ -104,8 +102,6 @@ contract GameUpgradable is IGame
         _roleAssign(tx.origin, "admin", 1);
         _roleAssign(tx.origin, "member", 1);
         //Init Default Game Roles
-        // _roleCreate("admin"); 
-        // _roleCreate("member");
         _roleCreate("authority");
         //Default Token URIs
         // _setRoleURI("admin", "");
@@ -151,14 +147,22 @@ contract GameUpgradable is IGame
         uint256 targetTokenId
     ) internal {
         //Fetch Rule's Effects
-        DataTypes.Effect[] memory effects = effectsGet(ruleId);
+        // DataTypes.RepChange[] memory effects = effectsGet(ruleId);
+        DataTypes.RepChange[] memory effects = effectsGet(ruleId);
         //Run Each Effect
         for (uint256 j = 0; j < effects.length; ++j) {
-            DataTypes.Effect memory effect = effects[j];
+            // DataTypes.RepChange memory effect = effects[j];
+            DataTypes.RepChange memory effect = effects[j];
+            
             //Register Rep in Game      //{name:'professional', value:5, direction:false}
-            _repAdd(targetContract, targetTokenId, effect.name, effect.direction, effect.value);
-            //Update Hub
-            _HUB.repAdd(targetContract, targetTokenId, effect.name, effect.direction, effect.value);
+            // _repAdd(targetContract, targetTokenId, effect.name, effect.direction, effect.value);
+            //Update Hub    //DEPRECATED
+            // _HUB.repAdd(targetContract, targetTokenId, effect.name, effect.direction, effect.value);
+
+            //Update Soul's Opinion (Reputation)
+            try ISoul(getSoulAddr()).opinionAboutToken(targetContract, targetTokenId, effect.domain, effect.value) {}   //Failure should not be fatal
+            // try ISoul(getSoulAddr()).opinionAboutSoul(targetTokenId, effect.domain, effect.value) {}   //Failure should not be fatal
+            catch Error(string memory) {}
         }
         //
         emit EffectsExecuted(targetTokenId, ruleId, "");
@@ -327,31 +331,31 @@ contract GameUpgradable is IGame
     }
 
     /// @dev Override _votesRepo() for votes implementation
-    function _votesRepo() internal view override returns (IVotesUpgradeable){
+    function _votesRepo() internal view override returns (IVotesRepoTracker){
         // address votesRepoAddr_ = votesRepoAddr();
-        // return IVotesUpgradeable(votesRepoAddr_);
-        return IVotesUpgradeable(votesRepoAddr());
+        // return IVotesRepoTracker(votesRepoAddr_);
+        return IVotesRepoTracker(votesRepoAddr());
     }
 
     
     //** Rule Management    //Maybe Offload to a GameExtension
     
     //Get Rules Repo
-    function _ruleRepo() internal view returns (IRules) {
+    function _ruleRepo() internal view returns (IRulesRepo) {
         address ruleRepoAddr = dataRepo().addressGetOf(address(_HUB), "RULE_REPO");
-        return IRules(ruleRepoAddr);
+        return IRulesRepo(ruleRepoAddr);
     }
 
     //-- Getters
 
     /// Get Rule
-    function ruleGet(uint256 id) public view returns (DataTypes.Rule memory) {
-        return _ruleRepo().ruleGet(id);
+    function ruleGet(uint256 ruleId) public view returns (DataTypes.Rule memory) {
+        return _ruleRepo().ruleGet(ruleId);
     }
 
     /// Get Rule's Effects
-    function effectsGet(uint256 id) public view returns (DataTypes.Effect[] memory) {
-        return _ruleRepo().effectsGet(id);
+    function effectsGet(uint256 effectId) public view returns (DataTypes.RepChange[] memory) {
+        return _ruleRepo().effectsGet(effectId);
     }
 
     /// Get Rule's Confirmation Method
@@ -365,7 +369,7 @@ contract GameUpgradable is IGame
     function ruleAdd(
         DataTypes.Rule memory rule, 
         DataTypes.Confirmation memory confirmation, 
-        DataTypes.Effect[] memory effects
+        DataTypes.RepChange[] memory effects
     ) public returns (uint256) {
         return _ruleRepo().ruleAdd(rule, confirmation, effects);
     }
@@ -374,7 +378,7 @@ contract GameUpgradable is IGame
     function ruleUpdate(
         uint256 id, 
         DataTypes.Rule memory rule, 
-        DataTypes.Effect[] memory effects
+        DataTypes.RepChange[] memory effects
     ) external {
         _ruleRepo().ruleUpdate(id, rule, effects);
     }

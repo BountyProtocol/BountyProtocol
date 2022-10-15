@@ -27,8 +27,10 @@ interface ISoul {
     /// Update Token's Metadata
     function update(uint256 tokenId, string memory uri) external returns (uint256);
 
-    /// Add Reputation (Positive or Negative)
-    function repAdd(uint256 tokenId, string calldata domain, bool rating, uint8 amount) external;
+    /// Add Reputation
+    // function repAdd(uint256 tokenId, string calldata domain, bool rating, uint8 amount) external;    
+    function opinionAboutSoul(uint256 tokenId, string calldata domain, int256 score) external;
+    function opinionAboutToken(address contractAddr, uint256 tokenId, string calldata domain, int256 score) external;
 
     /// Map Account to Existing Token
     function tokenOwnerAdd(address owner, uint256 tokenId) external;

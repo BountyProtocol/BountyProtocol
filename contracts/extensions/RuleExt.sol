@@ -28,7 +28,7 @@ contract RuleExt is IRuleExt, GameExtension {
     }
 
     /// Get Rule's Effects
-    function effectsGet(uint256 id) public view override returns (DataTypes.Effect[] memory) {
+    function effectsGet(uint256 id) public view override returns (DataTypes.RepChange[] memory) {
         return _ruleRepo().effectsGet(id);
     }
 
@@ -43,7 +43,7 @@ contract RuleExt is IRuleExt, GameExtension {
     function ruleAdd(
         DataTypes.Rule memory rule, 
         DataTypes.Confirmation memory confirmation, 
-        DataTypes.Effect[] memory effects
+        DataTypes.RepChange[] memory effects
     ) public override returns (uint256) {
         return _ruleRepo().ruleAdd(rule, confirmation, effects);
     }
@@ -52,7 +52,7 @@ contract RuleExt is IRuleExt, GameExtension {
     function ruleUpdate(
         uint256 id, 
         DataTypes.Rule memory rule, 
-        DataTypes.Effect[] memory effects
+        DataTypes.RepChange[] memory effects
     ) external override {
         _ruleRepo().ruleUpdate(id, rule, effects);
     }

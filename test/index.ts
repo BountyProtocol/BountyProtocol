@@ -292,14 +292,18 @@ describe("Protocol", function () {
       expect(await soulContract.connect(tester).tokenURI(1)).to.equal(test_uri);
     });
 
+    /* DEPRECATED - SBT now has Subjective Reputation
     it("Should protect from unauthorized reputation changes", async function () {
+      */
+    it("Should register soul's opinion change", async function () {
       //Rep Call Data      
-      let repCall = { tokenId:1, domain:"personal", rating:1, amount:2};
+      let repCall = { tokenId:1, domain:"personal", score:2};
       //Should Fail - Require Permissions
-      await expect(
-        soulContract.repAdd(repCall.tokenId, repCall.domain, repCall.rating, repCall.amount)
-      ).to.be.revertedWith("UNAUTHORIZED_ACCESS");
+      // await expect(
+        soulContract.connect(tester).opinionAboutSoul(repCall.tokenId, repCall.domain, repCall.score);
+      // ).to.be.revertedWith("UNAUTHORIZED_ACCESS");
     });
+    
 
   }); //Soul
 
@@ -492,8 +496,8 @@ describe("Protocol", function () {
       };
       // Effect Object (Describes Changes to Rating By Type)
       let effects1 = [
-        {name:'professional', value:5, direction:false},
-        {name:'social', value:5, direction:true},
+        {domain:'professional', value:5,},
+        {domain:'social', value:5,},
       ];
       let rule2 = {
         // uint256 about;    //About What (Token URI +? Contract Address)
@@ -506,8 +510,8 @@ describe("Protocol", function () {
       };
       // Effect Object (Describes Changes to Rating By Type)
       let  effects2 = [
-        {name:'environmental', value:10, direction:false},
-        {name:'personal', value:4, direction:true},
+        {domain:'environmental', value:10,},
+        {domain:'personal', value:4,},
       ];
       
       //Add Rule
@@ -524,9 +528,8 @@ describe("Protocol", function () {
       //Expect Event
       await expect(tx).to.emit(this.ruleRepo, 'Rule').withArgs(this.gameContract.address, 1, rule.about, rule.affected, rule.uri, rule.negation);
       
-      // await expect(tx).to.emit(this.ruleRepo, 'RuleEffects').withArgs(this.gameContract.address, 1, rule.effects.environmental, rule.effects.personal, rule.effects.social, rule.effects.professional);
       for(let effect of effects1) {
-        await expect(tx).to.emit(this.ruleRepo, 'RuleEffect').withArgs(this.gameContract.address, 1, effect.direction, effect.value, effect.name);
+        await expect(tx).to.emit(this.ruleRepo, 'RuleEffect').withArgs(this.gameContract.address, 1, effect.domain, effect.value);
       }
       await expect(tx).to.emit(this.ruleRepo, 'Confirmation').withArgs(this.gameContract.address, 1, confirmation.ruling, confirmation.evidence, confirmation.witness);
 
@@ -537,7 +540,6 @@ describe("Protocol", function () {
             
       //Expect Event
       await expect(tx2).to.emit(this.ruleRepo, 'Rule').withArgs(this.gameContract.address, 2, rule2.about, rule2.affected, rule2.uri, rule2.negation);
-      // await expect(tx2).to.emit(this.ruleRepo, 'RuleEffects').withArgs(this.gameContract.address, 2, rule2.effects.environmental, rule2.effects.personal, rule2.effects.social, rule2.effects.professional);
       await expect(tx2).to.emit(this.ruleRepo, 'Confirmation').withArgs(this.gameContract.address, 2, confirmation.ruling, confirmation.evidence, confirmation.witness);
 
       // expect(await this.gameContract.ruleAdd(actionContract.address)).to.equal("Hello, world!");
@@ -559,8 +561,8 @@ describe("Protocol", function () {
         negation: false,
       };
       let  effects = [
-        {name:'environmental', value:1, direction:false},
-        {name:'personal', value:1, direction:true},
+        {domain:'environmental', value:1},
+        {domain:'personal', value:1},
       ];
       let tx = await this.gameContract.connect(admin).ruleUpdate(2, rule, effects);
 
@@ -1015,7 +1017,7 @@ describe("Protocol", function () {
           },
           {
             role: "affected",
-            // tokenId: unOwnedTokenId,
+            // tokenId: soulTokens.unOwned, //TODO: Try This
             tokenId: soulTokens.tester3,
           },
         ];

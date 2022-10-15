@@ -64,7 +64,7 @@ contract ClaimUpgradable is IClaim, Procedure {
     }
 
     /// Get Rule's Effects
-    function ruleGetEffects(uint256 ruleRefId) public view returns (DataTypes.Effect[] memory) {
+    function ruleGetEffects(uint256 ruleRefId) public view returns (DataTypes.RepChange[] memory) {
         //Validate
         require (ruleRefExist(ruleRefId), "INEXISTENT_RULE_REF_ID");
         return IRules(_rules[ruleRefId].game).effectsGet(_rules[ruleRefId].ruleId);
@@ -72,8 +72,8 @@ contract ClaimUpgradable is IClaim, Procedure {
 
     /// Add Rule Reference
     function ruleRefAdd(address game_, uint256 ruleId_) external override AdminOrOwnerOrCTX {
-        //Validate Jurisdiciton implements IRules (ERC165)
-        require(IERC165(game_).supportsInterface(type(IRules).interfaceId), "Implmementation Does Not Support Rules Interface");  //Might Cause Problems on Interface Update. Keep disabled for now.
+        //ERC165: Validate Context implements IRules
+        require(IERC165(game_).supportsInterface(type(IRules).interfaceId), "Implementation Does Not Support IRules");  //Might Cause Problems on Interface Update. Keep disabled for now.
         _ruleRefAdd(game_, ruleId_);
     }
 

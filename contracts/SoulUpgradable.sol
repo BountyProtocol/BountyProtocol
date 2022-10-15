@@ -73,9 +73,8 @@ contract SoulUpgradable is
     }
 
     /// Get the SBT ID of the current user (msg.sender)
-    function _getCurrentSBT() internal view override returns (uint256) { 
+    function _getCurrentSBT() internal view override(Opinions, SoulBonds) returns (uint256) { 
         return tokenByAddress(_msgSender());
-        
     }
 
     //** Token Owner Index **/
@@ -133,14 +132,22 @@ contract SoulUpgradable is
 
     //** Reputation **/
     
-    /// Add Reputation (Positive or Negative)
-    function repAdd(uint256 tokenId, string calldata domain, bool rating, uint8 amount) external override {
+    /// Add Reputation (about another SBT on the same contract)
+    function opinionAboutSoul(uint256 tokenId, string calldata domain, int256 score) external override {
         //Validate - Only By Hub
-        require(_msgSender() == address(_HUB), "UNAUTHORIZED_ACCESS");
-        //Set
-        _repAdd(address(this), tokenId, domain, rating, amount);
+        // require(_msgSender() == address(_HUB), "Soul:UNAUTHORIZED_ACCESS");
+        //Not by hub - directly by opinion owner
+        require(_msgSender() != address(_HUB), "Soul:UNAUTHORIZED_ACCESS");
+        _opinionChange(address(this), tokenId, domain, score);
     }
-    
+
+    /// Add Reputation (Positive or Negative)
+    function opinionAboutToken(address contractAddr, uint256 tokenId, string calldata domain, int256 score) external override {
+        //Not by hub - directly by opinion owner
+        require(_msgSender() != address(_HUB), "Soul:UNAUTHORIZED_ACCESS");
+        _opinionChange(contractAddr, tokenId, domain, score);
+    }
+
     //** Token Actions **/
 
     /// Mint (Create New Token for Someone Else)
@@ -159,14 +166,6 @@ contract SoulUpgradable is
         //Mint
         return _mint(_msgSender(), tokenURI);
     }
-	
-    /* CANCELLED same as mintFor(self)
-    /// Add (Create New Token Without an Owner)
-    function add(string memory tokenURI) external override returns (uint256) {
-        //Mint
-        return _mint(address(this), tokenURI);
-    }
-    */
 
     /// Burn NFTs
     function burn(uint256 tokenId) external {
