@@ -368,6 +368,7 @@ contract GameUpgradable is IGame
         DataTypes.Confirmation memory confirmation, 
         DataTypes.RepChange[] memory effects
     ) public returns (uint256) {
+        require(roleHas(_msgSender(), "admin"), "Admin Only");
         return _ruleRepo().ruleAdd(rule, confirmation, effects);
     }
 
@@ -377,16 +378,19 @@ contract GameUpgradable is IGame
         DataTypes.Rule memory rule, 
         DataTypes.RepChange[] memory effects
     ) external {
+        require(roleHas(_msgSender(), "admin"), "Admin Only");
         _ruleRepo().ruleUpdate(id, rule, effects);
     }
 
     /// Set Disable Status for Rule
     function ruleDisable(uint256 id, bool disabled) external {
+        require(roleHas(_msgSender(), "admin"), "Admin Only");
         _ruleRepo().ruleDisable(id, disabled);
     }
 
     /// Update Rule's Confirmation Data
     function ruleConfirmationUpdate(uint256 id, DataTypes.Confirmation memory confirmation) external {
+        require(roleHas(_msgSender(), "admin"), "Admin Only");
         _ruleRepo().ruleConfirmationUpdate(id, confirmation);
     }
 

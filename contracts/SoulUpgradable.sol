@@ -188,8 +188,6 @@ contract SoulUpgradable is
 
     /// Create a new Token
     function _mint(address to, string memory uri) internal returns (uint256) {
-        //Validate - Bot Protection
-        // require(tx.origin == _msgSender(), "Bots not allowed");      //CANCELLED - Allow Contracts to Have Souls
         //One Per Account
         require(to == address(this) || balanceOf(to) == 0, "Account already has a token");
         //Mint

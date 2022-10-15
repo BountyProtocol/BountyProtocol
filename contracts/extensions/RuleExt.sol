@@ -45,6 +45,7 @@ contract RuleExt is IRuleExt, GameExtension {
         DataTypes.Confirmation memory confirmation, 
         DataTypes.RepChange[] memory effects
     ) public override returns (uint256) {
+        require(gameRoles().roleHas(_msgSender(), "admin"), "Admin Only");
         return _ruleRepo().ruleAdd(rule, confirmation, effects);
     }
 
@@ -54,16 +55,19 @@ contract RuleExt is IRuleExt, GameExtension {
         DataTypes.Rule memory rule, 
         DataTypes.RepChange[] memory effects
     ) external override {
+        require(gameRoles().roleHas(_msgSender(), "admin"), "Admin Only");
         _ruleRepo().ruleUpdate(id, rule, effects);
     }
 
     /// Set Disable Status for Rule
     function ruleDisable(uint256 id, bool disabled) external override {
+        require(gameRoles().roleHas(_msgSender(), "admin"), "Admin Only");
         _ruleRepo().ruleDisable(id, disabled);
     }
 
     /// Update Rule's Confirmation Data
     function ruleConfirmationUpdate(uint256 id, DataTypes.Confirmation memory confirmation) external override {
+        require(gameRoles().roleHas(_msgSender(), "admin"), "Admin Only");
         _ruleRepo().ruleConfirmationUpdate(id, confirmation);
     }
 

@@ -93,16 +93,11 @@ contract RuleRepo is IRulesRepo {
         DataTypes.Confirmation memory confirmation, 
         DataTypes.RepChange[] memory effects
     ) public override returns (uint256) {
-        //Validate Caller's Permissions
-        require(IERC1155RolesTracker(msg.sender).roleHas(tx.origin, "admin"), "Admin Only");
-        
         //Validate rule.about -- actionGUID Exists
         address actionRepo = dataRepo().addressGetOf(getHubAddress(), "history");
-
         IActionRepo(actionRepo).actionGet(rule.about);  //Revetrs if does not exist
         //Add Rule
         uint256 id = _ruleAdd(rule, effects);
-
         //Set Confirmations
         _confirmationSet(id, confirmation);
         return id;
@@ -114,24 +109,18 @@ contract RuleRepo is IRulesRepo {
         DataTypes.Rule memory rule, 
         DataTypes.RepChange[] memory effects
     ) external override {
-        //Validate Caller's Permissions
-        require(IERC1155RolesTracker(msg.sender).roleHas(tx.origin, "admin"), "Admin Only");
         //Update Rule
         _ruleUpdate(id, rule, effects);
     }
 
     /// Set Disable Status for Rule
     function ruleDisable(uint256 id, bool disabled) external override {
-         //Validate Caller's Permissions
-        require(IERC1155RolesTracker(msg.sender).roleHas(tx.origin, "admin"), "Admin Only");
         //Disable Rule
         _ruleDisable(id, disabled);
     }
 
     /// Update Rule's Confirmation Data
     function ruleConfirmationUpdate(uint256 id, DataTypes.Confirmation memory confirmation) external override {
-        //Validate Caller's Permissions
-        require(IERC1155RolesTracker(msg.sender).roleHas(tx.origin, "admin"), "Admin Only");
         //Set Confirmations
         _confirmationSet(id, confirmation);
     }
@@ -139,8 +128,6 @@ contract RuleRepo is IRulesRepo {
     /*
     /// TODO: Update Rule's Effects
     function ruleEffectsUpdate(uint256 id, DataTypes.RepChange[] memory effects) external override {
-        //Validate Caller's Permissions
-        require(IERC1155RolesTracker(msg.sender).roleHas(tx.origin, "admin"), "Admin Only");
         //Set Effects
         
     }

@@ -25,8 +25,7 @@ contract SafeERC1155 is ERC1155TrackerUpgradable,
         ISoul(_targetContract).mint(uri_);
 
         //Attach to Deployer's SBT
-        // _setOwner(_getExtTokenIdOrMake(_msgSender()));   //The Hub
-       _setOwner(_getExtTokenIdOrMake(owner_));  //tx.origin is given an asset. seems safe.
+       _setOwner(_getExtTokenIdOrMake(owner_));
     }
 
     /// Revert to original Owner function

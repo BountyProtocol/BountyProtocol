@@ -1,8 +1,6 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
-// import "hardhat/console.sol";
-
 import "../interfaces/ICTXEntityUpgradable.sol";
 import "../abstract/ProtocolEntityUpgradable.sol";
 import "../abstract/ERC1155RolesTrackerUp.sol";
@@ -21,8 +19,8 @@ abstract contract CTXEntityUpgradable is
 
     modifier AdminOnly() virtual {
        //Validate Permissions
-        require(roleHas(tx.origin, "admin")    //Admin Role
-            || roleHas(_msgSender(), "admin")    //Admin Role
+        require(roleHas(_msgSender(), "admin")    //Admin Role
+            // || roleHas(tx.origin, "admin")    //Admin Role
             , "INVALID_PERMISSIONS");
         _;
     }
