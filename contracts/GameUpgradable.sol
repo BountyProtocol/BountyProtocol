@@ -18,7 +18,6 @@ import "./interfaces/IActionRepo.sol";
 import "./interfaces/ICTXEntityUpgradable.sol";
 import "./abstract/CTXEntityUpgradable.sol";
 import "./abstract/ERC1155RolesTrackerUp.sol";
-// import "./abstract/Opinions2.sol";
 import "./abstract/Posts.sol";
 import "./abstract/ProxyMulti.sol";  //Adds 1.529Kb
 import "./interfaces/IRulesRepo.sol";
@@ -50,8 +49,6 @@ import "./abstract/VotesTracker.sol";
  * - [TODO] Unique Rule IDs (GUID)
  */
 contract GameUpgradable is IGame
-        // IRules,
-        // , Opinions2
         , Posts
         , ProxyMulti
         // VotesUpgradeable,

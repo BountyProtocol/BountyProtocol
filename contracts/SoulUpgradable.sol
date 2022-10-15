@@ -295,6 +295,9 @@ contract SoulUpgradable is
     //     emit Post(_msgSender(), tokenId, uri_);
     // }
     /// Post
+    /// @param tokenId  Acting SBT Token ID (Posting as)
+    /// @param uri_     Post data URI
+    /// @param context  Posting about
     function post(uint256 tokenId, string calldata uri_, string calldata context) external override {
         //Validate that User Controls The Token
         require(hasTokenControl(tokenId), "POST:SOUL_NOT_YOURS");
