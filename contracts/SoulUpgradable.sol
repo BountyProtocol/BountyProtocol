@@ -68,6 +68,7 @@ contract SoulUpgradable is
     /// ERC165 - Supported Interfaces
     function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
         return interfaceId == type(ISoul).interfaceId
+            || interfaceId == type(ISoulBonds).interfaceId 
             || interfaceId == type(IERC721Upgradeable).interfaceId 
             || super.supportsInterface(interfaceId);
     }
