@@ -9,6 +9,7 @@ import "../libraries/CheckpointsUpgradeableInt.sol";
  * - Hold & Update Multidimentional Preference Data about Other Contracts & Tokens
  * 
  * [Ent(SBT)] -> [contract:token]+[domain] => [value]
+ * 
  */
 abstract contract Opinions is IOpinions {
     

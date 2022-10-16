@@ -5,8 +5,6 @@ pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
-// import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-// import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "../interfaces/ISoulBonds.sol";
 import "../libraries/UintArray.sol";
 
@@ -16,10 +14,7 @@ import "../libraries/UintArray.sol";
  * - Save & Return Associations
  * - Owned by Requesting Address
  */
-abstract contract SoulBonds is ISoulBonds
-    // Context, 
-    // ERC165 
-    {
+abstract contract SoulBonds is ISoulBonds {
 
     //--- Storage
     
