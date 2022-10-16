@@ -2,12 +2,12 @@ import { Contract } from "ethers";
 import { run } from "hardhat";
 import { ethers } from "hardhat";
 import contractAddrs from "../scripts/_contractAddr";
+import { ZERO_ADDR } from "../utils/consts";
 // import { deployments, ethers } from "hardhat"
 const { upgrades } = require("hardhat");
 const hre = require("hardhat");
 const chain = hre.hardhatArguments.network;
 const contractAddr = contractAddrs[chain];
-const ZERO_ADDR = '0x0000000000000000000000000000000000000000';
 
 // export const deployRepoRules = async (contractAddress: string, args: any[]) => {
 // }
@@ -37,6 +37,13 @@ export const deployGameExt = async (hubContract: Contract) => {
       verification.push({name:"CourtExt", address:res.address, params:[]});
     });
   }
+  
+  //Game Extension: Votes Support
+  await deployContract("VotesExt", []).then(async res => {
+    await hubContract.assocSet("GAME_MDAO", res.address);
+    console.log("(i) Deployed Game VotesExt Extension ", res.address);
+    verification.push({name:"VotesExt", address:res.address, params:[]});
+  });
   
   //Game Extension: mDAO
   await deployContract("MicroDAOExt", []).then(async res => {
