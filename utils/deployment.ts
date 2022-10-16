@@ -32,38 +32,38 @@ export const deployGameExt = async (hubContract: Contract) => {
   if(chain!=='mumbai'){
     //Game Extension: Court of Law
     await deployContract("CourtExt", []).then(async res => {
-      await hubContract.assocSet("GAME_COURT", res.address);
       console.log("(i) Deployed Game CourtExt Extension ", res.address);
       verification.push({name:"CourtExt", address:res.address, params:[]});
+      await hubContract.assocSet("GAME_COURT", res.address);
     });
   }
   
-  //Game Extension: Votes Support
-  await deployContract("VotesExt", []).then(async res => {
-    await hubContract.assocSet("GAME_MDAO", res.address);
-    console.log("(i) Deployed Game VotesExt Extension ", res.address);
-    verification.push({name:"VotesExt", address:res.address, params:[]});
-  });
-  
   //Game Extension: mDAO
   await deployContract("MicroDAOExt", []).then(async res => {
-    await hubContract.assocSet("GAME_MDAO", res.address);
     console.log("(i) Deployed Game MicroDAOExt Extension ", res.address);
     verification.push({name:"MicroDAOExt", address:res.address, params:[]});
+    await hubContract.assocSet("GAME_MDAO", res.address);
   });
   //Game Extension: Project
   await deployContract("ProjectExt", []).then(async res => {
-    await hubContract.assocSet("GAME_PROJECT", res.address);
     console.log("(i) Deployed Game ProjectExt Extension ", res.address);
     verification.push({name:"ProjectExt", address:res.address, params:[]});
+    await hubContract.assocSet("GAME_PROJECT", res.address);
   });
   //Game Extension: Fund Management
   await deployContract("FundManExt", []).then(async res => {
+    console.log("(i) Deployed Game FundManExt Extension ", res.address);
+    verification.push({name:"FundManExt", address:res.address, params:[]});
     // await hubContract.assocAdd("GAME_DAO", res.address);
     await hubContract.assocAdd("GAME_MDAO", res.address);
     await hubContract.assocAdd("GAME_PROJECT", res.address);
-    console.log("(i) Deployed Game FundManExt Extension ", res.address);
-    verification.push({name:"FundManExt", address:res.address, params:[]});
+  });
+  
+  //Game Extension: Votes Support
+  await deployContract("VotesExt", []).then(async res => {
+    console.log("(i) Deployed Game VotesExt Extension ", res.address);
+    verification.push({name:"VotesExt", address:res.address, params:[]});
+    await hubContract.assocAdd("GAME_MDAO", res.address);
   });
   
 

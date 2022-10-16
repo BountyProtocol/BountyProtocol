@@ -151,6 +151,13 @@ contract HubUpgradable is
         string calldata name_, 
         string calldata uri_
     ) external override returns (address) {
+        /* [WIP]
+        //Support for Soulless accounts
+        if(_getExtTokenId(tx.origin) == 0){
+            //Auto-mint token for Account
+            _mintSoul(tx.origin, "");
+        }
+        */
         //Deploy
         BeaconProxy newProxyContract = new BeaconProxy(
             _beacons["game"],
@@ -163,11 +170,9 @@ contract HubUpgradable is
         _mintSoul(address(newProxyContract), uri_);
         //Event
         emit ContractCreated("game", address(newProxyContract));
-        
         //Set Type (to be called after creating a Soul)
         ICTXEntityUpgradable(address(newProxyContract)).confSet("type", type_);
         ICTXEntityUpgradable(address(newProxyContract)).confSet("role", type_);
-
         //Remember
         _games[address(newProxyContract)] = true;
         //Register Game to Repo
@@ -194,13 +199,11 @@ contract HubUpgradable is
         _mintSoul(address(newProxyContract), uri_);
         //Event
         emit ContractCreated("process", address(newProxyContract));
-
         //Set Type (to be called after creating a Soul)
         ICTXEntityUpgradable(address(newProxyContract)).confSet("type", type_);
         ICTXEntityUpgradable(address(newProxyContract)).confSet("role", type_);
         //Set Container
         IProcedure(address(newProxyContract)).setParentCTX(_msgSender());
-        
         //Remember Parent
         _procedures[address(newProxyContract)] = _msgSender();
         //Return

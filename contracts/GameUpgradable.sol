@@ -9,7 +9,7 @@ import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 // import "@openzeppelin/contracts/governance/utils/Votes.sol";
 // import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/draft-ERC721VotesUpgradeable.sol";
 // import "./abstract/Votes.sol";
-import "@openzeppelin/contracts-upgradeable/governance/utils/VotesUpgradeable.sol"; //Adds 3.486Kb
+// import "@openzeppelin/contracts-upgradeable/governance/utils/VotesUpgradeable.sol"; //Adds 3.486Kb
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
 import "./interfaces/IGameUp.sol";
 import "./interfaces/IRules.sol";
@@ -20,12 +20,12 @@ import "./abstract/CTXEntityUpgradable.sol";
 import "./abstract/ERC1155RolesTrackerUp.sol";
 import "./abstract/Posts.sol";
 import "./abstract/ProxyMulti.sol";  //Adds 1.529Kb
-import "./abstract/VotesTracker.sol";
+// import "./abstract/VotesTracker.sol";
 import "./interfaces/IRulesRepo.sol";
 // import "./libraries/DataTypes.sol";
 // import "./repositories/interfaces/IOpenRepo.sol";
 // import "./repositories/interfaces/IVotesRepoTracker.sol";    //Included above
-
+import "./repositories/interfaces/IVotesRepoTracker.sol";
 
 /**
  * @title Game Contract
@@ -51,9 +51,9 @@ import "./interfaces/IRulesRepo.sol";
 contract GameUpgradable is IGame
         , Posts
         , ProxyMulti
-        // , VotesUpgradeable
         , CTXEntityUpgradable
-        , VotesTracker
+        // , VotesUpgradeable
+        // , VotesTracker
         {
 
     //--- Storage
@@ -306,33 +306,36 @@ contract GameUpgradable is IGame
         // console.log("Votes Repo Addr: ", votesRepoAddr_);
         if(votesRepoAddr_ != address(0)) {
             for (uint256 i = 0; i < ids.length; ++i) {
-
                 //Only "member" tokens give voting rights
                 if(roleExist("member") && roleToId("member") == ids[i]) {
                     // uint256 id = ids[i];
                     uint256 amount = amounts[i];
-
                     //Votes Changes
                     IVotesRepoTracker(votesRepoAddr_).transferVotingUnits(fromToken, toToken, amount);
-
                 }
-                
             }
         }
         // else{ console.log("No Votes Repo Configured", votesRepoAddr_); }
     }
 
+
+
     /// Get the Votes Repo Address
     function votesRepoAddr() public view returns (address){
         return dataRepo().addressGetOf(address(_HUB), "VOTES_REPO");
     }
-
+    /*
     /// @dev Override _votesRepo() for votes implementation
     function _votesRepo() internal view override returns (IVotesRepoTracker){
         // address votesRepoAddr_ = votesRepoAddr();
         // return IVotesRepoTracker(votesRepoAddr_);
         return IVotesRepoTracker(votesRepoAddr());
     }
+    */
+    
+
+
+
 
     //** Rule Management    //Maybe Offload to a GameExtension
     

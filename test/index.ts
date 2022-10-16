@@ -1,6 +1,3 @@
-//TODO: Reinstate Lost Souls
-
-// DataTypes.Rule memory rule = ruleGet(ruleId);
 import { expect } from "chai";
 import { Contract, Signer } from "ethers";
 import { ethers } from "hardhat";
@@ -8,14 +5,10 @@ import {
   deployContract, 
   deployUUPS, 
   deployGameExt, 
-  deployHub 
+  deployHub,
 } from "../utils/deployment";
-const { upgrades } = require("hardhat");
+import { ZERO_ADDR, test_uri, test_uri2 } from "../utils/consts";
 
-//Test Data
-const ZERO_ADDR = '0x0000000000000000000000000000000000000000';
-let test_uri = "ipfs://QmQxkoWcpFgMa7bCzxaANWtSt43J1iMgksjNnT4vM1Apd7"; //"TEST_URI";
-let test_uri2 = "ipfs://TEST2";
 let actionGUID = "";
 let soulTokenId = 1;  //Try to keep track of Current Soul Token ID
 const soulTokens: any = {};  //Soul Token Assignment
@@ -46,7 +39,7 @@ describe("Protocol", function () {
     //Populate Accounts
     [owner, admin, admin2, tester, tester2, tester3, tester4, tester5, authority, ...addrs] = await ethers.getSigners();
 
-    //Addresses
+    //Fetch Addresses
     this.ownerAddr = await owner.getAddress();
     this.adminAddr = await admin.getAddress();
     this.admin2Addr = await admin2.getAddress();
@@ -92,7 +85,6 @@ describe("Protocol", function () {
 
     //--- History Upgradable (UUPS)
     actionContract = await deployUUPS("ActionRepoTrackerUp", [hubContract.address]);
-
     //Set History Contract to Hub
     await hubContract.assocSet("history", actionContract.address);
 
@@ -371,11 +363,7 @@ describe("Protocol", function () {
       //Check After
       expect(await this.gameContract.roleHas(this.testerAddr, "member")).to.equal(true);
     });
-
-    it("Members receive voting power", async function () {
-      expect(await this.gameContract.getVotes(this.testerAddr)).to.equal(1);
-    });
-
+    
     it("Role Should Track Soul's Owner", async function () {
       //Check Before
       expect(await this.gameContract.roleHas(this.tester5Addr, "member")).to.equal(false);
@@ -672,8 +660,6 @@ describe("Protocol", function () {
         //Set DAO Extension Contract
         await hubContract.assocAdd("GAME_DAO", dummyContract1.address);
         await hubContract.assocAdd("GAME_DAO", dummyContract2.address);
-        // console.log("Setting GAME_DAO Extension: ", dummyContract1.address);
-        // console.log("Setting GAME_DAO Extension: ", dummyContract2.address);
       });
 
       it("Should Set Game Type", async function () {
@@ -699,8 +685,8 @@ describe("Protocol", function () {
   }); //Game
 
   /**
-    * Projects Flow
-    */
+   * Projects Flow
+   */
   describe("Project Game Flow", function () {
 
     before(async function () {
@@ -710,7 +696,7 @@ describe("Protocol", function () {
       let gameMDAOAddr = await hubContract.connect(admin2).callStatic.makeGame(gameMDAOData.type, gameMDAOData.name, test_uri);
       // let gameAddr = await hubContract.callStatic.makeGame(game.type, game.name, test_uri);
       //Create New Game
-      let tx1 = await hubContract.connect(admin2).makeGame(gameMDAOData.type, gameMDAOData.name, test_uri);
+      await hubContract.connect(admin2).makeGame(gameMDAOData.type, gameMDAOData.name, test_uri);
       // await hubContract.makeGame(game.type, game.name, test_uri);
       ++soulTokenId;
 
@@ -735,10 +721,8 @@ describe("Protocol", function () {
       let game = {name: "Test Project", type: "PROJECT"};
       //Simulate to Get New Game Address
       let gameProjAddr = await hubContract.connect(admin).callStatic.makeGame(game.type, game.name, test_uri);
-      // let gameProjAddr = await hubContract.callStatic.makeGame(game.type, game.name, test_uri);
       //Create New Game
-      let tx2 = await hubContract.connect(admin).makeGame(game.type, game.name, test_uri);
-      // await hubContract.makeGame(game.type, game.name, test_uri);
+      await hubContract.connect(admin).makeGame(game.type, game.name, test_uri);
       ++soulTokenId;
       
       // await expect(tx2).to.emit(this.dataRepo, 'StringSet').withArgs("type", game.type);

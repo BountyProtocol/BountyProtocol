@@ -7,7 +7,6 @@ pragma solidity 0.8.4;
 import "@openzeppelin/contracts-upgradeable/governance/utils/IVotesUpgradeable.sol";
 import "../repositories/interfaces/IVotesRepoTracker.sol";
 import "../abstract/GameExtension.sol";
-// import "../libraries/DataTypes.sol";
 
 /** COPY OF VotesTracker.sol
  *
@@ -21,59 +20,46 @@ import "../abstract/GameExtension.sol";
  */
 contract VotesExt is IVotesUpgradeable, GameExtension {
 
-
-    /// Get the Votes Repo
-    /// @dev Implementing contract must override this!
-    function _votesRepo() internal view virtual returns (IVotesRepoTracker) {
-        revert("Must override _votesRepo()");
+    /// Get the Votes Repo Address
+    function votesRepoAddr() public view returns (address){
+        return dataRepo().addressGetOf(address(getHubAddress()), "VOTES_REPO");
     }
 
-    /* From ERC721Votes
+    /// Get the Votes Repo
+    function _votesRepo() internal view returns (IVotesRepoTracker) {
+        return IVotesRepoTracker(votesRepoAddr());
+    }
 
-    /**
-     * 
-     * /
+    /*
+    /// Hook:Track Voting Power 
+    /// @dev to be used on token transfers
     function _afterTokenTransferTracker(
-        address operator, 
-        uint256 fromSBT, 
-        uint256 toSBT, 
+        address operator,
+        uint256 fromToken,
+        uint256 toToken,
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
     ) internal virtual override {
-        // super._afterTokenTransferTracker(
-        //     operator, 
-        //     fromSBT, 
-        //     toSBT, 
-        //     ids,
-        //     amounts,
-        //     data
-        // );
-
-        for (uint256 i = 0; i < ids.length; ++i) {
-            uint256 id = ids[i];
-            if(id == _votingToken){
-                uint256 amount = amounts[i];
-
-                // _transferVotingUnits(from, to, 1);
-
-                //Run this on power changes
-                _votesRepo().transferVotingUnits(fromSBT, toSBT, amount);
-
+        super._afterTokenTransferTracker(operator, fromToken, toToken, ids, amounts, data);
+        //-- Track Voting Power by SBT
+        // address votesRepoAddr_ = dataRepo().addressGetOf(address(_HUB), "VOTES_REPO");
+        address votesRepoAddr_ = votesRepoAddr();
+        // console.log("Votes Repo Addr: ", votesRepoAddr_);
+        if(votesRepoAddr_ != address(0)) {
+            for (uint256 i = 0; i < ids.length; ++i) {
+                //Only "member" tokens give voting rights
+                if(roleExist("member") && roleToId("member") == ids[i]) {
+                    // uint256 id = ids[i];
+                    uint256 amount = amounts[i];
+                    //Votes Changes
+                    IVotesRepoTracker(votesRepoAddr_).transferVotingUnits(fromToken, toToken, amount);
+                }
             }
         }
-    }
-
-    /** DOESN'T REALLY NEED THIS...
-     * @dev Returns the balance of `account`.
-     * /
-    function _getVotingUnits(address account) internal view virtual override returns (uint256) {
-        // return balanceOf(account);
-        uint256 sbt = ?
-        _votesRepo().getVotingUnits(sbt);
+        // else{ console.log("No Votes Repo Configured", votesRepoAddr_); }
     }
     */
-
 
 
     //-- IVotes INTERFACE https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.7.3/contracts/governance/utils/IVotes.sol
