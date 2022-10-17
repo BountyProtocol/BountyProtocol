@@ -292,13 +292,6 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
     }
 
     /// Post
-    // function post(uint256 tokenId, string calldata uri_) external override {
-    //     //Validate that User Controls The Token
-    //     require(hasTokenControl(tokenId), "POST:SOUL_NOT_YOURS");
-    //     //Post Event
-    //     emit Post(_msgSender(), tokenId, uri_);
-    // }
-    /// Post
     /// @param tokenId  Acting SBT Token ID (Posting as)
     /// @param uri_     Post data URI
     /// @param context  Posting about
@@ -313,6 +306,16 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
         emit Post(_msgSender(), tokenId, uri_, context);
     }
 
+    //--- [DEV]
+
+    /// [WIP] Set Main Owner Account
+    // function setMain(uint256 tokenId, address account) external {
+    //Check if account is a secondary
+    // require(_owners[account] == tokenId, "Requested account is not mapped to this token");
+    //Transfer token to secondary account
+    //Change secondary mapping
+    // }
+
     /// [WIP] Run Custom Action
-    function runAction() external {}
+    // function runAction() external {}
 }
