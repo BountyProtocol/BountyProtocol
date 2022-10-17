@@ -6,9 +6,9 @@ import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 /**
  * @dev General Utility Functions
  * TODO: Make functions public and attach library as an external contract
+ *  https://hardhat.org/hardhat-runner/plugins/nomiclabs-hardhat-ethers#library-linking
  */
 library Utils {
-
     using AddressUpgradeable for address;
 
     /// Match Two Strings
@@ -17,14 +17,14 @@ library Utils {
     }
 
     /// Convert string to bytes32
-    function stringToBytes32(string memory str) public pure returns (bytes32) {
+    function stringToBytes32(string memory str) internal pure returns (bytes32) {
         require(bytes(str).length <= 32, "String is too long. Max 32 chars");
         return keccak256(abi.encode(str));
     }
 
     /// Convert bytes32 to string
-    function bytes32ToString(bytes32 input_) public pure returns (string memory){
-         return string(abi.encodePacked(input_));
+    function bytes32ToString(bytes32 input_) internal pure returns (string memory) {
+        return string(abi.encodePacked(input_));
     }
 
     /// Contract Type Logic
