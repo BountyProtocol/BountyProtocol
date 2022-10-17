@@ -27,6 +27,7 @@ import "./libraries/Utils.sol";
  *  - Assets are non-transferable by owner
  *  - Tokens can have multiple owners
  *  - [TODO] Lost-souls can be claimed/linked
+ *  - [TODO] Soul handles (string that points to the token)
  */
 // Initializable,
 contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opinions, SoulBonds, ERC721URIStorageUpgradeable {
