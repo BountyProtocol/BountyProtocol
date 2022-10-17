@@ -201,6 +201,15 @@ describe("Protocol", function () {
       });
 
       it("Can set token handle", async function () {
+        let handle = 'firstTry';
+        //Set
+        let tx = await soulContract.connect(tester2).handleSet(soulTokens.tester2, handle);
+        tx.wait();
+        //Expected Event
+        await expect(tx).to.emit(soulContract, 'SoulHandle').withArgs(soulTokens.tester2, handle);
+      });
+
+      it("Can change handle", async function () {
         //Set
         let tx = await soulContract.connect(tester2).handleSet(soulTokens.tester2, this.handle);
         tx.wait();
@@ -227,12 +236,6 @@ describe("Protocol", function () {
         expect(
           await soulContract.handleGet(soulTokens.tester2)
         ).to.equal(this.handle);
-      });
-
-      it("Can set only one handle", async function () {
-        await expect(
-          soulContract.connect(tester2).handleSet(soulTokens.tester2, "anotherHandle")
-        ).to.be.revertedWith("SINGLE_HANDLE_ONLY");
       });
 
       it("Can't set other's handles", async function () {

@@ -316,7 +316,7 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
         //Validate: token control
         require(hasTokenControl(tokenId), "SOUL_NOT_YOURS");
         //Validate: no handle assigned yet
-        require(Utils.stringMatch(handleGet(tokenId), ""), "SINGLE_HANDLE_ONLY");
+        // require(Utils.stringMatch(handleGet(tokenId), ""), "SINGLE_HANDLE_ONLY");
         //Validate: handle available
         require(handleFind(handle) == 0, "HANDLE_TAKEN");
         //Set Handle
@@ -336,11 +336,19 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
         return _handle[keccak256(bytes(handle))];
     }
 
-    //Set Handle
+    /// Set Handle
     function _handleSet(uint256 tokenId, string memory handle) internal {
-        // bytes32 handleBytes = Utils.stringToBytes32(handle);
-        bytes32 handleBytes = keccak256(bytes(handle));
-        _handle[handleBytes] = tokenId;
+        //Current Handle
+        string memory curHandle = handleGet(tokenId);
+        if(!Utils.stringMatch(curHandle, "")){
+            //Unset Current Handle
+            _handle[keccak256(bytes(curHandle))] = 0;
+        }
+        //New Handle
+        if(!Utils.stringMatch(handle, "")){
+            //Set
+            _handle[keccak256(bytes(handle))] = tokenId;
+        }
         _handleToken[tokenId] = handle;
     }
 
