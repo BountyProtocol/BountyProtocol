@@ -30,38 +30,6 @@ contract VotesExt is IVotesUpgradeable, GameExtension {
         return IVotesRepoTracker(votesRepoAddr());
     }
 
-    /*
-    /// Hook:Track Voting Power 
-    /// @dev to be used on token transfers
-    function _afterTokenTransferTracker(
-        address operator,
-        uint256 fromToken,
-        uint256 toToken,
-        uint256[] memory ids,
-        uint256[] memory amounts,
-        bytes memory data
-    ) internal virtual override {
-        super._afterTokenTransferTracker(operator, fromToken, toToken, ids, amounts, data);
-        //-- Track Voting Power by SBT
-        // address votesRepoAddr_ = dataRepo().addressGetOf(address(_HUB), "VOTES_REPO");
-        address votesRepoAddr_ = votesRepoAddr();
-        // console.log("Votes Repo Addr: ", votesRepoAddr_);
-        if(votesRepoAddr_ != address(0)) {
-            for (uint256 i = 0; i < ids.length; ++i) {
-                //Only "member" tokens give voting rights
-                if(roleExist("member") && roleToId("member") == ids[i]) {
-                    // uint256 id = ids[i];
-                    uint256 amount = amounts[i];
-                    //Votes Changes
-                    IVotesRepoTracker(votesRepoAddr_).transferVotingUnits(fromToken, toToken, amount);
-                }
-            }
-        }
-        // else{ console.log("No Votes Repo Configured", votesRepoAddr_); }
-    }
-    */
-
-
     //-- IVotes INTERFACE https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.7.3/contracts/governance/utils/IVotes.sol
     
     /// Get Current Power
