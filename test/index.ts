@@ -148,7 +148,7 @@ describe("Protocol", function () {
   }); //Action Repository
 
   describe("Soul", function () {
-
+    
     it("Should inherit protocol owner", async function () {
       expect(await soulContract.owner()).to.equal(this.ownerAddr);
     });
@@ -193,6 +193,45 @@ describe("Protocol", function () {
         soulContract.connect(tester).mint(test_uri)
       ).to.be.revertedWith("Account already has a token");
     });
+
+    describe("Soul Handle", function () {
+
+      before(async function () {
+        this.handle = "tester2Handle";
+      });
+
+      it("Can set token handle", async function () {
+        //Set
+        let tx = await soulContract.connect(tester2).handleSet(soulTokens.tester2, this.handle);
+        tx.wait();
+        //Expected Event
+        await expect(tx).to.emit(soulContract, 'SoulHandle').withArgs(soulTokens.tester2, this.handle);
+      });
+      
+      it("Can get token by handle", async function () {
+        expect(
+          await soulContract.handleFind(this.handle)
+        ).to.equal(soulTokens.tester2);
+      });
+
+      it("Can get handle by token", async function () {
+        expect(
+          await soulContract.handleGet(soulTokens.tester2)
+        ).to.equal(this.handle);
+      });
+
+      it("Can set only one handle", async function () {
+        await expect(
+          soulContract.connect(tester2).handleSet(soulTokens.tester2, "anotherHandle")
+        ).to.be.revertedWith("SINGLE_HANDLE_ONLY");
+      });
+
+      it("Can't set other's handles", async function () {
+        await expect(
+          soulContract.connect(tester2).handleSet(soulTokens.admin2, "otherHandle")
+        ).to.be.revertedWith("SOUL_NOT_YOURS");
+      });
+    }); //Soul Handle
 
     it("Should Index Addresses", async function () {
       //Expected Token ID

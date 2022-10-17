@@ -41,7 +41,8 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
     mapping(address => uint256) internal _owners; //Map Multiple Accounts to Tokens
     mapping(uint256 => string) public types; //Soul Types
     mapping(uint256 => address) internal _link; //[TBD] Linked Souls
-    mapping(bytes32 => uint256) internal _handle; //[TBD] Soul Handles
+    mapping(bytes32 => uint256) internal _handle; //Soul Handles to Tokens
+    mapping(uint256 => string) internal _handleToken; //Soul Tokens to Handles
 
     //--- Modifiers
 
@@ -178,6 +179,8 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
         require(_msgSender() == owner(), "Only Owner");
         //Burn Token
         _burn(tokenId);
+        //Clear Handle
+        _handleSet(tokenId, "");
     }
 
     /// Update Token's Metadata
@@ -304,6 +307,41 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
         require(hasTokenControl(tokenId), "POST:SOUL_NOT_YOURS");
         //Post Event
         emit Post(_msgSender(), tokenId, uri_, context);
+    }
+
+    //** Token Handle **/
+
+    /// Set handle for token
+    function handleSet(uint256 tokenId, string calldata handle) external override {
+        //Validate: token control
+        require(hasTokenControl(tokenId), "SOUL_NOT_YOURS");
+        //Validate: no handle assigned yet
+        require(Utils.stringMatch(handleGet(tokenId), ""), "SINGLE_HANDLE_ONLY");
+        //Validate: handle available
+        require(handleFind(handle) == 0, "HANDLE_TAKEN");
+        //Set Handle
+        _handleSet(tokenId, handle);
+        //Event
+        emit SoulHandle(tokenId, handle);
+    }
+
+    /// Get handle by tokenId
+    function handleGet(uint256 tokenId) public view override returns (string memory) {
+        return _handleToken[tokenId];
+    }
+
+    /// Find tokenId by handle
+    function handleFind(string calldata handle) public view override returns (uint256) {
+        // return _handle[Utils.stringToBytes32(handle)];
+        return _handle[keccak256(bytes(handle))];
+    }
+
+    //Set Handle
+    function _handleSet(uint256 tokenId, string memory handle) internal {
+        // bytes32 handleBytes = Utils.stringToBytes32(handle);
+        bytes32 handleBytes = keccak256(bytes(handle));
+        _handle[handleBytes] = tokenId;
+        _handleToken[tokenId] = handle;
     }
 
     //--- [DEV]
