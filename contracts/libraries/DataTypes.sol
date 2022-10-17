@@ -60,11 +60,11 @@ library DataTypes {
     
     // Rule Object
     struct Rule {
-        bytes32 about;      //About What (Action's GUID)      //TODO: Maybe Call This 'actionGUID'? 
-        string affected;    //Affected Role. E.g. "investors"
-        bool negation;      //0 - Commission  1 - Omission
-        string uri;         //Test & Conditions
-        bool disabled;      //1 - Rule Disabled
+        bytes32 about;   //About What (Action's GUID)      //TODO: Maybe Call This 'actionGUID'? 
+        string affected; //Affected Role. E.g. "investors"
+        bool negation;   //0 - Commission  1 - Omission
+        string uri;      //Test & Conditions
+        bool disabled;   //1 - Rule Disabled
     }
     
     // Effect Structure (Reputation Changes)
@@ -74,8 +74,18 @@ library DataTypes {
         bool direction; // Direction: -
         // bytes32 action; //Action GUID
         // bytes data;  //[TBD]
+        bool disabled;  //1 - Rule Disabled
     }
-    
+
+    // Effect Structure (Reputation Changes)
+    struct RepChange {
+        // uint256 domain;
+        string domain;
+        int256 value;    // value: 5
+        // bytes32 action; //Action GUID
+        // bytes data;  //[TBD]
+        bool disabled;  //1 - Rule Disabled
+    }
     // Stored Reactions [Action -> Reaction]
     /*
         action => Contract + Function + Parameters

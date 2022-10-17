@@ -23,7 +23,7 @@ import "../repositories/interfaces/IOpenRepo.sol";
  * - Sender expected to be a protocol entity
  * - Sender expected to support getHub() & getRepoAddr()
  */
-contract RuleRepo is IRules {
+contract RuleRepo is IRulesRepo {
 
     //--- Storage
 
@@ -33,7 +33,7 @@ contract RuleRepo is IRules {
     //Rule Data
     mapping(address => mapping(uint256 => DataTypes.Rule)) internal _rules;
     mapping(address => mapping(uint256 => DataTypes.Confirmation)) internal _ruleConfirmation;  //Rule Confirmations
-    mapping(address => mapping(uint256 => DataTypes.Effect[])) internal _effects;  //Rule Efects (Reputation Changes)   //effects[id][] => {direction:true, value:5, name:'personal'}  // Generic, Iterable & Extendable/Flexible
+    mapping(address => mapping(uint256 => DataTypes.RepChange[])) internal _effects;  //Rule Efects (Reputation Changes)   //effects[id][] => {direction:true, value:5, name:'personal'}  // Generic, Iterable & Extendable/Flexible
     mapping(address => mapping(uint256 => bytes32[])) internal _claims;  //Rule Claims (Consequences) //action GUIDs   
     // mapping(address => mapping(uint256 => string) internal _uri;
 
@@ -71,12 +71,12 @@ contract RuleRepo is IRules {
     }
 
     /// Get Rule's Effects By Owner
-    function effectsGetOf(address ownerAddress, uint256 id) public view override returns (DataTypes.Effect[] memory) {
+    function effectsGetOf(address ownerAddress, uint256 id) public view override returns (DataTypes.RepChange[] memory) {
         return _effects[ownerAddress][id];
     }
 
     /// Get Rule's Effects
-    function effectsGet(uint256 id) public view override returns (DataTypes.Effect[] memory) {
+    function effectsGet(uint256 id) public view override returns (DataTypes.RepChange[] memory) {
         return effectsGetOf(msg.sender, id);
     }
 
@@ -91,18 +91,13 @@ contract RuleRepo is IRules {
     function ruleAdd(
         DataTypes.Rule memory rule, 
         DataTypes.Confirmation memory confirmation, 
-        DataTypes.Effect[] memory effects
+        DataTypes.RepChange[] memory effects
     ) public override returns (uint256) {
-        //Validate Caller's Permissions
-        require(IERC1155RolesTracker(msg.sender).roleHas(tx.origin, "admin"), "Admin Only");
-        
         //Validate rule.about -- actionGUID Exists
         address actionRepo = dataRepo().addressGetOf(getHubAddress(), "history");
-
         IActionRepo(actionRepo).actionGet(rule.about);  //Revetrs if does not exist
         //Add Rule
         uint256 id = _ruleAdd(rule, effects);
-
         //Set Confirmations
         _confirmationSet(id, confirmation);
         return id;
@@ -112,35 +107,27 @@ contract RuleRepo is IRules {
     function ruleUpdate(
         uint256 id, 
         DataTypes.Rule memory rule, 
-        DataTypes.Effect[] memory effects
+        DataTypes.RepChange[] memory effects
     ) external override {
-        //Validate Caller's Permissions
-        require(IERC1155RolesTracker(msg.sender).roleHas(tx.origin, "admin"), "Admin Only");
         //Update Rule
         _ruleUpdate(id, rule, effects);
     }
 
     /// Set Disable Status for Rule
     function ruleDisable(uint256 id, bool disabled) external override {
-         //Validate Caller's Permissions
-        require(IERC1155RolesTracker(msg.sender).roleHas(tx.origin, "admin"), "Admin Only");
         //Disable Rule
         _ruleDisable(id, disabled);
     }
 
     /// Update Rule's Confirmation Data
     function ruleConfirmationUpdate(uint256 id, DataTypes.Confirmation memory confirmation) external override {
-        //Validate Caller's Permissions
-        require(IERC1155RolesTracker(msg.sender).roleHas(tx.origin, "admin"), "Admin Only");
         //Set Confirmations
         _confirmationSet(id, confirmation);
     }
 
     /*
     /// TODO: Update Rule's Effects
-    function ruleEffectsUpdate(uint256 id, DataTypes.Effect[] memory effects) external override {
-        //Validate Caller's Permissions
-        require(IERC1155RolesTracker(msg.sender).roleHas(tx.origin, "admin"), "Admin Only");
+    function ruleEffectsUpdate(uint256 id, DataTypes.RepChange[] memory effects) external override {
         //Set Effects
         
     }
@@ -153,7 +140,7 @@ contract RuleRepo is IRules {
     // }
 
     /// Add Rule
-    function _ruleAdd(DataTypes.Rule memory rule, DataTypes.Effect[] memory effects) internal returns (uint256) {
+    function _ruleAdd(DataTypes.Rule memory rule, DataTypes.RepChange[] memory effects) internal returns (uint256) {
         //Add New Rule
         _ruleIds.increment();
         uint256 id = _ruleIds.current();
@@ -180,22 +167,22 @@ contract RuleRepo is IRules {
     //TODO: Separate Rule Effects Update from Rule Update
 
     /// Set Rule
-    function _ruleSet(uint256 id, DataTypes.Rule memory rule, DataTypes.Effect[] memory effects) internal {
+    function _ruleSet(uint256 ruleId, DataTypes.Rule memory rule, DataTypes.RepChange[] memory effects) internal {
         //Set
-        _rules[msg.sender][id] = rule;
+        _rules[msg.sender][ruleId] = rule;
         //Rule Updated Event
-        emit Rule(msg.sender, id, rule.about, rule.affected, rule.uri, rule.negation);
+        emit Rule(msg.sender, ruleId, rule.about, rule.affected, rule.uri, rule.negation);
 
-        // emit RuleEffects(msg.sender, id, rule.effects.environmental, rule.effects.personal, rule.effects.social, rule.effects.professional);
+        // emit RuleEffects(msg.sender, ruleId, rule.effects.environmental, rule.effects.personal, rule.effects.social, rule.effects.professional);
         for (uint256 i = 0; i < effects.length; ++i) {
-            _effects[msg.sender][id].push(effects[i]);
+            _effects[msg.sender][ruleId].push(effects[i]);
             //Effect Added Event
-            emit RuleEffect(msg.sender, id, effects[i].direction, effects[i].value, effects[i].name);
+            emit RuleEffect(msg.sender, ruleId, effects[i].domain, effects[i].value);
         }
     }
 
     /// Update Rule
-    function _ruleUpdate(uint256 id, DataTypes.Rule memory rule, DataTypes.Effect[] memory effects) internal {
+    function _ruleUpdate(uint256 id, DataTypes.Rule memory rule, DataTypes.RepChange[] memory effects) internal {
         //Remove Current Effects
         delete _effects[msg.sender][id];
         //Update Rule

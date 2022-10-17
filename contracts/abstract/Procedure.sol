@@ -153,7 +153,7 @@ abstract contract Procedure is IProcedure
     function _setParentCTX(address container) internal {
         //Validate
         require(container != address(0), "Invalid Container Address");
-        require(IERC165(container).supportsInterface(type(IGame).interfaceId), "Implmementation Does Not Support Game Interface");  //Might Cause Problems on Interface Update. Keep disabled for now.
+        require(IERC165(container).supportsInterface(type(IGame).interfaceId), "Implementation Does Not Support Game Interface");  //Might Cause Problems on Interface Update. Keep disabled for now.
         //Set to OpenRepo
         dataRepo().addressSet("container", container);
     }

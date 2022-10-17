@@ -3,13 +3,10 @@
 //
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
-import { Contract } from "ethers";
 import { ethers } from "hardhat";
 import { verify, deployContract, deployUUPS, deployGameExt } from "../utils/deployment";
-const { upgrades } = require("hardhat");
 const hre = require("hardhat");
 const chain = hre.hardhatArguments.network;
-const ZERO_ADDR = '0x0000000000000000000000000000000000000000';
 
 //Track Addresses (Fill in present addresses to prevent new deplopyment)
 import contractAddrs from "./_contractAddr";
@@ -17,9 +14,9 @@ const contractAddr = contractAddrs[chain];
 import publicAddrs from "./_publicAddrs";
 const publicAddr = publicAddrs[chain];
 let deployed: any = [];
+
 /**
  * MISC COMMANDS
- * 
  */
 async function main() {
     // let hubContract: Contract;

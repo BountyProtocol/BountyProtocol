@@ -5,10 +5,11 @@
 // Runtime Environment's members available in the global scope.
 import { ethers } from "hardhat";
 import { verify, deployContract, deployUUPS, deployGameExt } from "../utils/deployment";
-const { upgrades } = require("hardhat");
+import { ZERO_ADDR } from "../utils/consts";
+
 const hre = require("hardhat");
 const chain = hre.hardhatArguments.network;
-const ZERO_ADDR = '0x0000000000000000000000000000000000000000';
+
 
 //Track Addresses (Fill in present addresses to prevent new deplopyment)
 import contractAddrs from "./_contractAddr";

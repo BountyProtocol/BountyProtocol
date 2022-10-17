@@ -27,7 +27,7 @@ abstract contract Rules is IRules {
     
     //Additional Rule Data
     mapping(uint256 => DataTypes.Confirmation) internal _ruleConfirmation;
-    mapping(uint256 => DataTypes.Effect[]) internal _effects;     //effects[id][] => {direction:true, value:5, name:'personal'}  // Generic, Iterable & Extendable/Flexible
+    mapping(uint256 => DataTypes.RepChange[]) internal _effects;     //effects[id][] => {direction:true, value:5, name:'personal'}  // Generic, Iterable & Extendable/Flexible
     // mapping(uint256 => string) internal _uri;
 
     //--- Functions
@@ -46,7 +46,7 @@ abstract contract Rules is IRules {
     }
 
     /// Get Rule's Effects
-    function effectsGet(uint256 id) public view override returns (DataTypes.Effect[] memory) {
+    function effectsGet(uint256 id) public view override returns (DataTypes.RepChange[] memory) {
         return _effects[id];
     }
    
@@ -58,7 +58,7 @@ abstract contract Rules is IRules {
     //-- Setters
 
     /// Add Rule
-    function _ruleAdd(DataTypes.Rule memory rule, DataTypes.Effect[] memory effects) internal returns (uint256) {
+    function _ruleAdd(DataTypes.Rule memory rule, DataTypes.RepChange[] memory effects) internal returns (uint256) {
         //Add New Rule
         _ruleIds.increment();
         uint256 id = _ruleIds.current();
@@ -69,7 +69,7 @@ abstract contract Rules is IRules {
     }
 
     /// Set Rule
-    function _ruleSet(uint256 id, DataTypes.Rule memory rule, DataTypes.Effect[] memory effects) internal {
+    function _ruleSet(uint256 id, DataTypes.Rule memory rule, DataTypes.RepChange[] memory effects) internal {
         //Set
         _rules[id] = rule;
         //Rule Updated Event
@@ -78,12 +78,12 @@ abstract contract Rules is IRules {
         for (uint256 i = 0; i < effects.length; ++i) {
             _effects[id].push(effects[i]);
             //Effect Added Event
-            emit RuleEffect(id, effects[i].direction, effects[i].value, effects[i].name);
+            emit RuleEffect(id, effects[i].domain, effects[i].value);
         }
     }
 
     /// Update Rule
-    function _ruleUpdate(uint256 id, DataTypes.Rule memory rule, DataTypes.Effect[] memory effects) internal {
+    function _ruleUpdate(uint256 id, DataTypes.Rule memory rule, DataTypes.RepChange[] memory effects) internal {
         //Remove Current Effects
         delete _effects[id];
         //Update Rule

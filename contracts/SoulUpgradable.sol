@@ -68,14 +68,14 @@ contract SoulUpgradable is
     /// ERC165 - Supported Interfaces
     function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
         return interfaceId == type(ISoul).interfaceId
+            || interfaceId == type(ISoulBonds).interfaceId 
             || interfaceId == type(IERC721Upgradeable).interfaceId 
             || super.supportsInterface(interfaceId);
     }
 
     /// Get the SBT ID of the current user (msg.sender)
-    function _getCurrentSBT() internal view override returns (uint256) { 
+    function _getCurrentSBT() internal view override(Opinions, SoulBonds) returns (uint256) { 
         return tokenByAddress(_msgSender());
-        
     }
 
     //** Token Owner Index **/
@@ -133,14 +133,22 @@ contract SoulUpgradable is
 
     //** Reputation **/
     
-    /// Add Reputation (Positive or Negative)
-    function repAdd(uint256 tokenId, string calldata domain, bool rating, uint8 amount) external override {
+    /// Add Reputation (about another SBT on the same contract)
+    function opinionAboutSoul(uint256 tokenId, string calldata domain, int256 score) external override {
         //Validate - Only By Hub
-        require(_msgSender() == address(_HUB), "UNAUTHORIZED_ACCESS");
-        //Set
-        _repAdd(address(this), tokenId, domain, rating, amount);
+        // require(_msgSender() == address(_HUB), "Soul:UNAUTHORIZED_ACCESS");
+        //Not by hub - directly by opinion owner
+        require(_msgSender() != address(_HUB), "Soul:UNAUTHORIZED_ACCESS");
+        _opinionChange(address(this), tokenId, domain, score);
     }
-    
+
+    /// Add Reputation (Positive or Negative)
+    function opinionAboutToken(address contractAddr, uint256 tokenId, string calldata domain, int256 score) external override {
+        //Not by hub - directly by opinion owner
+        require(_msgSender() != address(_HUB), "Soul:UNAUTHORIZED_ACCESS");
+        _opinionChange(contractAddr, tokenId, domain, score);
+    }
+
     //** Token Actions **/
 
     /// Mint (Create New Token for Someone Else)
@@ -159,14 +167,6 @@ contract SoulUpgradable is
         //Mint
         return _mint(_msgSender(), tokenURI);
     }
-	
-    /* CANCELLED same as mintFor(self)
-    /// Add (Create New Token Without an Owner)
-    function add(string memory tokenURI) external override returns (uint256) {
-        //Mint
-        return _mint(address(this), tokenURI);
-    }
-    */
 
     /// Burn NFTs
     function burn(uint256 tokenId) external {
@@ -189,8 +189,6 @@ contract SoulUpgradable is
 
     /// Create a new Token
     function _mint(address to, string memory uri) internal returns (uint256) {
-        //Validate - Bot Protection
-        // require(tx.origin == _msgSender(), "Bots not allowed");      //CANCELLED - Allow Contracts to Have Souls
         //One Per Account
         require(to == address(this) || balanceOf(to) == 0, "Account already has a token");
         //Mint
@@ -254,11 +252,7 @@ contract SoulUpgradable is
 
     /// Check if the Current Account has Control over a Token   //DEPRECATE?
     function hasTokenControl(uint256 tokenId) public view override returns (bool) {
-        return (
-            hasTokenControlAccount(tokenId, _msgSender()) 
-            // solhint-disable-next-line avoid-tx-origin
-            || hasTokenControlAccount(tokenId, tx.origin)
-        );
+        return hasTokenControlAccount(tokenId, _msgSender());
     }
 
     /// Check if a Specific Account has control over a Token
@@ -278,9 +272,7 @@ contract SoulUpgradable is
         if(ownerAccount.isContract()){
             try OwnableUpgradeable(ownerAccount).owner() //Failure should not be fatal
             returns (address contractOwner) {
-                // console.log("Found Owner", contractOwner);
-                // solhint-disable-next-line avoid-tx-origin
-                return (contractOwner == _msgSender() || contractOwner == tx.origin);   //Ideally, any of the calling addresses in the stack.
+                return (contractOwner == _msgSender());   //Ideally, any of the calling addresses in the stack.
             } 
             catch Error(string memory) {}
         }
@@ -296,6 +288,9 @@ contract SoulUpgradable is
     //     emit Post(_msgSender(), tokenId, uri_);
     // }
     /// Post
+    /// @param tokenId  Acting SBT Token ID (Posting as)
+    /// @param uri_     Post data URI
+    /// @param context  Posting about
     function post(uint256 tokenId, string calldata uri_, string calldata context) external override {
         //Validate that User Controls The Token
         require(hasTokenControl(tokenId), "POST:SOUL_NOT_YOURS");

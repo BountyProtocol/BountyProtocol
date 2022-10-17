@@ -103,4 +103,9 @@ abstract contract ProtocolEntityUpgradable is
         dataRepo().stringSet(key, value);
     }
 
+    /// Get the SBT ID of the current user (msg.sender)
+    function getCurrentSBT() public view override returns (uint256) { 
+        return ISoul(getSoulAddr()).tokenByAddress(_msgSender());
+    }
+
 }

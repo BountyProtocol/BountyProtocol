@@ -18,13 +18,11 @@ import "./interfaces/IHub.sol";
 import "./interfaces/IGameUp.sol";
 import "./interfaces/IClaim.sol";
 import "./interfaces/IProcedure.sol";
-// import "./interfaces/ITask.sol";
 import "./interfaces/ISoul.sol";
 import "./interfaces/IRules.sol";
 import "./libraries/DataTypes.sol";
 import "./abstract/ContractBase.sol";
 import "./abstract/AssocExt.sol";
-
 
 /**
  * Hub Contract
@@ -153,6 +151,13 @@ contract HubUpgradable is
         string calldata name_, 
         string calldata uri_
     ) external override returns (address) {
+        /* [WIP]
+        //Support for Soulless accounts
+        if(_getExtTokenId(tx.origin) == 0){
+            //Auto-mint token for Account
+            _mintSoul(tx.origin, "");
+        }
+        */
         //Deploy
         BeaconProxy newProxyContract = new BeaconProxy(
             _beacons["game"],
@@ -165,11 +170,9 @@ contract HubUpgradable is
         _mintSoul(address(newProxyContract), uri_);
         //Event
         emit ContractCreated("game", address(newProxyContract));
-        
         //Set Type (to be called after creating a Soul)
         ICTXEntityUpgradable(address(newProxyContract)).confSet("type", type_);
         ICTXEntityUpgradable(address(newProxyContract)).confSet("role", type_);
-
         //Remember
         _games[address(newProxyContract)] = true;
         //Register Game to Repo
@@ -196,13 +199,11 @@ contract HubUpgradable is
         _mintSoul(address(newProxyContract), uri_);
         //Event
         emit ContractCreated("process", address(newProxyContract));
-
         //Set Type (to be called after creating a Soul)
         ICTXEntityUpgradable(address(newProxyContract)).confSet("type", type_);
         ICTXEntityUpgradable(address(newProxyContract)).confSet("role", type_);
         //Set Container
         IProcedure(address(newProxyContract)).setParentCTX(_msgSender());
-        
         //Remember Parent
         _procedures[address(newProxyContract)] = _msgSender();
         //Return
@@ -272,9 +273,10 @@ contract HubUpgradable is
         return address(newProxyContract);
     }
 
+    /* DEPRECATED - moved to subjective reputation
     //--- Reputation
 
-    /// Add Reputation (Positive or Negative)
+    /// Global Reputation Changes
     function repAdd(address contractAddr, 
         uint256 tokenId, 
         string calldata domain, 
@@ -292,9 +294,13 @@ contract HubUpgradable is
     function _repAddAvatar(uint256 tokenId, string calldata domain, bool rating, uint8 amount) internal {
         address SBTAddress = dataRepo().addressGet("SBT");
         try ISoul(SBTAddress).repAdd(tokenId, domain, rating, amount) {}   //Failure should not be fatal
-        catch Error(string memory /*reason*/) {}
-    }
 
+        // address contractAddr, uint256 tokenId, uint256 domain, int256 score
+
+        catch Error(string memory) {}
+    }
+    */
+    
     /// Mint an SBT for another account
     function mintForAccount(address account, string calldata tokenURI) external override activeGame returns (uint256) {
         //Mint

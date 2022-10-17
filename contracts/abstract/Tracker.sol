@@ -11,6 +11,7 @@ import "../interfaces/ISoul.sol";
 /**
  * @title Tracker Contract Functions
  * @dev To Extend Contracts with Token Tracking Funtionality
+ * @dev call _setTargetContract() on initialize
  */
 abstract contract Tracker {
     

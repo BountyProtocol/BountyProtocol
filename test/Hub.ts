@@ -2,12 +2,6 @@ import { expect } from "chai";
 import { Contract, ContractReceipt, Signer } from "ethers";
 import { ethers } from "hardhat";
 import { deployContract, deployUUPS, deployHub } from "../utils/deployment";
-const { upgrades } = require("hardhat");
-
-//Test Data
-const ZERO_ADDR = '0x0000000000000000000000000000000000000000';
-let test_uri = "ipfs://QmQxkoWcpFgMa7bCzxaANWtSt43J1iMgksjNnT4vM1Apd7"; //"TEST_URI";
-
 
 describe("Hub", function () {
     let openRepoContract: Contract;

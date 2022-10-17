@@ -1,32 +1,29 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
-// import "hardhat/console.sol";
+import "hardhat/console.sol";
 
 import "@openzeppelin/contracts/utils/Strings.sol";
 // import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 // import "@openzeppelin/contracts/governance/utils/Votes.sol";
-// import "./abstract/Votes.sol";
 // import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/draft-ERC721VotesUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/governance/utils/VotesUpgradeable.sol"; //Adds 3.486Kb
+// import "@openzeppelin/contracts-upgradeable/governance/utils/VotesUpgradeable.sol"; //Adds 3.486Kb
+// import "./abstract/Votes.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
 import "./interfaces/IGameUp.sol";
 import "./interfaces/IRules.sol";
 import "./interfaces/IClaim.sol";
 import "./interfaces/IActionRepo.sol";
 import "./interfaces/ICTXEntityUpgradable.sol";
-import "./repositories/interfaces/IVotesRepoTracker.sol";
-import "./abstract/ERC1155RolesTrackerUp.sol";
-// import "./abstract/ProtocolEntityUpgradable.sol";
 import "./abstract/CTXEntityUpgradable.sol";
-import "./abstract/Opinions.sol";
+import "./abstract/ERC1155RolesTrackerUp.sol";
 import "./abstract/Posts.sol";
 import "./abstract/ProxyMulti.sol";  //Adds 1.529Kb
-// import "./interfaces/IRulesRepo.sol";
-// import "./repositories/interfaces/IOpenRepo.sol";
-// import "./libraries/DataTypes.sol";
-
+import "./interfaces/IRulesRepo.sol";
+// import "./abstract/VotesTracker.sol";
+// import "./repositories/interfaces/IVotesRepoTracker.sol";    //Included in VotesTracker.sol
+import "./repositories/interfaces/IVotesRepoTracker.sol";
 
 /**
  * @title Game Contract
@@ -50,12 +47,11 @@ import "./abstract/ProxyMulti.sol";  //Adds 1.529Kb
  * - [TODO] Unique Rule IDs (GUID)
  */
 contract GameUpgradable is IGame
-        // IRules,
-        , Opinions
         , Posts
         , ProxyMulti
-        // VotesUpgradeable,
         , CTXEntityUpgradable
+        // , VotesUpgradeable
+        // , VotesTracker
         {
 
     //--- Storage
@@ -79,7 +75,7 @@ contract GameUpgradable is IGame
      * @dev Returns the balance of `account`.
      * /
     function _getVotingUnits(address account) internal view virtual override returns (uint256) {
-        return balanceOf(account, _roleToId("member"));
+        return balanceOf(account, roleToId("member"));
     }
     */
 
@@ -101,8 +97,6 @@ contract GameUpgradable is IGame
         _roleAssign(tx.origin, "admin", 1);
         _roleAssign(tx.origin, "member", 1);
         //Init Default Game Roles
-        // _roleCreate("admin"); 
-        // _roleCreate("member");
         _roleCreate("authority");
         //Default Token URIs
         // _setRoleURI("admin", "");
@@ -148,14 +142,22 @@ contract GameUpgradable is IGame
         uint256 targetTokenId
     ) internal {
         //Fetch Rule's Effects
-        DataTypes.Effect[] memory effects = effectsGet(ruleId);
+        // DataTypes.RepChange[] memory effects = effectsGet(ruleId);
+        DataTypes.RepChange[] memory effects = effectsGet(ruleId);
         //Run Each Effect
         for (uint256 j = 0; j < effects.length; ++j) {
-            DataTypes.Effect memory effect = effects[j];
+            // DataTypes.RepChange memory effect = effects[j];
+            DataTypes.RepChange memory effect = effects[j];
+            
             //Register Rep in Game      //{name:'professional', value:5, direction:false}
-            _repAdd(targetContract, targetTokenId, effect.name, effect.direction, effect.value);
-            //Update Hub
-            _HUB.repAdd(targetContract, targetTokenId, effect.name, effect.direction, effect.value);
+            // _repAdd(targetContract, targetTokenId, effect.name, effect.direction, effect.value);
+            //Update Hub    //DEPRECATED
+            // _HUB.repAdd(targetContract, targetTokenId, effect.name, effect.direction, effect.value);
+
+            //Update Soul's Opinion (Reputation)
+            try ISoul(getSoulAddr()).opinionAboutToken(targetContract, targetTokenId, effect.domain, effect.value) {}   //Failure should not be fatal
+            // try ISoul(getSoulAddr()).opinionAboutSoul(targetTokenId, effect.domain, effect.value) {}   //Failure should not be fatal
+            catch Error(string memory) {}
         }
         //
         emit EffectsExecuted(targetTokenId, ruleId, "");
@@ -286,7 +288,7 @@ contract GameUpgradable is IGame
         }
     }
     
-    /// Hook:Track Voting Power    //UNTESTED
+    /// Hook:Track Voting Power
     function _afterTokenTransferTracker(
         address operator,
         uint256 fromToken,
@@ -296,42 +298,51 @@ contract GameUpgradable is IGame
         bytes memory data
     ) internal virtual override {
         super._afterTokenTransferTracker(operator, fromToken, toToken, ids, amounts, data);
-        //-- Track Voting Power by SBT
-        address votesRepoAddr = dataRepo().addressGetOf(address(_HUB), "VOTES_REPO");
-        // console.log("Votes Repo: ", votesRepoAddr);
-        if(votesRepoAddr != address(0)) {
+        _trackVotePower(fromToken, toToken, ids, amounts);
+    }
+
+    /// Hook:Track Voting Power
+    /// @dev VoteRepot -- Track Voting Power by SBT
+    function _trackVotePower(
+        uint256 fromToken,
+        uint256 toToken,
+        uint256[] memory ids,
+        uint256[] memory amounts
+    ) internal {
+        address votesRepoAddr_ = dataRepo().addressGetOf(address(_HUB), "VOTES_REPO");
+        // address votesRepoAddr_ = votesRepoAddr();
+        if(votesRepoAddr_ != address(0)) {
             for (uint256 i = 0; i < ids.length; ++i) {
                 //Only "member" tokens give voting rights
-                if(_roleToId("member") == ids[i]) {
+                if(roleExist("member") && roleToId("member") == ids[i]) {
                     // uint256 id = ids[i];
                     uint256 amount = amounts[i];
                     //Votes Changes
-                    IVotesRepoTracker(votesRepoAddr).transferVotingUnits(fromToken, toToken, amount);
+                    IVotesRepoTracker(votesRepoAddr_).transferVotingUnits(fromToken, toToken, amount);
                 }
             }
         }
-        // else{ console.log("No Votes Repo Configured", votesRepoAddr); }
+        // else{ console.log("No Votes Repo Configured", votesRepoAddr_); }
     }
-
 
     //** Rule Management    //Maybe Offload to a GameExtension
     
     //Get Rules Repo
-    function _ruleRepo() internal view returns (IRules) {
+    function _ruleRepo() internal view returns (IRulesRepo) {
         address ruleRepoAddr = dataRepo().addressGetOf(address(_HUB), "RULE_REPO");
-        return IRules(ruleRepoAddr);
+        return IRulesRepo(ruleRepoAddr);
     }
 
     //-- Getters
 
     /// Get Rule
-    function ruleGet(uint256 id) public view returns (DataTypes.Rule memory) {
-        return _ruleRepo().ruleGet(id);
+    function ruleGet(uint256 ruleId) public view returns (DataTypes.Rule memory) {
+        return _ruleRepo().ruleGet(ruleId);
     }
 
     /// Get Rule's Effects
-    function effectsGet(uint256 id) public view returns (DataTypes.Effect[] memory) {
-        return _ruleRepo().effectsGet(id);
+    function effectsGet(uint256 effectId) public view returns (DataTypes.RepChange[] memory) {
+        return _ruleRepo().effectsGet(effectId);
     }
 
     /// Get Rule's Confirmation Method
@@ -345,8 +356,9 @@ contract GameUpgradable is IGame
     function ruleAdd(
         DataTypes.Rule memory rule, 
         DataTypes.Confirmation memory confirmation, 
-        DataTypes.Effect[] memory effects
+        DataTypes.RepChange[] memory effects
     ) public returns (uint256) {
+        require(roleHas(_msgSender(), "admin"), "Admin Only");
         return _ruleRepo().ruleAdd(rule, confirmation, effects);
     }
 
@@ -354,18 +366,21 @@ contract GameUpgradable is IGame
     function ruleUpdate(
         uint256 id, 
         DataTypes.Rule memory rule, 
-        DataTypes.Effect[] memory effects
+        DataTypes.RepChange[] memory effects
     ) external {
+        require(roleHas(_msgSender(), "admin"), "Admin Only");
         _ruleRepo().ruleUpdate(id, rule, effects);
     }
 
     /// Set Disable Status for Rule
     function ruleDisable(uint256 id, bool disabled) external {
+        require(roleHas(_msgSender(), "admin"), "Admin Only");
         _ruleRepo().ruleDisable(id, disabled);
     }
 
     /// Update Rule's Confirmation Data
     function ruleConfirmationUpdate(uint256 id, DataTypes.Confirmation memory confirmation) external {
+        require(roleHas(_msgSender(), "admin"), "Admin Only");
         _ruleRepo().ruleConfirmationUpdate(id, confirmation);
     }
 

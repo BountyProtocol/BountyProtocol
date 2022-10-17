@@ -9,7 +9,7 @@ interface IRuleExt {
     function ruleGet(uint256 id) external view returns (DataTypes.Rule memory);
 
     /// Get Rule's Effects
-    function effectsGet(uint256 id) external view returns (DataTypes.Effect[] memory);
+    function effectsGet(uint256 id) external view returns (DataTypes.RepChange[] memory);
 
     /// Get Rule's Confirmation Method
     function confirmationGet(uint256 id) external view returns (DataTypes.Confirmation memory);
@@ -20,14 +20,14 @@ interface IRuleExt {
     function ruleAdd(
         DataTypes.Rule memory rule, 
         DataTypes.Confirmation memory confirmation, 
-        DataTypes.Effect[] memory effects
+        DataTypes.RepChange[] memory effects
     ) external returns (uint256);
 
     /// Update Rule
     function ruleUpdate(
         uint256 id, 
         DataTypes.Rule memory rule, 
-        DataTypes.Effect[] memory effects
+        DataTypes.RepChange[] memory effects
     ) external;
 
     /// Set Disable Status for Rule

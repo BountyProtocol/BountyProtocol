@@ -21,4 +21,7 @@ interface IProtocolEntity {
     /// Contract URI
     function contractURI() external view returns (string memory);
 
+    /// Get the SBT ID of the current user (msg.sender)
+    function getCurrentSBT() external view returns (uint256);
+    
 }
