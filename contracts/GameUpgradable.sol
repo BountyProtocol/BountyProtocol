@@ -8,8 +8,8 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 // import "@openzeppelin/contracts/governance/utils/Votes.sol";
 // import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/draft-ERC721VotesUpgradeable.sol";
-// import "./abstract/Votes.sol";
 // import "@openzeppelin/contracts-upgradeable/governance/utils/VotesUpgradeable.sol"; //Adds 3.486Kb
+// import "./abstract/Votes.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
 import "./interfaces/IGameUp.sol";
 import "./interfaces/IRules.sol";
@@ -20,11 +20,9 @@ import "./abstract/CTXEntityUpgradable.sol";
 import "./abstract/ERC1155RolesTrackerUp.sol";
 import "./abstract/Posts.sol";
 import "./abstract/ProxyMulti.sol";  //Adds 1.529Kb
-// import "./abstract/VotesTracker.sol";
 import "./interfaces/IRulesRepo.sol";
-// import "./libraries/DataTypes.sol";
-// import "./repositories/interfaces/IOpenRepo.sol";
-// import "./repositories/interfaces/IVotesRepoTracker.sol";    //Included above
+// import "./abstract/VotesTracker.sol";
+// import "./repositories/interfaces/IVotesRepoTracker.sol";    //Included in VotesTracker.sol
 import "./repositories/interfaces/IVotesRepoTracker.sol";
 
 /**
@@ -290,7 +288,7 @@ contract GameUpgradable is IGame
         }
     }
     
-    /// Hook:Track Voting Power    //UNTESTED
+    /// Hook:Track Voting Power
     function _afterTokenTransferTracker(
         address operator,
         uint256 fromToken,
@@ -300,10 +298,19 @@ contract GameUpgradable is IGame
         bytes memory data
     ) internal virtual override {
         super._afterTokenTransferTracker(operator, fromToken, toToken, ids, amounts, data);
-        //-- Track Voting Power by SBT
-        // address votesRepoAddr_ = dataRepo().addressGetOf(address(_HUB), "VOTES_REPO");
-        address votesRepoAddr_ = votesRepoAddr();
-        // console.log("Votes Repo Addr: ", votesRepoAddr_);
+        _trackVotePower(fromToken, toToken, ids, amounts);
+    }
+
+    /// Hook:Track Voting Power
+    /// @dev VoteRepot -- Track Voting Power by SBT
+    function _trackVotePower(
+        uint256 fromToken,
+        uint256 toToken,
+        uint256[] memory ids,
+        uint256[] memory amounts
+    ) internal {
+        address votesRepoAddr_ = dataRepo().addressGetOf(address(_HUB), "VOTES_REPO");
+        // address votesRepoAddr_ = votesRepoAddr();
         if(votesRepoAddr_ != address(0)) {
             for (uint256 i = 0; i < ids.length; ++i) {
                 //Only "member" tokens give voting rights
@@ -317,25 +324,6 @@ contract GameUpgradable is IGame
         }
         // else{ console.log("No Votes Repo Configured", votesRepoAddr_); }
     }
-
-
-
-    /// Get the Votes Repo Address
-    function votesRepoAddr() public view returns (address){
-        return dataRepo().addressGetOf(address(_HUB), "VOTES_REPO");
-    }
-    /*
-    /// @dev Override _votesRepo() for votes implementation
-    function _votesRepo() internal view override returns (IVotesRepoTracker){
-        // address votesRepoAddr_ = votesRepoAddr();
-        // return IVotesRepoTracker(votesRepoAddr_);
-        return IVotesRepoTracker(votesRepoAddr());
-    }
-    */
-    
-
-
-
 
     //** Rule Management    //Maybe Offload to a GameExtension
     
