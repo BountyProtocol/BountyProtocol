@@ -207,6 +207,15 @@ describe("Protocol", function () {
         //Expected Event
         await expect(tx).to.emit(soulContract, 'SoulHandle').withArgs(soulTokens.tester2, this.handle);
       });
+
+      it("Can set token handle for un-owned tokens", async function () {
+        let handle = 'unownedHandle';
+        //Set
+        let tx = await soulContract.handleSet(soulTokens.unOwned, handle);
+        tx.wait();
+        //Expected Event
+        await expect(tx).to.emit(soulContract, 'SoulHandle').withArgs(soulTokens.unOwned, handle);
+      });
       
       it("Can get token by handle", async function () {
         expect(
@@ -231,6 +240,13 @@ describe("Protocol", function () {
           soulContract.connect(tester2).handleSet(soulTokens.admin2, "otherHandle")
         ).to.be.revertedWith("SOUL_NOT_YOURS");
       });
+      
+      it("Can't set same handle twice", async function () {
+        await expect(
+          soulContract.connect(admin).handleSet(soulTokens.admin, this.handle)
+        ).to.be.revertedWith("HANDLE_TAKEN");
+      });
+
     }); //Soul Handle
 
     it("Should Index Addresses", async function () {
