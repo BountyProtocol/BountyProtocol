@@ -12,25 +12,25 @@ import "@openzeppelin/contracts-upgradeable/governance/utils/IVotesUpgradeable.s
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "./interfaces/IVotesRepo.sol";
 
-
 /**
  * @title Votes Repository
  * @dev Retains Voting Power History for other Contracts
  * @dev Based on VotesUpgradeable  https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/v4.7.0/contracts/governance/utils/VotesUpgradeable.sol
  * Version 1.0.0
  */
-// abstract contract VotesUpgradeable is Initializable, IVotesUpgradeable, ContextUpgradeable, EIP712Upgradeable {
-contract VotesRepoUpgradable is IVotesRepo, Initializable, IVotesUpgradeable, ContextUpgradeable, EIP712Upgradeable {
-
+contract VotesRepoUpgradable is IVotesRepo, Initializable, ContextUpgradeable, EIP712Upgradeable {
     //** Implementation
 
     //Track Voting Units
     mapping(address => mapping(address => uint256)) internal _votingUnits;
 
-
     /// Expose Voting Power Transfer Method
-    /// @dev Run this on the consumer contract. On _afterTokenTransfer() 
-    function transferVotingUnits(address from, address to, uint256 amount) external override {
+    /// @dev Run this on the consumer contract. On _afterTokenTransfer()
+    function transferVotingUnits(
+        address from,
+        address to,
+        uint256 amount
+    ) external override {
         _transferVotingUnits(from, to, amount);
     }
 
@@ -41,7 +41,6 @@ contract VotesRepoUpgradable is IVotesRepo, Initializable, IVotesUpgradeable, Co
         return _votingUnits[msg.sender][account];
     }
 
-
     //** Core
 
     using CheckpointsUpgradeable for CheckpointsUpgradeable.History;
@@ -51,7 +50,7 @@ contract VotesRepoUpgradable is IVotesRepo, Initializable, IVotesUpgradeable, Co
 
     // mapping(address => address) private _delegation;
     mapping(address => mapping(address => address)) private _delegation;
-    
+
     // mapping(address => CheckpointsUpgradeable.History) private _delegateCheckpoints;
     mapping(address => mapping(address => CheckpointsUpgradeable.History)) private _delegateCheckpoints;
 
@@ -64,7 +63,7 @@ contract VotesRepoUpgradable is IVotesRepo, Initializable, IVotesUpgradeable, Co
     /**
      * @dev Returns the current amount of votes that `account` has.
      */
-    function getVotes(address account) public view virtual override returns (uint256) {
+    function getVotes(address account) public view override returns (uint256) {
         console.log("[DEBUG] getVotes() STARTED", account);
         return _delegateCheckpoints[msg.sender][account].latest();
     }
@@ -76,7 +75,7 @@ contract VotesRepoUpgradable is IVotesRepo, Initializable, IVotesUpgradeable, Co
      *
      * - `blockNumber` must have been already mined
      */
-    function getPastVotes(address account, uint256 blockNumber) public view virtual override returns (uint256) {
+    function getPastVotes(address account, uint256 blockNumber) public view override returns (uint256) {
         return _delegateCheckpoints[msg.sender][account].getAtBlock(blockNumber);
     }
 
@@ -91,7 +90,7 @@ contract VotesRepoUpgradable is IVotesRepo, Initializable, IVotesUpgradeable, Co
      *
      * - `blockNumber` must have been already mined
      */
-    function getPastTotalSupply(uint256 blockNumber) public view virtual override returns (uint256) {
+    function getPastTotalSupply(uint256 blockNumber) public view override returns (uint256) {
         require(blockNumber < block.number, "VotesRepo: block not yet mined");
         return _totalCheckpoints[msg.sender].getAtBlock(blockNumber);
     }
@@ -99,23 +98,30 @@ contract VotesRepoUpgradable is IVotesRepo, Initializable, IVotesUpgradeable, Co
     /**
      * @dev Returns the current total supply of votes.
      */
-    function _getTotalSupply() internal view virtual returns (uint256) {
+    function _getTotalSupply() internal view returns (uint256) {
         return _totalCheckpoints[msg.sender].latest();
     }
 
     /**
      * @dev Returns the delegate that `account` has chosen.
      */
-    function delegates(address account) public view virtual override returns (address) {
+    function delegates(address account) public view override returns (address) {
         return _delegation[msg.sender][account];
+    }
+
+    /** MEANINGLESS HERE
+     * @dev Delegates votes from the sender to `delegatee`.
+     * /
+    function delegate(address delegatee) public override {
+        address account = _msgSender();
+        _delegate(account, delegatee);
     }
 
     /**
      * @dev Delegates votes from the sender to `delegatee`.
      */
-    function delegate(address delegatee) public virtual override {
-        address account = _msgSender();
-        _delegate(account, delegatee);
+    function delegateFrom(address from, address to) external override {
+        _delegate(from, to);
     }
 
     /**
@@ -128,7 +134,7 @@ contract VotesRepoUpgradable is IVotesRepo, Initializable, IVotesUpgradeable, Co
         uint8 v,
         bytes32 r,
         bytes32 s
-    ) public virtual override {
+    ) public override {
         require(block.timestamp <= expiry, "VotesRepo: signature expired");
         address signer = ECDSAUpgradeable.recover(
             _hashTypedDataV4(keccak256(abi.encode(_DELEGATION_TYPEHASH, delegatee, nonce, expiry))),
@@ -145,7 +151,7 @@ contract VotesRepoUpgradable is IVotesRepo, Initializable, IVotesUpgradeable, Co
      *
      * Emits events {DelegateChanged} and {DelegateVotesChanged}.
      */
-    function _delegate(address account, address delegatee) internal virtual {
+    function _delegate(address account, address delegatee) internal {
         address oldDelegate = delegates(account);
         _delegation[msg.sender][account] = delegatee;
 
@@ -157,7 +163,11 @@ contract VotesRepoUpgradable is IVotesRepo, Initializable, IVotesUpgradeable, Co
      * @dev Transfers, mints, or burns voting units. To register a mint, `from` should be zero. To register a burn, `to`
      * should be zero. Total supply of voting units will be adjusted with mints and burns.
      */
-    function _transferVotingUnits(address from, address to, uint256 amount) internal virtual {
+    function _transferVotingUnits(
+        address from,
+        address to,
+        uint256 amount
+    ) internal {
         if (from == address(0)) {
             _totalCheckpoints[msg.sender].push(_add, amount);
         }
@@ -170,7 +180,11 @@ contract VotesRepoUpgradable is IVotesRepo, Initializable, IVotesUpgradeable, Co
     /**
      * @dev Moves delegated votes from one delegate to another.
      */
-    function _moveDelegateVotes(address from, address to, uint256 amount) private {
+    function _moveDelegateVotes(
+        address from,
+        address to,
+        uint256 amount
+    ) private {
         if (from != to && amount > 0) {
             if (from != address(0)) {
                 (uint256 oldValue, uint256 newValue) = _delegateCheckpoints[msg.sender][from].push(_subtract, amount);
@@ -196,7 +210,7 @@ contract VotesRepoUpgradable is IVotesRepo, Initializable, IVotesUpgradeable, Co
      *
      * Returns the current value and increments nonce.
      */
-    function _useNonce(address owner) internal virtual returns (uint256 current) {
+    function _useNonce(address owner) internal returns (uint256 current) {
         CountersUpgradeable.Counter storage nonce = _nonces[msg.sender][owner];
         current = nonce.current();
         nonce.increment();
@@ -205,7 +219,7 @@ contract VotesRepoUpgradable is IVotesRepo, Initializable, IVotesUpgradeable, Co
     /**
      * @dev Returns an address nonce.
      */
-    function nonces(address owner) public view virtual returns (uint256) {
+    function nonces(address owner) public view returns (uint256) {
         return _nonces[msg.sender][owner].current();
     }
 
@@ -220,7 +234,7 @@ contract VotesRepoUpgradable is IVotesRepo, Initializable, IVotesUpgradeable, Co
     /** MOVED
      * @dev Must return the voting units held by an account.
      * /
-    function _getVotingUnits(address) internal view virtual returns (uint256);
+    function _getVotingUnits(address) internal view returns (uint256);
 
     /**
      * @dev This empty reserved space is put in place to allow future versions to add new
