@@ -67,10 +67,6 @@ contract VotesExt is IVotesUpgradeable, GameExtension {
     function delegate(address delegatee) public virtual override {
         _votesRepo().delegateFrom(msg.sender, delegatee);
     }
-    // function delegateToToken(uint256 delegateeSBT) public virtual override {
-    //      uint256 fromSBT = getCurrentSBT();
-    //     _votesRepo().delegateFrom(fromSBT, delegateeSBT);
-    // }
 
     /**
      * @dev Delegates votes from signer to `delegatee`.
