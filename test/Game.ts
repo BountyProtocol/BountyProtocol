@@ -72,14 +72,13 @@ describe("Game Extensions", function () {
             //Create New Game
             await this.hubContract.makeGame(game.type, game.name, test_uri);
             //Init Game Contract Object
-            // this.gameContract = await ethers.getContractFactory("GameUpgradable").then(res => res.attach(gameAddr));
             this.gameContract = await ethers.getContractAt('GameUpgradable', gameAddr);
             console.log("Deployed Game Contract to ", this.gameContract.address);
         });
 
         describe("Votes Extension", function () {
             before(async function () {
-                console.log("use Game Contract at ", this.gameContract.address);
+                // console.log("use Game Contract at ", this.gameContract.address);
                 this.gameVotes = await ethers.getContractAt('VotesExt', this.gameContract.address);
             });
 
@@ -93,15 +92,10 @@ describe("Game Extensions", function () {
               });
               
             it("Members receive voting power", async function () {
-                
-                let gameType = await this.gameContract.confGet("type");
-                console.log("Game Type:", gameType);
-                
                 expect(await this.gameVotes.getVotes(this.tester2Addr)).to.equal(1);
-
             });
         }); //Votes Extension
 
     }); //mDAO
 
-});
+}); //Game Extensions
