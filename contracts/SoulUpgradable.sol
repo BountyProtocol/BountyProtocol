@@ -28,33 +28,26 @@ import "./libraries/Utils.sol";
  *  - Tokens can have multiple owners
  *  - [TODO] Lost-souls can be claimed/linked
  */
-contract SoulUpgradable is 
-        // Initializable,
-        ProtocolEntityUpgradable, 
-        ISoul, 
-        UUPSUpgradeable,
-        Opinions,
-        SoulBonds,
-        ERC721URIStorageUpgradeable {
-    
+// Initializable,
+contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opinions, SoulBonds, ERC721URIStorageUpgradeable {
     //--- Storage
-    
+
     using AddressUpgradeable for address;
 
     using CountersUpgradeable for CountersUpgradeable.Counter;
     CountersUpgradeable.Counter private _tokenIds;
 
-    mapping(address => uint256) internal _owners;  //Map Multiple Accounts to Tokens (Aliases)
-    mapping(uint256 => string) public types;    //Soul Types
+    mapping(address => uint256) internal _owners; //Map Multiple Accounts to Tokens
+    mapping(uint256 => string) public types; //Soul Types
     mapping(uint256 => address) internal _link; //[TBD] Linked Souls
+    mapping(bytes32 => uint256) internal _handle; //[TBD] Soul Handles
 
     //--- Modifiers
-
 
     //--- Functions
 
     /// Initializer
-    function initialize (address hub) public initializer {
+    function initialize(address hub) public initializer {
         //Initializers
         __ERC721_init("Soulbound Tokens (Identity)", "SBT");
         __ERC721URIStorage_init();
@@ -63,18 +56,19 @@ contract SoulUpgradable is
     }
 
     /// Upgrade Permissions
-    function _authorizeUpgrade(address newImplementation) internal onlyOwner override { }
+    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
 
     /// ERC165 - Supported Interfaces
     function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
-        return interfaceId == type(ISoul).interfaceId
-            || interfaceId == type(ISoulBonds).interfaceId 
-            || interfaceId == type(IERC721Upgradeable).interfaceId 
-            || super.supportsInterface(interfaceId);
+        return
+            interfaceId == type(ISoul).interfaceId ||
+            interfaceId == type(ISoulBonds).interfaceId ||
+            interfaceId == type(IERC721Upgradeable).interfaceId ||
+            super.supportsInterface(interfaceId);
     }
 
     /// Get the SBT ID of the current user (msg.sender)
-    function _getCurrentSBT() internal view override(Opinions, SoulBonds) returns (uint256) { 
+    function _getCurrentSBT() internal view override(Opinions, SoulBonds) returns (uint256) {
         return tokenByAddress(_msgSender());
     }
 
@@ -94,9 +88,9 @@ contract SoulUpgradable is
     function tokenByAddress(address owner) public view override returns (uint256) {
         return _owners[owner];
     }
-    
+
     /// Return Token URI by Address
-    function accountURI(address account) external view override returns (string memory){
+    function accountURI(address account) external view override returns (string memory) {
         return tokenURI(tokenByAddress(account));
     }
 
@@ -132,9 +126,13 @@ contract SoulUpgradable is
     }
 
     //** Reputation **/
-    
+
     /// Add Reputation (about another SBT on the same contract)
-    function opinionAboutSoul(uint256 tokenId, string calldata domain, int256 score) external override {
+    function opinionAboutSoul(
+        uint256 tokenId,
+        string calldata domain,
+        int256 score
+    ) external override {
         //Validate - Only By Hub
         // require(_msgSender() == address(_HUB), "Soul:UNAUTHORIZED_ACCESS");
         //Not by hub - directly by opinion owner
@@ -143,7 +141,12 @@ contract SoulUpgradable is
     }
 
     /// Add Reputation (Positive or Negative)
-    function opinionAboutToken(address contractAddr, uint256 tokenId, string calldata domain, int256 score) external override {
+    function opinionAboutToken(
+        address contractAddr,
+        uint256 tokenId,
+        string calldata domain,
+        int256 score
+    ) external override {
         //Not by hub - directly by opinion owner
         require(_msgSender() != address(_HUB), "Soul:UNAUTHORIZED_ACCESS");
         _opinionChange(contractAddr, tokenId, domain, score);
@@ -155,7 +158,7 @@ contract SoulUpgradable is
     function mintFor(address to, string memory tokenURI) public override returns (uint256) {
         //Require Additional Privileges To Set URI
         if (!Utils.stringMatch(tokenURI, "")) {
-            //Validate - Contract Owner 
+            //Validate - Contract Owner
             require(_msgSender() == owner() || _msgSender() == address(_HUB), "Only Owner or Hub");
         }
         //Mint
@@ -170,7 +173,7 @@ contract SoulUpgradable is
 
     /// Burn NFTs
     function burn(uint256 tokenId) external {
-        //Validate - Contract Owner 
+        //Validate - Contract Owner
         require(_msgSender() == owner(), "Only Owner");
         //Burn Token
         _burn(tokenId);
@@ -180,7 +183,7 @@ contract SoulUpgradable is
     function update(uint256 tokenId, string memory uri) external override returns (uint256) {
         //Validate Owner of Token
         require(_isApprovedOrOwner(_msgSender(), tokenId) || _msgSender() == owner(), "caller is not owner or approved");
-        _setTokenURI(tokenId, uri);	//This Goes for Specific Metadata Set (IPFS and Such)
+        _setTokenURI(tokenId, uri); //This Goes for Specific Metadata Set (IPFS and Such)
         //Emit URI Changed Event
         emit URI(uri, tokenId);
         //Done
@@ -196,34 +199,42 @@ contract SoulUpgradable is
         uint256 newItemId = _tokenIds.current();
         _mint(to, newItemId);
         //Set URI
-        _setTokenURI(newItemId, uri);	//This Goes for Specific Metadata Set (IPFS and Such)
+        _setTokenURI(newItemId, uri); //This Goes for Specific Metadata Set (IPFS and Such)
         //Emit URI Changed Event
         emit URI(uri, newItemId);
         //Done
         return newItemId;
     }
-    
+
     /// Token Transfer Rules
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal virtual override(ERC721Upgradeable) {
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal virtual override(ERC721Upgradeable) {
         super._beforeTokenTransfer(from, to, tokenId);
         //Non-Transferable (by client)
         require(
-            _msgSender() == owner() //Contract Owner
-            || _msgSender() == address(_HUB) //Hub
-            || from == address(0) //Minting
-            , "Sorry, assets are non-transferable"
+            _msgSender() == owner() || //Contract Owner
+                _msgSender() == address(_HUB) || //Hub
+                from == address(0), //Minting
+            "Sorry, assets are non-transferable"
         );
-        
-        //Update Address Index        
-        if(from != address(0)) _owners[from] = 0;
-        if(to != address(0) && to != address(this)) {
+
+        //Update Address Index
+        if (from != address(0)) _owners[from] = 0;
+        if (to != address(0) && to != address(this)) {
             require(_owners[to] == 0, "Receiving address already owns a token");
             _owners[to] = tokenId;
         }
     }
 
     /// Hook - After Token Transfer
-    function _afterTokenTransfer(address, address to, uint256 tokenId) internal virtual override {
+    function _afterTokenTransfer(
+        address,
+        address to,
+        uint256 tokenId
+    ) internal virtual override {
         //Soul Type (Contract Symbol)
         string memory soulType = Utils.getAddressType(to);
         //Set
@@ -234,7 +245,11 @@ contract SoulUpgradable is
 
     /// Override transferFrom()
     /// @dev Remove Approval Check. Transfer Privileges are manged in the _beforeTokenTransfer function
-    function transferFrom(address from, address to, uint256 tokenId) public virtual override {
+    function transferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) public virtual override {
         //solhint-disable-next-line max-line-length
         // require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: caller is not token owner or approved");
         _transfer(from, to, tokenId);
@@ -244,10 +259,7 @@ contract SoulUpgradable is
     /// @dev Override the main Transfer privileges function
     function _isApprovedOrOwner(address spender, uint256 tokenId) internal view override returns (bool) {
         //Approved or Seconday Owner
-        return (
-            super._isApprovedOrOwner(spender, tokenId)  // Token Owner or Approved 
-            || (_owners[spender] == tokenId)    //Or Secondary Owner
-        );
+        return (super._isApprovedOrOwner(spender, tokenId) || (_owners[spender] == tokenId)); // Token Owner or Approved //Or Secondary Owner
     }
 
     /// Check if the Current Account has Control over a Token   //DEPRECATE?
@@ -258,23 +270,21 @@ contract SoulUpgradable is
     /// Check if a Specific Account has control over a Token
     function hasTokenControlAccount(uint256 tokenId, address account) public view override returns (bool) {
         address ownerAccount = ownerOf(tokenId);
-        return (
-            _isApprovedOrOwner(account, tokenId)  // Token Owner or Approved 
+        return (_isApprovedOrOwner(account, tokenId) || // Token Owner or Approved
             // ownerAccount == account //Token Owner (Support for Contract as Owner)
-            || (ownerAccount == address(this) && owner() == account) //Unclaimed Tokens Controlled by Contract Owner Contract (DAO)
-            || _isSecondaryOwner(tokenId)  //Owner of the owner contract
-        );
+            (ownerAccount == address(this) && owner() == account) || //Unclaimed Tokens Controlled by Contract Owner Contract (DAO)
+            _isSecondaryOwner(tokenId)); //Owner of the owner contract
     }
 
     /// Check if sender is the Owner of the Owner Contract
-    function _isSecondaryOwner(uint256 tokenId) internal view returns (bool){
+    function _isSecondaryOwner(uint256 tokenId) internal view returns (bool) {
         address ownerAccount = ownerOf(tokenId);
-        if(ownerAccount.isContract()){
-            try OwnableUpgradeable(ownerAccount).owner() //Failure should not be fatal
+        if (ownerAccount.isContract()) {
+            try
+                OwnableUpgradeable(ownerAccount).owner() //Failure should not be fatal
             returns (address contractOwner) {
-                return (contractOwner == _msgSender());   //Ideally, any of the calling addresses in the stack.
-            } 
-            catch Error(string memory) {}
+                return (contractOwner == _msgSender()); //Ideally, any of the calling addresses in the stack.
+            } catch Error(string memory) {}
         }
         //Default to No
         return false;
@@ -291,7 +301,11 @@ contract SoulUpgradable is
     /// @param tokenId  Acting SBT Token ID (Posting as)
     /// @param uri_     Post data URI
     /// @param context  Posting about
-    function post(uint256 tokenId, string calldata uri_, string calldata context) external override {
+    function post(
+        uint256 tokenId,
+        string calldata uri_,
+        string calldata context
+    ) external override {
         //Validate that User Controls The Token
         require(hasTokenControl(tokenId), "POST:SOUL_NOT_YOURS");
         //Post Event
@@ -299,8 +313,5 @@ contract SoulUpgradable is
     }
 
     /// [WIP] Run Custom Action
-    function runAction() external {
-
-    }
-
+    function runAction() external {}
 }
