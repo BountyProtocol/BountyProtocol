@@ -384,23 +384,4 @@ contract GameUpgradable is IGame
         _ruleRepo().ruleConfirmationUpdate(id, confirmation);
     }
 
- 
-
-
-    /**
-     * https://github.com/makerdao/multicall/blob/master/src/Multicall.sol
-     * https://github.com/makerdao/multicall/blob/master/src/Multicall2.sol
-     * Structure Call: https://github.com/safe-global/safe-contracts/blob/da66b45ec87d2fb6da7dfd837b29eacdb9a604c5/src/utils/execution.ts
-     */
-    /// Run Custom Action
-    function runAction(bytes32 actionGUID) external {
-        if(actionGUID == actionGUID){
-            // address targetContract = '';
-            // (bool success, bytes memory result) = address(this).delegatecall(data[i]);
-
-        }
-    }
-
-    mapping(bytes32 => bytes) internal availableActions;
-
 }
