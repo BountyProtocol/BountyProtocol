@@ -61,7 +61,7 @@ describe("Deployment", function () {
         const proxyActionRepo = await deployUUPS("ActionRepoTrackerUp", [hubContract.address]);
         await proxyActionRepo.deployed();
         //Set Avatar Contract to Hub
-        hubContract.assocSet("history", proxyActionRepo.address);
+        hubContract.assocSet("action", proxyActionRepo.address);
         // this.historyContract = proxyActionRepo;
         // console.log("ActionRepoTrackerUp deployed to:", proxyActionRepo.address);
     });

@@ -111,9 +111,9 @@ export const hubAssocUpdate = async () => {
       await hubContract.assocSet("SBT", contractAddr.avatar);
       console.log("Hub: Updated SBT to: ", contractAddr.avatar);
     }
-    assoc.history = await hubContract.assocGet("history");
+    assoc.history = await hubContract.assocGet("action");
     if(assoc.history == contractAddr.history){
-      await hubContract.assocSet("history", contractAddr.history);
+      await hubContract.assocSet("action", contractAddr.history);
       console.log("Hub: Updated History to: ", contractAddr.history);
     }
     // else console.log("Not the same", contractAddr.history, ZERO_ADDR, (assoc.history == ZERO_ADDR));

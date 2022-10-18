@@ -146,14 +146,14 @@ async function main() {
     console.log("Validate Hub ", hubContract.address);
     let assoc: any = {};
     assoc.sbt = await hubContract.assocGet("SBT");
-    assoc.history = await hubContract.assocGet("history");
+    assoc.history = await hubContract.assocGet("action");
     // console.log("Hub: ", hubContract.address, " Assoc:", assoc, contractAddr);
     if(assoc.sbt == ZERO_ADDR){
       await hubContract.assocSet("SBT", contractAddr.avatar);
       console.log("Updated SBT to: ", contractAddr.avatar);
     }
     if(assoc.history == ZERO_ADDR){
-      await hubContract.assocSet("history", contractAddr.history);
+      await hubContract.assocSet("action", contractAddr.history);
       console.log("Updated History to: ", contractAddr.history);
     }
     // else console.log("Not the same", contractAddr.history, ZERO_ADDR, (assoc.history == ZERO_ADDR));

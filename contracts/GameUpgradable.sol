@@ -28,7 +28,7 @@ import "./repositories/interfaces/IVotesRepoTracker.sol";
 /**
  * @title Game Contract
  * @dev Retains Group Members in Roles
- * @dev Version 3.2
+ * @dev Version 4.0
  * V1: Using Role NFTs
  * - Mints Member NFTs
  * - One for each
@@ -43,15 +43,13 @@ import "./repositories/interfaces/IVotesRepoTracker.sol";
  * V3:
  * - Multi-Proxy Pattern
  * V4:
- * - [TODO] DAO Votes
+ * - DAO Votes
  * - [TODO] Unique Rule IDs (GUID)
  */
 contract GameUpgradable is IGame
         , Posts
         , ProxyMulti
         , CTXEntityUpgradable
-        // , VotesUpgradeable
-        // , VotesTracker
         {
 
     //--- Storage
@@ -197,9 +195,7 @@ contract GameUpgradable is IGame
     function _implementations() internal view virtual override returns (address[] memory) {
         address[] memory implementationAddresses;
         string memory gameType = confGet("type");
-        
         // console.log("[DEBUG] Find Implementations For", gameType);
-
         if(Utils.stringMatch(gameType, "")) return implementationAddresses;
         // require (!Utils.stringMatch(gameType, ""), "NO_GAME_TYPE");
         //UID
@@ -207,9 +203,6 @@ contract GameUpgradable is IGame
         //Fetch Implementations
         implementationAddresses = dataRepo().addressGetAllOf(address(_HUB), gameTypeFull); //Specific
         require(implementationAddresses.length > 0, "NO_FALLBACK_CONTRACTS");
-
-        // console.log("[DEBUG] Has Implementations For: ", gameTypeFull);
-
         return implementationAddresses;
     }
 

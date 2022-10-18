@@ -22,7 +22,7 @@ async function main() {
   if(false){
     //Set to HUB
     await hubContract.assocSet("SBT", contractAddr.avatar);
-    await hubContract.assocSet("history", contractAddr.history);
+    await hubContract.assocSet("action", contractAddr.history);
   }
 }
 

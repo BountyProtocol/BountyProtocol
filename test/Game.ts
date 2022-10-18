@@ -41,7 +41,7 @@ describe("Game Extensions", function () {
         //--- History Upgradable (UUPS)
         this.actionContract = await deployUUPS("ActionRepoTrackerUp", [this.hubContract.address]);
         //Set History Contract to Hub
-        await this.hubContract.assocSet("history", this.actionContract.address);
+        await this.hubContract.assocSet("action", this.actionContract.address);
 
         //--- Votes Repository Upgradable (UUPS)
         this.votesRepo = await deployUUPS("VotesRepoTrackerUp", [this.hubContract.address]);
@@ -59,6 +59,7 @@ describe("Game Extensions", function () {
      * Projects Flow
      */
     describe("mDAO Game Flow", function () {
+
         it("Deploy mDAO", async function () {
         // before(async function () {
             let game = {
@@ -77,6 +78,7 @@ describe("Game Extensions", function () {
         });
 
         describe("Votes Extension", function () {
+
             before(async function () {
                 // console.log("use Game Contract at ", this.gameContract.address);
                 this.gameVotes = await ethers.getContractAt('VotesExt', this.gameContract.address);
@@ -94,6 +96,7 @@ describe("Game Extensions", function () {
             it("Members receive voting power", async function () {
                 expect(await this.gameVotes.getVotes(this.tester2Addr)).to.equal(1);
             });
+            
         }); //Votes Extension
 
     }); //mDAO

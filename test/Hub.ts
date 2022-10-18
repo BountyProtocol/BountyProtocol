@@ -46,8 +46,8 @@ describe("Hub", function () {
         //--- Deploy History
         actionContract = await deployUUPS("ActionRepoTrackerUp", [hubContract.address]);
         //Set Avatar Contract to Hub
-        hubContract.assocSet("history", actionContract.address);
-        hubContract2.assocSet("history", actionContract.address);
+        hubContract.assocSet("action", actionContract.address);
+        hubContract2.assocSet("action", actionContract.address);
     });
 
     it("Should Be Secure", async function () {

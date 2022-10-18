@@ -94,7 +94,7 @@ contract RuleRepo is IRulesRepo {
         DataTypes.RepChange[] memory effects
     ) public override returns (uint256) {
         //Validate rule.about -- actionGUID Exists
-        address actionRepo = dataRepo().addressGetOf(getHubAddress(), "history");
+        address actionRepo = dataRepo().addressGetOf(getHubAddress(), "action");
         IActionRepo(actionRepo).actionGet(rule.about);  //Revetrs if does not exist
         //Add Rule
         uint256 id = _ruleAdd(rule, effects);

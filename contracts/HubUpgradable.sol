@@ -104,7 +104,7 @@ contract HubUpgradable is
             catch Error(string memory /*reason*/) {}
         }
         //History
-        address actionRepo = dataRepo().addressGet("history");
+        address actionRepo = dataRepo().addressGet("action");
         if(actionRepo != address(0)) {
             try IProtocolEntity(actionRepo).setHub(newHubAddr) {}   //Failure should not be fatal
             catch Error(string memory reason) {
@@ -156,7 +156,7 @@ contract HubUpgradable is
         if(_getExtTokenId(tx.origin) == 0){
             //Auto-mint token for Account
             _mintSoul(tx.origin, "");
-        }
+    }
         */
         //Deploy
         BeaconProxy newProxyContract = new BeaconProxy(

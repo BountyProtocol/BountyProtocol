@@ -12,7 +12,7 @@ import "./abstract/ERC1155GUIDTrackerUp.sol";
 
 
 /**
- * @title History Retention
+ * @title Action & History Retention
  * @dev Event Repository -- Retains Unique Events and Their Apperance Throught History
  * 2D - Compound GUID + Additional Data & URI
  * [TBD] 3D - Individual Instances of Action (Claims) as NFTs + Event Details (Time, Claim no.,  etc')
@@ -28,7 +28,7 @@ contract ActionRepoTrackerUp is
     using AddressUpgradeable for address;
 
     //Arbitrary Contract Name & Symbol 
-    string public constant override symbol = "HISTORY";
+    string public constant override symbol = "ACTION";
     string public constant name = "Semantic Action Repository";
 
     // Event Storage     (Unique Concepts)

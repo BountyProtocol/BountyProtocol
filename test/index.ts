@@ -86,7 +86,7 @@ describe("Protocol", function () {
     //--- History Upgradable (UUPS)
     actionContract = await deployUUPS("ActionRepoTrackerUp", [hubContract.address]);
     //Set History Contract to Hub
-    await hubContract.assocSet("history", actionContract.address);
+    await hubContract.assocSet("action", actionContract.address);
 
     //--- Votes Repository Upgradable (UUPS)
     this.votesRepo = await deployUUPS("VotesRepoTrackerUp", [hubContract.address]);
