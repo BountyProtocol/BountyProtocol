@@ -66,7 +66,7 @@ library DataTypes {
         string uri;      //Test & Conditions
         bool disabled;   //1 - Rule Disabled
     }
-    
+    /* DEPRECATED - Using RepChange instead due to new rep structure
     // Effect Structure (Reputation Changes)
     struct Effect {
         string name;
@@ -76,7 +76,7 @@ library DataTypes {
         // bytes data;  //[TBD]
         bool disabled;  //1 - Rule Disabled
     }
-
+    */
     // Effect Structure (Reputation Changes)
     struct RepChange {
         // uint256 domain;
