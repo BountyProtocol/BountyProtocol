@@ -28,18 +28,18 @@ abstract contract Opinions is IOpinions {
     function _getCurrentSBT() internal view virtual returns (uint256);
 
     /// Fetch Opinion (Any)
-    function getRepForDomain(uint256 sbt, address contractAddr, uint256 tokenId, string calldata domain) public view override returns (int256) {
+    function getOpinion(uint256 sbt, address contractAddr, uint256 tokenId, string calldata domain) public view override returns (int256) {
         return _rep[sbt][contractAddr][tokenId][domain].latest();
     }
 
     /// Fetch Opinion (Current SBT)
-    function getRepForDomain(address contractAddr, uint256 tokenId, string calldata domain) public view override returns (int256) {
-        return getRepForDomain(_getCurrentSBT(), contractAddr, tokenId, domain);
+    function getOpinionMine(address contractAddr, uint256 tokenId, string calldata domain) public view override returns (int256) {
+        return getOpinion(_getCurrentSBT(), contractAddr, tokenId, domain);
     }
 
     /// Fetch Opinion (Self)
-    function getRepForDomain(uint256 tokenId, string calldata domain) public view override returns (int256) {
-        return getRepForDomain(address(this), tokenId, domain);
+    function getOpinionOnSoul(uint256 tokenId, string calldata domain) public view override returns (int256) {
+        return getOpinionMine(address(this), tokenId, domain);
     }
 
     /// Get Opinion at a specified mined block 

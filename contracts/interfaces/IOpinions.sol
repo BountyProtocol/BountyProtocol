@@ -7,14 +7,14 @@ interface IOpinions {
     
     //--- Functions
 
-    /// Fetch Opinion (Crosschain)
-    function getRepForDomain(uint256 sbt, address contractAddr, uint256 tokenId, string calldata domain) external view returns (int256);
+    /// Fetch Opinion
+    function getOpinion(uint256 sbt, address contractAddr, uint256 tokenId, string calldata domain) external view returns (int256);
 
     /// Fetch Opinion (Current Chain)
-    function getRepForDomain(address contractAddr, uint256 tokenId, string calldata domain) external view returns (int256);
+    function getOpinionMine(address contractAddr, uint256 tokenId, string calldata domain) external view returns (int256);
 
     /// Fetch Opinion (Self)
-    function getRepForDomain(uint256 tokenId, string calldata domain) external view returns (int256);
+    function getOpinionOnSoul(uint256 tokenId, string calldata domain) external view returns (int256);
 
     function getPastRepForDomain(uint256 sbt, address contractAddr, uint256 tokenId, string calldata domain, uint256 blockNumber) external view returns (int256);
 
