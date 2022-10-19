@@ -120,6 +120,10 @@ contract ActionRepoTrackerUp is
         return _actionGet(guid);
     }
 
+    function actionGetStr(bytes32 guid) public view override returns (string memory, string memory, string memory, string memory) {
+        return (_actions[guid].subject, _actions[guid].object, _actions[guid].verb, _actions[guid].tool);
+    }
+
     /// Get Action by GUID
     function _actionGet(bytes32 guid) internal view GUIDExists(guid) returns (DataTypes.SVO memory) {
         return _actions[guid];

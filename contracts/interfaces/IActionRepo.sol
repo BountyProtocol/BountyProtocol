@@ -27,6 +27,8 @@ interface IActionRepo {
     /// Get Action by GUID
     function actionGet(bytes32 guid) external view returns (DataTypes.SVO memory);
 
+    function actionGetStr(bytes32 guid) external view returns (string memory, string memory, string memory, string memory);
+
     /// Get Action's URI
     function actionGetURI(bytes32 guid) external view returns (string memory);
     

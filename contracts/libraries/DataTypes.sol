@@ -86,12 +86,16 @@ library DataTypes {
         // bytes data;  //[TBD]
         bool disabled;  //1 - Rule Disabled
     }
+
     // Stored Reactions [Action -> Reaction]
     /*
         action => Contract + Function + Parameters
 
-        * Target Contract: Repo:string => address 
-        * Function: Function signature (string)
+        bytes memory data = abi.encodeWithSignature(verb:"set(uint256)", params:_value)
+        //address(tool:contract).call(data);
+
+        * tool: Target Contract: Repo:string => address 
+        * verb: Function signature (string)
         * Parameters: [param]:[type:key]  E.g.
             to => Role:subject
             amount => RepoUint:prize
@@ -101,8 +105,9 @@ library DataTypes {
         sig + param type (by source) => topic
     */
     struct Reaction {
-        address target;
-        bytes data;
+        address tool; //assocGet() => Game / Soul
+        string verb; //ruleAdd() / burn()
+        bytes data; //rule / tokenId /...
     }
 
     //Rule Confirmation Method

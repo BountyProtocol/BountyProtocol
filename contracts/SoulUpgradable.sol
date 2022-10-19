@@ -362,6 +362,4 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
     //Change secondary mapping
     // }
 
-    /// [WIP] Run Custom Action
-    // function runAction() external {}
 }
