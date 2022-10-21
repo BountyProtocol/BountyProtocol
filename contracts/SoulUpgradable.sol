@@ -38,11 +38,11 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
     using CountersUpgradeable for CountersUpgradeable.Counter;
     CountersUpgradeable.Counter private _tokenIds;
 
-    mapping(address => uint256) internal _owners; //Map Multiple Accounts to Tokens
+    mapping(address => uint256) private _owners_rev; //Map Multiple Accounts to Tokens
     mapping(uint256 => string) public types; //Soul Types
-    mapping(uint256 => address) internal _link; //[TBD] Linked Souls
-    mapping(bytes32 => uint256) internal _handle; //Soul Handles to Tokens
-    mapping(uint256 => string) internal _handleToken; //Soul Tokens to Handles
+    mapping(uint256 => address) private _link; //[TBD] Linked Souls
+    mapping(bytes32 => uint256) private _handle; //Soul Handles to Tokens
+    mapping(uint256 => string) private _handleToken; //Soul Tokens to Handles
 
     //--- Modifiers
 
@@ -88,7 +88,7 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
 
     /// Get Token ID by Address
     function tokenByAddress(address owner) public view override returns (uint256) {
-        return _owners[owner];
+        return _owners_rev[owner];
     }
 
     /// Return Token URI by Address
@@ -101,16 +101,16 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
      */
     function balanceOf(address owner) public view override returns (uint256) {
         require(owner != address(0), "ERC721: balance query for the zero address");
-        return (_owners[owner] != 0) ? 1 : 0;
-        // if(_owners[owner] != 0) return 1;
+        return (_owners_rev[owner] != 0) ? 1 : 0;
+        // if(_owners_rev[owner] != 0) return 1;
         // return super.balanceOf(owner);
     }
 
     /// Map Account to Existing Token (Alias / Secondary Account)
     function _tokenOwnerAdd(address owner, uint256 tokenId) internal {
         require(_exists(tokenId), "nonexistent token");
-        require(_owners[owner] == 0, "Account already mapped to token");
-        _owners[owner] = tokenId;
+        require(_owners_rev[owner] == 0, "Account already mapped to token");
+        _owners_rev[owner] = tokenId;
         //Faux Transfer Event (Mint)
         emit Transfer(address(0), owner, tokenId);
     }
@@ -118,11 +118,11 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
     /// Map Account to Existing Token (Alias / Secondary Account)
     function _tokenOwnerRemove(address owner, uint256 tokenId) internal {
         require(_exists(tokenId), "nonexistent token");
-        require(_owners[owner] == tokenId, "Account is not mapped to this token");
+        require(_owners_rev[owner] == tokenId, "Account is not mapped to this token");
         //Not Main Account
         require(owner != ownerOf(tokenId), "Account is main token's owner. Use burn()");
         //Remove Association
-        _owners[owner] = 0;
+        _owners_rev[owner] = 0;
         //Faux Transfer Event (Burn)
         emit Transfer(owner, address(0), tokenId);
     }
@@ -226,10 +226,10 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
         );
 
         //Update Address Index
-        if (from != address(0)) _owners[from] = 0;
+        if (from != address(0)) _owners_rev[from] = 0;
         if (to != address(0) && to != address(this)) {
-            require(_owners[to] == 0, "Receiving address already owns a token");
-            _owners[to] = tokenId;
+            require(_owners_rev[to] == 0, "Receiving address already owns a token");
+            _owners_rev[to] = tokenId;
         }
     }
 
@@ -263,7 +263,7 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
     /// @dev Override the main Transfer privileges function
     function _isApprovedOrOwner(address spender, uint256 tokenId) internal view override returns (bool) {
         //Approved or Seconday Owner
-        return (super._isApprovedOrOwner(spender, tokenId) || (_owners[spender] == tokenId)); // Token Owner or Approved //Or Secondary Owner
+        return (super._isApprovedOrOwner(spender, tokenId) || (_owners_rev[spender] == tokenId)); // Token Owner or Approved //Or Secondary Owner
     }
 
     /// Check if the Current Account has Control over a Token   //DEPRECATE?
@@ -357,7 +357,7 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
     /// [WIP] Set Main Owner Account
     // function setMain(uint256 tokenId, address account) external {
     //Check if account is a secondary
-    // require(_owners[account] == tokenId, "Requested account is not mapped to this token");
+    // require(_owners_rev[account] == tokenId, "Requested account is not mapped to this token");
     //Transfer token to secondary account
     //Change secondary mapping
     // }
