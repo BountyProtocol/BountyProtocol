@@ -11,10 +11,10 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
 import "./interfaces/ISoul.sol";
+import "./libraries/Utils.sol";
+import "./abstract/ProtocolEntityUpgradable.sol";
 import "./abstract/Opinions.sol";
 import "./abstract/SoulBonds.sol";
-import "./abstract/ProtocolEntityUpgradable.sol";
-import "./libraries/Utils.sol";
 
 /**
  * @title Soulbound NFT Identity Tokens w/Reputation Tracking
@@ -341,12 +341,12 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
     function _handleSet(uint256 tokenId, string memory handle) internal {
         //Current Handle
         string memory curHandle = handleGet(tokenId);
-        if(!Utils.stringMatch(curHandle, "")){
+        if (!Utils.stringMatch(curHandle, "")) {
             //Unset Current Handle
             _handle[keccak256(bytes(curHandle))] = 0;
         }
         //New Handle
-        if(!Utils.stringMatch(handle, "")){
+        if (!Utils.stringMatch(handle, "")) {
             //Set
             _handle[keccak256(bytes(handle))] = tokenId;
         }
@@ -355,7 +355,10 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
 
     //--- [DEV]
 
-  
+    /// Merge tokens
+    // function _merge(uint256 tokenId, uint256[] memory tokenIds) internal {
+    function _merge(uint256 tokenIdKeep, uint256 tokenIdLose) internal {}
+
     /// [WIP] Set Main Owner Account
     // function setMain(uint256 tokenId, address account) external {
     //Check if account is a secondary
@@ -363,5 +366,4 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
     //Transfer token to secondary account
     //Change secondary mapping
     // }
-
 }
