@@ -13,8 +13,6 @@ const chain = hre.hardhatArguments.network;
 import publicAddrs from "./_publicAddrs";
 const publicAddr = publicAddrs[chain];
 
-console.log()
-
 /**
  * Deploy Independent Public Agents
  */
