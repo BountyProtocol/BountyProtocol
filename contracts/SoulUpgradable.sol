@@ -18,7 +18,7 @@ import "./libraries/Utils.sol";
 
 /**
  * @title Soulbound NFT Identity Tokens w/Reputation Tracking
- * @dev Version 2.2
+ * @dev Version 2.4
  *  - Contract is open for everyone to mint.
  *  - Max of one NFT assigned for each account
  *  - Owner can mint tokens for other entities
@@ -26,8 +26,9 @@ import "./libraries/Utils.sol";
  *  - Minted Token's URI is updatable by Token holder
  *  - Assets are non-transferable by owner
  *  - Tokens can have multiple owners
+ *  - Soul handles (string that points to the token)
  *  - [TODO] Lost-souls can be claimed/linked
- *  - [TODO] Soul handles (string that points to the token)
+ *  - [TODO] Merge Souls
  */
 // Initializable,
 contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opinions, SoulBonds, ERC721URIStorageUpgradeable {
@@ -354,6 +355,7 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
 
     //--- [DEV]
 
+  
     /// [WIP] Set Main Owner Account
     // function setMain(uint256 tokenId, address account) external {
     //Check if account is a secondary
