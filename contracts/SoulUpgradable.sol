@@ -299,7 +299,7 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
     /// @param tokenId  Acting SBT Token ID (Posting as)
     /// @param uri_     Post data URI
     /// @param context  Posting about
-    function post(
+    function announcement(
         uint256 tokenId,
         string calldata uri_,
         string calldata context
@@ -307,7 +307,7 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
         //Validate that User Controls The Token
         require(hasTokenControl(tokenId), "POST:SOUL_NOT_YOURS");
         //Post Event
-        emit Post(_msgSender(), tokenId, uri_, context);
+        emit Announcement(_msgSender(), tokenId, uri_, context);
     }
 
     //** Token Handle **/

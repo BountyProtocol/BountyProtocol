@@ -53,9 +53,9 @@ interface ISoul {
     /// Check if a Specific Account has control over a Token
     function hasTokenControlAccount(uint256 tokenId, address account) external view returns (bool);
 
-    /// Post
-    // function post(uint256 tokenId, string calldata uri) external;
-    function post(
+    /// Post and Announcement
+    // function announcement(uint256 tokenId, string calldata uri) external;
+    function announcement(
         uint256 tokenId,
         string calldata uri,
         string calldata context
@@ -83,9 +83,8 @@ interface ISoul {
     /// Reputation Changed
     event ReputationChange(uint256 indexed id, string domain, bool rating, uint256 score);
 
-    /// General Post
-    // event Post(address indexed account, uint256 tokenId, string uri);
-    event Post(address indexed account, uint256 tokenId, string uri, string context);
+    /// General Announcement
+    event Announcement(address indexed account, uint256 tokenId, string uri, string context);
 
     /// Soul Type Change
     event SoulType(uint256 indexed tokenId, string soulType);
