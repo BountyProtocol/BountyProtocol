@@ -41,11 +41,9 @@ contract ActionExt is GameExtension {
 
     /// Run Custom Action
     function runActionData(bytes32 actionGUID, bytes memory data) external {
-        console.log("** runActionData() STARTED");
-
         //Fetch Action
         address actionRepoAddr = getActionRepoAddr();
-        console.log("** actionRepoAddr", actionRepoAddr);
+        console.log("** [DEV] actionRepoAddr", actionRepoAddr);
         if(actionRepoAddr != address(0)){
             // DataTypes.SVO memory action;
             // action = IActionRepo(actionRepoAddr).actionGet(actionGUID);
@@ -54,19 +52,19 @@ contract ActionExt is GameExtension {
             // console.log("** Action T,V -- ", subject, object);
    
             try IActionRepo(actionRepoAddr).actionGet(actionGUID) returns (DataTypes.SVO memory action) {
-                console.log("** Action T,V", action.tool, action.verb);
+                console.log("** [DEV] Action T,V", action.tool, action.verb);
                 if(Utils.stringMatch(action.tool, "soul")){
                     if(Utils.stringMatch(action.verb, "rate")){
                         //Update Soul's Opinion (Reputation)
                         address targetContract = getSoulAddr();
-                        console.log("** action targetContract", targetContract);
+                        console.log("** [DEV] action targetContract", targetContract);
                         (uint256 targetTokenId, string memory domain, int256 value) = abi.decode(
                             data,
                             (uint256, string, int256)
                         );
-                        console.log("** action decoded params", targetTokenId, domain);
+                        console.log("** [DEV] action decoded params", targetTokenId, domain);
                         try ISoul(getSoulAddr()).opinionAboutToken(targetContract, targetTokenId, domain, value) {
-                            console.log("Rep Changed", targetContract, targetTokenId);
+                            console.log("[DEV] Rep Changed", targetContract, targetTokenId);
                         }   //Failure should not be fatal
                         catch Error(string memory reason) {
                             revert(reason);
