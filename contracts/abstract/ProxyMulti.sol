@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 // OpenZeppelin Contracts (last updated v4.6.0) (proxy/Proxy.sol)
-
 pragma solidity ^0.8.0;
+
+import "hardhat/console.sol";
+
 
 /**
  * Original Contract: https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/Proxy.sol
@@ -26,7 +28,6 @@ abstract contract ProxyMulti {
         address[] memory implementations = _implementations();
         for (uint256 i = 0; i < implementations.length; ++i) {
             address implementation = implementations[i];
-            // _delegate(implementations[i]);
             assembly {
                 // Copy msg.data. We take full control of memory in this inline assembly
                 // block because it will not return to Solidity code. We overwrite the
@@ -53,6 +54,45 @@ abstract contract ProxyMulti {
         }
         //If Nothing Found
         revert("NO_SUCH_FUNCTION");
+    }
+
+    /* [WIP] Trying to ignore only 'function doesn't exist' errors
+    function _delegateMulti() internal virtual {
+        address[] memory implementations = _implementations();
+        for (uint256 i = 0; i < implementations.length; ++i) {
+            _delegate(implementations[i]);
+            try _delegate(implementations[i]) {}   //Failure should not be fatal
+            catch Error(string memory error) {
+                console.log("[DEV] Multiproxy ERROR:", error);
+            }
+        }
+    }
+    */
+
+    function _delegate(address implementation) internal virtual {
+        assembly {
+            // Copy msg.data. We take full control of memory in this inline assembly
+            // block because it will not return to Solidity code. We overwrite the
+            // Solidity scratch pad at memory position 0.
+            calldatacopy(0, 0, calldatasize())
+
+            // Call the implementation.
+            // out and outsize are 0 because we don't know the size yet.
+            let result := delegatecall(gas(), implementation, 0, calldatasize(), 0, 0)
+
+            // Copy the returned data.
+            returndatacopy(0, 0, returndatasize())
+
+            switch result
+            // delegatecall returns 0 on error.
+            case 0 {
+                revert(0, returndatasize())
+                //TODO: Return Error only if Function Found on Target Contract
+            }
+            default {
+                return(0, returndatasize())
+            }
+        }
     }
 
     /**
