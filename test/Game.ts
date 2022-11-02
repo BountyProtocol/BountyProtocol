@@ -3,6 +3,7 @@ import { Signer } from "ethers";
 import { ethers } from "hardhat";
 import { deployContract, deployUUPS, deployHub, deployGameExt } from "../utils/deployment";
 import { ZERO_ADDR, test_uri } from "../utils/consts";
+import { AbiCoder } from "ethers/lib/utils";
 
 describe("Game Extensions", function () {
     //Addresses
@@ -56,7 +57,7 @@ describe("Game Extensions", function () {
     });
 
     /**
-     * Projects Flow
+     * mDAO Flow
      */
     describe("mDAO Game Flow", function () {
 
@@ -74,14 +75,14 @@ describe("Game Extensions", function () {
             await this.hubContract.makeGame(game.type, game.name, test_uri);
             //Init Game Contract Object
             this.gameContract = await ethers.getContractAt('GameUpgradable', gameAddr);
-            console.log("Deployed Game Contract to ", this.gameContract.address);
         });
 
         describe("Votes Extension", function () {
 
             before(async function () {
-                // console.log("use Game Contract at ", this.gameContract.address);
                 this.gameVotes = await ethers.getContractAt('VotesExt', this.gameContract.address);
+
+
             });
 
             it("User can join as a member", async function () {
@@ -98,6 +99,68 @@ describe("Game Extensions", function () {
             });
             
         }); //Votes Extension
+
+        
+        describe("Action Extension", function () {
+
+            before(async function () {
+                // console.log("use Game Contract at ", this.gameContract.address);
+                this.gameAction = await ethers.getContractAt('ActionExt', this.gameContract.address);
+                //Create Actions
+                let actions = [
+                    {
+                        // "id": "0x5e89aafb7762888023ad6f29f35fbd9d43628385b48bf160b748b67607ff42b2",
+                        "subject": "game",
+                        "verb": "rate",
+                        "object": "person",
+                        "tool": "soul",
+                    },
+                ];
+                for(let action of actions){
+                    this.actionContract.actionAdd(action, "");
+                }
+            });
+
+            it("Run Actions", async function () {
+                let actionGUID = "0x5e89aafb7762888023ad6f29f35fbd9d43628385b48bf160b748b67607ff42b2";
+                let role = await this.gameContract.confGet("role")
+                console.log("Game role", role);
+
+                let sbt = await this.soulContract.tokenByAddress(this.gameContract.address);
+                let rate = {
+                    tokenId: await this.soulContract.tokenByAddress(this.tester2Addr),
+                    amount: 11,
+                };
+
+                let abiCoder: AbiCoder = ethers.utils.defaultAbiCoder; 
+                //targetTokenId, domain, value
+                let data = abiCoder.encode(['uint256','string','int256'], [rate.tokenId, "personal", rate.amount]);
+                // console.log("Data Encoded", data);
+                let tx = await this.gameAction.runActionData(actionGUID, data);
+                // let receipt2 = await tx.wait()
+                // console.log("Action 2 Logs", receipt2.logs);
+                // console.log("Action 2 Events: ", receipt2.events);
+                await expect(tx).to.emit(this.soulContract, 'OpinionChange');
+
+                //** Rep w custom data objects
+                // let data = {
+                //     roleMap: [], 
+                //     intMap: [{role:"object", value:1},{role:"value", value:1}],
+                //     strMap: [{role:"direction", value:"positive"}, {role:"domain", value:"personal"}],
+                // }
+                // let tx1 = await this.gameAction.runActionXX(data.actionGUID, data.roleMap, data.intMap, data.strMap);
+                // let receipt1 = await tx1.wait()
+                // console.log("Action 1 Logs", receipt1.logs);
+                // console.log("Action 1 Events: ", receipt1.events);
+
+                let rep = await this.soulContract.getOpinion(sbt, this.soulContract.address, rate.tokenId, "personal");
+                console.log("Game Rep for tokenId:"+rate.tokenId, {rep});
+
+                expect(rep).to.equal(rate.amount);
+            });
+            
+        }); //Action Extension
+
 
     }); //mDAO
 
