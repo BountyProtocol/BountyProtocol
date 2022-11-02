@@ -12,7 +12,7 @@ const chain = hre.hardhatArguments.network;
 import contractAddrs from "./_contractAddr";
 const contractAddr = contractAddrs[chain];
 
-let oldHubAddr = "0x288B2040e78dC90D73d8Ed0957ed706260DC8EfE";
+let oldHubAddr = "0x9956b603Eb5A081d23721e5e0c8839257A92c499";
 
 /**
  * Migrate Contracts Between Hubs

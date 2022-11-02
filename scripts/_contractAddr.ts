@@ -17,12 +17,12 @@ const contractAddr: any = {
     history:"0xce5F671e5e2C9c122e09Fe323aB0840155ab1D60", //0.5.1
   },
   mumbai:{
-    game: "0x964147d5215c43b33DDb81Db663efAeC776eC6a4", //0.5.2
-    claim: "0x29B46D6463951A31bEfa095040eE33b4f4f63EeD", //0.5.2
-    task: "0xB2a0e344528fE48EA6f392a24374A2F20c87658f", //0.5.2
-    hub: "0x9956b603Eb5A081d23721e5e0c8839257A92c499", //0.5.2 (Proxy)
-    avatar: "0x5726eB1ba64F3FA0aAD002F273B625adA6e788ff", // 0.5.2 (Proxy)
-    history: "0x95BD98a656C907fC037aF87Ea740fD94188Cd65f", // D4.4 (Proxy)
+    game: "0x5590Bf51Ba578448f8Ec40EC057B8cE383c8cf56", //0.6.0
+    claim: "0x615EBbd1ceF504E6E5A4e00f22E579560D0b07D1", //0.6.0
+    task: "0xec727Ea20A3EfFf39E75F96e6ddc9Dc261babCf8", //0.6.0
+    hub: "0xc0d1D74547356B2be0709cE841F5F2Fa5D8c63D7", //0.6.0 (Proxy)
+    avatar: "0x5726eB1ba64F3FA0aAD002F273B625adA6e788ff", //0.5.2 (Proxy) //Updated
+    history: "0x95BD98a656C907fC037aF87Ea740fD94188Cd65f", //D4.4 (Proxy)
   },
   optimism_kovan:{
     // game: "0xCFeE012952A2ECf7482790aB3EAe15Bd28AE5ae8", //0.5.1
