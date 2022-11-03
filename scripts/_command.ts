@@ -24,11 +24,19 @@ async function main() {
     //Hub Associations & Validation 
     if(contractAddr.hub){
         let hubContract = await ethers.getContractFactory("HubUpgradable").then(res => res.attach(contractAddr.hub));
+
+        //Game Extension: Court of Law
+        await deployContract("CourtExt", []).then(async res => {
+            await hubContract.assocSet("GAME_COURT", res.address);
+            console.log("Deployed Court Ext. ", res.address);
+        });
+        /*
         console.log("Deploy All Game Extensions & Set to Hub");
         if(hubContract){
             //Deploy All Game Extensions & Set to Hub
             deployGameExt(hubContract);
         }
+        */
     }
 
 }

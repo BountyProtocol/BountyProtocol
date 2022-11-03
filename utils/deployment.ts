@@ -29,14 +29,14 @@ export const deployGameExt = async (hubContract: Contract) => {
   console.log("Start Deploying Game Extensions...");
 
   /* [mumbai] FAILS W/reason: 'replacement fee too low', code: 'REPLACEMENT_UNDERPRICED', */
-  if(chain!=='mumbai'){
+  // if(chain!=='mumbai'){
     //Game Extension: Court of Law
     await deployContract("CourtExt", []).then(async res => {
       // console.log("(i) Deployed Game Extension: CourtExt", res.address);
       verification.push({name:"CourtExt", address:res.address, params:[]});
       await hubContract.assocSet("GAME_COURT", res.address);
     });
-  }
+  // }
   
   //Game Extension: mDAO
   await deployContract("MicroDAOExt", []).then(async res => {
