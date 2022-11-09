@@ -347,19 +347,12 @@ describe("Protocol", function () {
       expect(await soulContract.connect(tester).tokenURI(soulTokens.tester)).to.equal(test_uri);
     });
 
-    /* DEPRECATED - SBT now has Subjective Reputation
-    it("Should protect from unauthorized reputation changes", async function () {
-      */
     it("Should register soul's opinion change", async function () {
       //Rep Call Data      
       let repCall = { tokenId:1, domain:"personal", score:2};
-      //Should Fail - Require Permissions
-      // await expect(
-        soulContract.connect(tester).opinionAboutSoul(repCall.tokenId, repCall.domain, repCall.score);
-      // ).to.be.revertedWith("UNAUTHORIZED_ACCESS");
+      soulContract.connect(tester).opinionAboutSoul(repCall.tokenId, repCall.domain, repCall.score);
     });
     
-
   }); //Soul
 
   /**
