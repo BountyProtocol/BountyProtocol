@@ -156,7 +156,7 @@ contract HubUpgradable is
         if(_getExtTokenId(tx.origin) == 0){
             //Auto-mint token for Account
             _mintSoul(tx.origin, "");
-    }
+        }
         */
         //Deploy
         BeaconProxy newProxyContract = new BeaconProxy(

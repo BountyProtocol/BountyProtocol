@@ -88,6 +88,11 @@ describe("Protocol", function () {
     //Set History Contract to Hub
     await hubContract.assocSet("action", actionContract.address);
 
+    //Mint SBT for Hub
+    await soulContract.mintFor(hubContract.address, "");
+    soulTokens.hub = await soulContract.tokenByAddress(hubContract.address);
+    ++soulTokenId;
+
     //--- Votes Repository Upgradable (UUPS)
     this.votesRepo = await deployUUPS("VotesRepoTrackerUp", [hubContract.address]);
     // this.votesRepo = await deployUUPS("VotesRepoTrackerUpInt", [hubContract.address]);
@@ -254,7 +259,7 @@ describe("Protocol", function () {
 
     it("Should Index Addresses", async function () {
       //Expected Token ID
-      let tokenId = 1;
+      let tokenId = 2;
       //Fetch Token ID By Address
       let result = await soulContract.tokenByAddress(this.testerAddr);
       //Check Token
@@ -263,7 +268,7 @@ describe("Protocol", function () {
 
     it("Allow Multiple Owner Accounts per Soul", async function () {
       let miscAddr = await addrs[0].getAddress();
-      let tokenId = 1;
+      let tokenId = 2;
       //Fetch Token ID By Address
       let tx = await soulContract.tokenOwnerAdd(miscAddr, tokenId);
       tx.wait();
@@ -330,16 +335,16 @@ describe("Protocol", function () {
     it("Tokens should NOT be transferable", async function () {
       //Should Fail to transfer -- "Sorry, assets are non-transferable"
       await expect(
-        soulContract.connect(tester).transferFrom(this.testerAddr, this.tester2Addr, 1)
+        soulContract.connect(tester).transferFrom(this.testerAddr, this.tester2Addr, soulTokens.tester)
       ).to.be.revertedWith("Sorry, assets are non-transferable");
     });
 
     it("Can update token's metadata", async function () {
       let test_uri = "TEST_URI_UPDATED";
       //Update URI
-      await soulContract.connect(tester).update(1, test_uri);
+      await soulContract.connect(tester).update(soulTokens.tester, test_uri);
       //Check URI
-      expect(await soulContract.connect(tester).tokenURI(1)).to.equal(test_uri);
+      expect(await soulContract.connect(tester).tokenURI(soulTokens.tester)).to.equal(test_uri);
     });
 
     /* DEPRECATED - SBT now has Subjective Reputation

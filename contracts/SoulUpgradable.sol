@@ -31,7 +31,14 @@ import "./abstract/SoulBonds.sol";
  *  - [TODO] Merge Souls
  */
 // Initializable,
-contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opinions, SoulBonds, ERC721URIStorageUpgradeable {
+contract SoulUpgradable is 
+  ProtocolEntityUpgradable, 
+  ISoul, 
+  UUPSUpgradeable, 
+  Opinions, 
+  SoulBonds, 
+  ERC721URIStorageUpgradeable 
+  {
     //--- Storage
 
     using AddressUpgradeable for address;
@@ -165,7 +172,21 @@ contract SoulUpgradable is ProtocolEntityUpgradable, ISoul, UUPSUpgradeable, Opi
             require(_msgSender() == owner() || _msgSender() == address(_HUB), "Only Owner or Hub");
         }
         //Mint
-        return _mint(to, tokenURI);
+        uint256 sbt = _mint(to, tokenURI);
+        if(_msgSender() == address(_HUB)){
+            //Relate to Creating Account (Hub)
+            relateToCretor(sbt);
+        }
+        return sbt;
+    }
+    
+    /// Relate an entity to current account (creator)
+    function relateToCretor(uint256 sbt) private {
+        uint256 hubSBT = tokenByAddress(_msgSender());
+        //Mint SBT for Hub
+        if(hubSBT == 0) hubSBT = _mint(_msgSender(), "");
+        //Relate to  Hub
+        _relSetOf(sbt, "hub", hubSBT);
     }
 
     /// Mint (Create New Token for oneself)
