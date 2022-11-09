@@ -144,6 +144,18 @@ async function main() {
   if(!hubContract && contractAddr.hub) hubContract = await ethers.getContractFactory("HubUpgradable").then(res => res.attach(contractAddr.hub));
   if(hubContract){
     console.log("Validate Hub ", hubContract.address);
+
+    //Hub SBT
+    let soulContract = await ethers.getContractFactory("SoulUpgradable").then(res => res.attach(contractAddr.avatar));
+    let hubSBT = await soulContract.tokenByAddress(hubContract.address);
+    if(hubSBT == 0){
+      await soulContract.mintFor(hubContract.address, "");
+      hubSBT = await soulContract.tokenByAddress(hubContract.address);
+      console.log("Minted SBT for Hub:", Number(hubSBT));
+    }
+    else console.log("Hub has SBT:", Number(hubSBT));
+
+    //Hub Associations
     let assoc: any = {};
     assoc.sbt = await hubContract.assocGet("SBT");
     assoc.history = await hubContract.assocGet("action");
