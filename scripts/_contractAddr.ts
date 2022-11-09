@@ -21,7 +21,7 @@ const contractAddr: any = {
     claim: "0x615EBbd1ceF504E6E5A4e00f22E579560D0b07D1", //0.6.0
     task: "0xec727Ea20A3EfFf39E75F96e6ddc9Dc261babCf8", //0.6.0
     hub: "0xc0d1D74547356B2be0709cE841F5F2Fa5D8c63D7", //0.6.0 (Proxy)
-    avatar: "0x5726eB1ba64F3FA0aAD002F273B625adA6e788ff", //0.5.2 (Proxy) //Updated
+    avatar: "0x232902B2460D82d61f04f76F49b888AF67f73ef2", //0.6.0 (Proxy)
     history: "0x95BD98a656C907fC037aF87Ea740fD94188Cd65f", //D4.4 (Proxy)
   },
   optimism_kovan:{

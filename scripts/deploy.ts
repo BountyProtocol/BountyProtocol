@@ -142,7 +142,7 @@ async function main() {
 
   //Validate Hub Associations
   if(!hubContract && contractAddr.hub) hubContract = await ethers.getContractFactory("HubUpgradable").then(res => res.attach(contractAddr.hub));
-  if(0 && hubContract){
+  if(hubContract){
     console.log("Validate Hub ", hubContract.address);
     let assoc: any = {};
     assoc.sbt = await hubContract.assocGet("SBT");
