@@ -5,6 +5,8 @@
           "files": ["*.sol"],
           "options": {
             "printWidth": 140,
+            "tabWidth": 4,
+            "useTabs": true,
             "explicitTypes": "always"
           }
         }
