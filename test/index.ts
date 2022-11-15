@@ -802,12 +802,16 @@ describe("Protocol", function () {
 
     it("Project Should Create a Task ", async function () {
       let value = 100; //ethers.utils.parseEther(0.001);
-      let taskData = {type:"BOUNTY", name: "Test Task", uri: test_uri2};
+      let taskData = {type:"bounty", name: "Test Task", uri: test_uri2};
       let taskAddr = await this.projectContract.connect(admin).callStatic.makeTask(taskData.type, taskData.name, taskData.uri);
       // this.projectContract.connect(admin).makeTask(taskData.name, taskData.uri);
       await this.projectContract.connect(admin).makeTask(taskData.type, taskData.name, taskData.uri, {value}); //Fund on Creation
       //Attach
       this.task1 = await ethers.getContractAt('TaskUpgradable', taskAddr, admin);
+    });
+
+    it("TODO: Project Should Update a Task (Soul) ", async function () {
+    
     });
 
     it("Should Fund Task (ETH)", async function () {
@@ -927,7 +931,7 @@ describe("Protocol", function () {
 
       it("Project Should Create a new Task ", async function () {
         let value = 100; //ethers.utils.parseEther(0.001);
-        let taskData = {type: "Bounty", name: "Test Task", uri: test_uri2};
+        let taskData = {type: "bounty", name: "Test Task", uri: test_uri2};
         let taskAddr = await this.projectContract.connect(admin).callStatic.makeTask(taskData.type, taskData.name, taskData.uri);
         // this.projectContract.connect(admin).makeTask(taskData.type, taskData.name, taskData.uri);
         this.projectContract.connect(admin).makeTask(taskData.type, taskData.name, taskData.uri, {value}); //Fund on Creation

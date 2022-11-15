@@ -229,16 +229,13 @@ contract HubUpgradable is
         _mintSoul(address(newProxyContract), uri_);
         //Event
         emit ContractCreated("process", address(newProxyContract));
-
         //Set Type (to be called after creating a Soul)
         ICTXEntityUpgradable(address(newProxyContract)).confSet("type", type_);
         ICTXEntityUpgradable(address(newProxyContract)).confSet("role", type_);
         //Set Container
         IProcedure(address(newProxyContract)).setParentCTX(_msgSender());
-        
         //Remember Parent (Same as Claims)
         _procedures[address(newProxyContract)] = _msgSender();
-
         //Return
         return address(newProxyContract);
     }
