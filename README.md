@@ -1,23 +1,29 @@
+```
+Due to the lack of traction in the space project has came to a halt. 
+We are currently looking for a strong design partner with a matching use case to continue development. 
+```
+
 # The Solidify Protocol 
 
-Using the magic of decentralized cryptography to create a highe-level DeSoc building blocks out of composible smart contracts and NFTs.
-
+A composible architecture for representing reality. 
 
 ## Overview
 
 This platform allows you to
 
-- Mint characters
-- Create games
-- Set up roles and incentives
-- Manage reputation
-- Design an interaction flow 
-
+- Mint SBT profiles to represent users and resources
+- Assign these people roles within distributed social organizations (DAO, Pod, etc')
+- Set up roles and incentives for each org
+- Design custom interaction flows and incentives
+- Reward participants with tokens & reputation
+- Moderate the population, handle claims, and retrive assets.
+- Full extendibility and customization
 
 ## Technical info
 
 - [Docs (Notion)](https://www.notion.so/virtualbrick/Contracts-4e383eb032e34cd08d5f035dee2dd9bb)
 - [Changelog](https://github.com/MentorDAO/BountyProtocol/releases)
+- [Partial Demo](https://solidify.space)
 
 ## Getting Started
 
