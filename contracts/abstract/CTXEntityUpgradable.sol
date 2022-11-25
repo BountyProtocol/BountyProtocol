@@ -19,15 +19,19 @@ abstract contract CTXEntityUpgradable is
 
     modifier AdminOnly() virtual {
        //Validate Permissions
-        require(roleHas(_msgSender(), "admin")    //Admin Role
-            // || roleHas(tx.origin, "admin")    //Admin Role
-            , "INVALID_PERMISSIONS");
+        require(roleHas(_msgSender(), "admin"), "INVALID_PERMISSIONS");
         _;
     }
 
     modifier AdminOrOwner() virtual {
        //Validate Permissions
         require(_isAdminOrOwner(), "INVALID_PERMISSIONS");
+        _;
+    }
+
+    modifier AdminOrOwnerOrHub() {
+       //Validate Permissions
+        require(_isAdminOrOwner() || _msgSender() == address(_HUB), "INVALID_PERMISSIONS");
         _;
     }
 
@@ -42,7 +46,6 @@ abstract contract CTXEntityUpgradable is
     /// Check if current account is Admin or Owner
     function _isAdminOrOwner() internal view returns (bool) {
         return (owner() == _msgSender()      //Owner
-            || roleHas(tx.origin, "admin")    //Admin Role
             || roleHas(_msgSender(), "admin")    //Admin Role
         );
     }
@@ -66,14 +69,14 @@ abstract contract CTXEntityUpgradable is
     }
     
     /// Generic Config Set Function
-    function confSet(string memory key, string memory value) public override AdminOrOwner {
+    function confSet(string memory key, string memory value) public override AdminOrOwnerOrHub {
         _confSet(key, value);
     }
 
     //** Role Management
     
     /// Create a new Role
-    function roleCreate(string memory role) external virtual override AdminOrOwner {
+    function roleCreate(string memory role) external virtual override AdminOrOwnerOrHub {
         _roleCreate(role);
     }
 
