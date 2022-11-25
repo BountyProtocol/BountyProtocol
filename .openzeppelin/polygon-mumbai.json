@@ -3330,7 +3330,7 @@
             "label": "_OpenRepo",
             "offset": 0,
             "slot": "202",
-            "type": "t_contract(IOpenRepo)25807",
+            "type": "t_contract(IOpenRepo)10713",
             "contract": "AssocExt",
             "src": "contracts\\abstract\\AssocExt.sol:16"
           },
@@ -3384,7 +3384,7 @@
             "label": "bool",
             "numberOfBytes": "1"
           },
-          "t_contract(IOpenRepo)25807": {
+          "t_contract(IOpenRepo)10713": {
             "label": "contract IOpenRepo",
             "numberOfBytes": "20"
           },
