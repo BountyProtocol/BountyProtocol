@@ -807,7 +807,8 @@ describe("Protocol", function () {
       // this.projectContract.connect(admin).makeTask(taskData.name, taskData.uri);
       await this.projectContract.connect(admin).makeTask(taskData.type, taskData.name, taskData.uri, {value}); //Fund on Creation
       //Attach
-      this.task1 = await ethers.getContractAt('TaskUpgradable', taskAddr, admin);
+      // this.task1 = await ethers.getContractAt('TaskUpgradable', taskAddr, admin);
+      this.task1 = await ethers.getContractAt('TaskUpgradable', taskAddr);
     });
 
     it("TODO: Project Should Update a Task (Soul) ", async function () {
@@ -821,7 +822,7 @@ describe("Protocol", function () {
       await admin.sendTransaction({to: this.task1.address, value});
       //Validate Balance
       expect(await this.task1.contractBalance(ZERO_ADDR))
-        .to.equal(Number(curBalance) + Number(value));
+        .to.equal(curBalance.add(value));
     });
 
     it("Should Fund Task (ERC20)", async function () {
@@ -949,7 +950,7 @@ describe("Protocol", function () {
         await admin.sendTransaction({to: this.task2.address, value});
         //Validate Balance
         expect(await this.task2.contractBalance(ZERO_ADDR))
-          .to.equal(Number(curBalance) + Number(value));
+          .to.equal(curBalance.add(value));
       });
 
       it("Should Fund Task (ERC20)", async function () {
@@ -974,7 +975,7 @@ describe("Protocol", function () {
         let tx = await this.task2.connect(admin).cancel(test_uri, [this.token.address]);
         await expect(tx).to.emit(this.task2Procedure, 'Cancelled').withArgs(test_uri, this.adminAddr);
         //Expect Refund & Check Task Creator's Balance
-        expect(await this.token.balanceOf(this.adminAddr)).to.equal(Number(balanceAdminBefore.token) + Number(balanceBefore.token));
+        expect(await this.token.balanceOf(this.adminAddr)).to.equal(balanceAdminBefore.token.add(balanceBefore.token));
         // expect(await admin.getBalance()).to.equal( balanceAdminBefore.native.add(balanceBefore.native) );  //...Gas?
       });
 
@@ -987,7 +988,7 @@ describe("Protocol", function () {
         await admin.sendTransaction({to: this.task2.address, value});
         //Validate Balance
         expect(await this.task2.contractBalance(ZERO_ADDR))
-          .to.equal(Number(curBalance) + Number(value));
+          .to.equal(curBalance.add(value));
 
         await this.token.connect(admin).transfer(this.task2.address, 1);
         //Verify Transfer
@@ -1016,7 +1017,7 @@ describe("Protocol", function () {
         /// Refund -- Send Tokens back to Task Creator
         let tx = await this.task2.connect(admin).refund([this.token.address]);
         //Expect Refund & Check Task Creator's Balance
-        expect(await this.token.balanceOf(this.adminAddr)).to.equal(Number(balanceAdminBefore.token) + Number(balanceBefore.token));
+        expect(await this.token.balanceOf(this.adminAddr)).to.equal(balanceAdminBefore.token.add(balanceBefore.token));
         // expect(await admin.getBalance()).to.equal( balanceAdminBefore.native.add(balanceBefore.native) );  //...Gas?
       });
 
