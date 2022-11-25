@@ -73,7 +73,6 @@ abstract contract SoulBonds is ISoulBonds {
         return relGetAllOf(_getCurrentSBT(), key);
     }
 
-
     /// Set Relation
     function relSet(string memory key, uint256 toSBT) external virtual override {
         _relSetOf(_getCurrentSBT(), key, toSBT);
@@ -88,7 +87,6 @@ abstract contract SoulBonds is ISoulBonds {
     function relRemove(string memory key, uint256 toSBT) external virtual override {
         _relRemoveOf(_getCurrentSBT(), key, toSBT);
     }
-
     
     /// Set Relation
     function _relSetOf(uint256 fromSBT, string memory key, uint256 toSBT) internal {
