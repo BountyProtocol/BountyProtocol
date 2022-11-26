@@ -91,10 +91,9 @@ contract GameUpgradable is IGame
         _setTargetContract(dataRepo().addressGetOf(address(_HUB), "SBT"));
         //Identifiers
         name = name_;
-        //Assign Creator as Admin & Member
-        _roleAssign(tx.origin, "admin", 1);
-        _roleAssign(tx.origin, "member", 1);
         //Init Default Game Roles
+        _roleCreate("admin");
+        _roleCreate("member");
         _roleCreate("authority");
         //Default Token URIs
         // _setRoleURI("admin", "");
@@ -256,10 +255,10 @@ contract GameUpgradable is IGame
     //     emit Nominate(_msgSender(), soulToken, uri_);
     // }
 
-    /** TODO: DEPRECATE - Allow Uneven Role Distribution 
+    /** TODO: DEPRECATED - Allow Uneven Role Distribution 
     * @dev Hook that is called before any token transfer. This includes minting and burning, as well as batched variants.
     *  - Max of Single Token for each account
-    */
+    
     function _beforeTokenTransfer(
         address operator,
         address from,
@@ -280,7 +279,8 @@ contract GameUpgradable is IGame
             }
         }
     }
-    
+    */
+
     /// Hook:Track Voting Power
     function _afterTokenTransferTracker(
         address operator,

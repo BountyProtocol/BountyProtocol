@@ -47,7 +47,7 @@ abstract contract Escrow is IEscrow {
      * total shares and their previous withdrawals.
      */
     function _release(address payable account, uint256 amount) internal {
-        require(amount > 0, "ESCROW:NOTHING_TO_RELEASE");
+        require(amount > 0, "ESCROW:NO_NATIVE_TO_RELEASE");
         Address.sendValue(account, amount);
         emit PaymentReleased(account, amount);
         emit FundsSent(account, amount, address(0));
@@ -59,7 +59,7 @@ abstract contract Escrow is IEscrow {
      * contract.
      */
     function _releaseToken(address token, address account, uint256 amount) internal {
-        require(amount > 0, "ESCROW:NOTHING_TO_RELEASE");
+        require(amount > 0, "ESCROW:NO_TOKEN_TO_RELEASE");
         SafeERC20.safeTransfer(IERC20(token), account, amount);
         emit ERC20PaymentReleased(IERC20(token), account, amount);
         emit FundsSent(account, amount, token);

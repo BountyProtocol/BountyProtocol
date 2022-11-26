@@ -170,7 +170,7 @@ contract VotesRepoTrackerUpInt is
      */
     function delegate(address delegatee) public virtual override {
         // address account = _msgSender();
-        address account = tx.origin;
+        address account = tx.origin;    //! Insecure
         _delegate(account, delegatee);
     }
 

@@ -12,15 +12,12 @@ import "./interfaces/ITask.sol";
 
 /**
  * @title Task / Request for Product (RFP) Entity
- * @dev Version 1.2.0
+ * @dev Version 1.2.1
  * [TODO] Support for different share withing roles
  * [TODO] Distribute config for different roles
  * [TODO] Protocol Treasury Donation
  */
-contract TaskUpgradable is ITask
-    , Procedure
-    , Escrow
-    {
+contract TaskUpgradable is ITask, Procedure, Escrow {
 
     //-- Storage
 

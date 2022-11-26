@@ -15,7 +15,7 @@ import "./abstract/Procedure.sol";
 
 /**
  * @title Upgradable Claim (Proven) Contract
- * @dev Version 2.2.1
+ * @dev Version 2.2.2
  */
 contract ClaimUpgradable is IClaim, Procedure {
 
@@ -40,6 +40,9 @@ contract ClaimUpgradable is IClaim, Procedure {
     function initialize (string memory name_) public virtual override initializer {
         super.initialize(name_);
         symbol = "CLAIM";
+        //Custom Roles
+        _roleCreate("witness");     //Witnesses
+        _roleCreate("affected");    //Affected Party (For reparations)
     }
 
     //--- Rule Reference 
@@ -102,7 +105,10 @@ contract ClaimUpgradable is IClaim, Procedure {
     /// File the Claim (Validate & Open Discussion)  --> Open
     function stageFile() public override {
         //Validate Caller
-        require(roleHas(tx.origin, "creator") || roleHas(_msgSender(), "admin") , "ROLE:CREATOR_OR_ADMIN");
+        require(roleHas(_msgSender(), "creator") 
+            || roleHas(_msgSender(), "admin")
+            || _msgSender() == getContainerAddr()
+            , "ROLE:CREATOR_OR_ADMIN");
         //Validate Lifecycle Stage
         require(stage == DataTypes.ClaimStage.Draft, "STAGE:DRAFT_ONLY");
         //Validate - Has Subject

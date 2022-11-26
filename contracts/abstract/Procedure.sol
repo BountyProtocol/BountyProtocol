@@ -10,14 +10,10 @@ import "../libraries/DataTypes.sol";
 import "../abstract/CTXEntityUpgradable.sol";
 import "../abstract/Posts.sol";
 
-
 /**
  * @title Procedure Basic Logic for Contracts 
  */
-abstract contract Procedure is IProcedure
-    , CTXEntityUpgradable
-    , Posts
-    {
+abstract contract Procedure is IProcedure, CTXEntityUpgradable, Posts {
 
     //-- Storage
 
@@ -30,22 +26,13 @@ abstract contract Procedure is IProcedure
     string public symbol;
 
     //--- Modifiers
-/* REDUNDANT
-    /// Permissions Modifier
-    modifier AdminOrOwner() override {
-       //Validate Permissions
-        require(owner() == _msgSender()      //Owner
-            || roleHas(_msgSender(), "admin")    //Admin Role
-            , "INVALID_PERMISSIONS");
-        _;
-    }
-*/
+
     /// Permissions Modifier
     modifier AdminOrOwnerOrCTX() {
        //Validate Permissions
         require(owner() == _msgSender()      //Owner
             || roleHas(_msgSender(), "admin")    //Admin Role
-            || msg.sender == getContainerAddr()
+            || _msgSender() == getContainerAddr()
             , "INVALID_PERMISSIONS");
 
         _;
@@ -79,22 +66,15 @@ abstract contract Procedure is IProcedure
     /// Initializer
     function initialize(string memory name_) public virtual override initializer {
         //Initializers
-        // __ProtocolEntity_init(hub);
-        __ProtocolEntity_init(msg.sender);  //Sender is the Hub
+        __ProtocolEntity_init(_msgSender());  //Sender is the Hub
         _setTargetContract(getSoulAddr());
         //Identifiers
         name = name_;
-        //Auto-Set Creator Wallet as Admin
-        _roleAssign(tx.origin, "admin", 1);
-        _roleAssign(tx.origin, "creator", 1);
-        //Init Default Claim Roles
-        // _roleCreate("admin");
-        // _roleCreate("creator");     //Filing the claim
+        //Init Default Roles
+        _roleCreate("admin");
+        _roleCreate("creator");
         _roleCreate("subject");        //Acting Agent
         _roleCreate("authority");      //Deciding authority
-        //Custom Roles
-        // _roleCreate("witness");     //Witnesses
-        // _roleCreate("affected");    //Affected Party (For reparations)
     }
     /// Change Claim Stage
     function _setStage(DataTypes.ClaimStage stage_) internal {
@@ -144,7 +124,7 @@ abstract contract Procedure is IProcedure
 	    require(
             owner() == _msgSender()      //Owner
             || roleHas(_msgSender(), "admin")    //Admin Role
-            || msg.sender == address(_HUB)   //Through the Hub
+            || _msgSender() == address(_HUB)   //Through the Hub
             , "INVALID_PERMISSIONS");
         _setParentCTX(container);
     }
@@ -173,18 +153,16 @@ abstract contract Procedure is IProcedure
     /// Assign to a Role
     function roleAssign(address account, string memory role) public override roleExists(role) {
         //Special Validations for Special Roles 
-        if (Utils.stringMatch(role, "admin") || Utils.stringMatch(role, "authority")) {
-            require(getContainerAddr() != address(0), "Unknown Parent Container");
-            //Validate: Must Hold same role in Containing Game
-            require(IERC1155RolesTracker(getContainerAddr()).roleHas(account, role), "User Required to hold same role in the Game context");
-        }
-        else{
-            //Validate Permissions
-            require(
-                owner() == _msgSender()      //Owner
-                || roleHas(_msgSender(), "admin")    //Admin Role
-                || msg.sender == address(_HUB)   //Through the Hub
-                , "INVALID_PERMISSIONS");
+        if(_msgSender() != address(_HUB)  && _msgSender() != owner() && _msgSender() != getContainerAddr()){
+            if (Utils.stringMatch(role, "admin") || Utils.stringMatch(role, "authority")) {
+                require(getContainerAddr() != address(0), "Unknown Parent Container");
+                //Validate: Must Hold same role in Containing Game
+                require(IERC1155RolesTracker(getContainerAddr()).roleHas(account, role), "User Required to hold same role in the Game context");
+            }
+            else{
+                //Admin Role
+                require(roleHas(_msgSender(), "admin"), "INVALID_PERMISSIONS");
+            }
         }
         //Add
         _roleAssign(account, role, 1);

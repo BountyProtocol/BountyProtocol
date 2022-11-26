@@ -173,6 +173,9 @@ contract HubUpgradable is
         //Set Type (to be called after creating a Soul)
         ICTXEntityUpgradable(address(newProxyContract)).confSet("type", type_);
         ICTXEntityUpgradable(address(newProxyContract)).confSet("role", type_);
+        //Assing Default Roles
+        ICTXEntityUpgradable(address(newProxyContract)).roleAssign(_msgSender(), "admin");
+        ICTXEntityUpgradable(address(newProxyContract)).roleAssign(_msgSender(), "member");
         //Remember
         _games[address(newProxyContract)] = true;
         //Register Game to Repo

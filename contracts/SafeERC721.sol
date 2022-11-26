@@ -33,7 +33,7 @@ contract SafeERC721 is ERC721TrackerUpgradable,
         //Represent the Self
         ISoul(_targetContract).mint(uri_);
         //Remember Deployer's SBT
-        _setOwner(_getExtTokenIdOrMake(owner_));  //tx.origin is given an asset. seems safe.
+        _setOwner(_getExtTokenIdOrMake(owner_));
     }
 
     /// Revert to original Owner function
