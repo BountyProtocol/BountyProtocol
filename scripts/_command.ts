@@ -4,7 +4,7 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 import { ethers } from "hardhat";
-import { verify, deployContract, deployUUPS, deployGameExt } from "../utils/deployment";
+import { deployContract } from "../utils/deployment";
 const hre = require("hardhat");
 const chain = hre.hardhatArguments.network;
 
