@@ -5,7 +5,7 @@ We are currently looking for a strong design partner with a matching use case to
 
 # The Soul-System Protocol 
 
-Composible architecture for representing society
+Compossible architecture for representing society
 
 ## Overview
 
