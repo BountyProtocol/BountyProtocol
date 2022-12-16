@@ -1,25 +1,32 @@
+Compossible architecture for representing society
+
 ```
 Due to the lack of traction in the space project has came to a halt. 
 We are currently looking for a strong design partner with a matching use case to continue development. 
 ```
 
+
 # The Soul-System Protocol 
 
-Compossible architecture for representing society
+A Soul-System is a collection of composible primitives based around a soulbound token contract.
 
-![image](https://user-images.githubusercontent.com/5618090/208204563-860d1dcd-ffee-44a1-8c0b-4dfb0791e96e.png)
 
 ## Overview
 
 This platform allows you to
 
-- Mint SBT profiles to represent users and resources
-- Assign these people roles within distributed social organizations (DAO, Pod, etc')
-- Set up roles and incentives for each org
-- Design custom interaction flows and incentives
-- Reward participants with tokens & reputation
-- Moderate the population, handle claims, and retrive assets.
-- Full extendibility and customization
+- Mint SBT profiles to represent users 
+- Create games to represent groups with rules (Distributed Social Organizations)
+- Assign users roles (member, admin, dev, etc') within the distributed organizations (DAO, Pod, etc')
+- Incentives - set up rules reactions for each org/game & reward them with various types of soulbound tokens (rep, xp, etc')
+- Design custom interaction flows between entities (Procedures)
+- Open, extendibe, customizable & complient with existing asset types (ERC20/721/1155, etc')
+- [TBD] Use soulbound tokens (role, rep, xp...) for governance
+- [TBD] Recursive control structure between games
+
+## Architecture
+
+![image](https://user-images.githubusercontent.com/5618090/208204563-860d1dcd-ffee-44a1-8c0b-4dfb0791e96e.png)
 
 ## Technical info
 
