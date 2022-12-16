@@ -1,8 +1,7 @@
 Compossible architecture for representing society
 
 ```
-Due to the lack of traction in the space project has came to a halt. 
-We are currently looking for a strong design partner with a matching use case to continue development. 
+We are currently looking for a strong design partner with a matching use case. 
 ```
 
 
