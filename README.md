@@ -7,6 +7,8 @@ We are currently looking for a strong design partner with a matching use case to
 
 Compossible architecture for representing society
 
+![image](https://user-images.githubusercontent.com/5618090/208204563-860d1dcd-ffee-44a1-8c0b-4dfb0791e96e.png)
+
 ## Overview
 
 This platform allows you to
