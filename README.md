@@ -3,9 +3,9 @@ Due to the lack of traction in the space project has came to a halt.
 We are currently looking for a strong design partner with a matching use case to continue development. 
 ```
 
-# The Solidify Protocol 
+# The Soul-System Protocol 
 
-A composible architecture for representing reality. 
+A composible architecture for representing society
 
 ## Overview
 
