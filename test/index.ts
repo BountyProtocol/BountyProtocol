@@ -8,6 +8,10 @@ import {
   deployHub,
 } from "../utils/deployment";
 import { ZERO_ADDR, test_uri, test_uri2 } from "../utils/consts";
+import { HubUpgradable } from '../typechain-types/contracts/HubUpgradable';
+import { SoulUpgradable } from '../typechain-types/contracts/SoulUpgradable';
+import { ActionRepoTrackerUp } from '../typechain-types/contracts/ActionRepoTrackerUp';
+import { GameUpgradable } from '../typechain-types/contracts/GameUpgradable';
 
 let actionGUID = "";
 let soulTokenId = 1;  //Try to keep track of Current Soul Token ID
@@ -15,10 +19,10 @@ const soulTokens: any = {};  //Soul Token Assignment
 
 describe("Protocol", function () {
   //Contract Instances
-  let hubContract: Contract;
-  let soulContract: Contract;
-  let actionContract: Contract;
-  let gameContract: Contract;
+  let hubContract: HubUpgradable;
+  let soulContract: SoulUpgradable;
+  let actionContract: ActionRepoTrackerUp;
+  let gameContract: GameUpgradable;
   // let unOwnedTokenId: number;
 
   //Addresses
@@ -395,7 +399,7 @@ describe("Protocol", function () {
       // console.log("Current soulTokenId", soulTokenId);
       ++soulTokenId;
       //Init Game Contract Object
-      gameContract = await ethers.getContractFactory("GameUpgradable").then(res => res.attach(gameAddr));
+      gameContract = await ethers.getContractFactory("GameUpgradable").then(res => res.attach(gameAddr)) as GameUpgradable;
       this.gameContract = gameContract;
 
       expect(await this.gameContract.confGet("type")).to.equal(game.type);
