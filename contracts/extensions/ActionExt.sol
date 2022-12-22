@@ -43,7 +43,7 @@ contract ActionExt is GameExtension {
     function runActionData(bytes32 actionGUID, bytes memory data) external {
         //Fetch Action
         address actionRepoAddr = getActionRepoAddr();
-        console.log("** [DEV] actionRepoAddr", actionRepoAddr);
+        console.log("** [WIP] actionRepoAddr", actionRepoAddr);
         if(actionRepoAddr != address(0)){
             // DataTypes.SVO memory action;
             // action = IActionRepo(actionRepoAddr).actionGet(actionGUID);
@@ -52,19 +52,19 @@ contract ActionExt is GameExtension {
             // console.log("** Action T,V -- ", subject, object);
    
             try IActionRepo(actionRepoAddr).actionGet(actionGUID) returns (DataTypes.SVO memory action) {
-                console.log("** [DEV] Action T,V", action.tool, action.verb);
+                console.log("** [WIP] Action T,V", action.tool, action.verb);
                 if(Utils.stringMatch(action.tool, "soul")){
                     if(Utils.stringMatch(action.verb, "rate")){
                         //Update Soul's Opinion (Reputation)
                         address targetContract = getSoulAddr();
-                        console.log("** [DEV] action targetContract", targetContract);
+                        console.log("** [WIP] action targetContract", targetContract);
                         (uint256 targetTokenId, string memory domain, int256 value) = abi.decode(
                             data,
                             (uint256, string, int256)
                         );
-                        console.log("** [DEV] action decoded params", targetTokenId, domain);
+                        console.log("** [WIP] action decoded params", targetTokenId, domain);
                         try ISoul(getSoulAddr()).opinionAboutToken(targetContract, targetTokenId, domain, value) {
-                            console.log("[DEV] Rep Changed", targetContract, targetTokenId);
+                            console.log("[WIP] Rep Changed", targetContract, targetTokenId);
                         }   //Failure should not be fatal
                         catch Error(string memory reason) {
                             revert(reason);

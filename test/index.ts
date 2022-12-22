@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Contract, Signer } from "ethers";
+import { Signer } from "ethers";
 import { ethers } from "hardhat";
 import { 
   deployContract, 
@@ -366,9 +366,6 @@ describe("Protocol", function () {
     
     before(async function () {
       //Mint Souls for Participants
-      // await soulContract.connect(owner).mint(test_uri);
-      // await soulContract.connect(admin).mint(test_uri);
-      // await soulContract.connect(tester3).mint(test_uri);
       await soulContract.connect(tester4).mint(test_uri);
       await soulContract.connect(tester5).mint(test_uri);
       await soulContract.connect(authority).mint(test_uri);

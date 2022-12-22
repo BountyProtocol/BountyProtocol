@@ -127,9 +127,9 @@ abstract contract CTXEntityUpgradable is
     }
    
     /// Set Contract URI
-    function setContractURI(string calldata contract_uri) external override AdminOrOwner {
+    function setContractURI(string calldata contractUri) external override AdminOrOwner {
         //Set
-        _setContractURI(contract_uri);
+        _setContractURI(contractUri);
     }
 
 }
