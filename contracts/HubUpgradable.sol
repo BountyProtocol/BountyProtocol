@@ -238,7 +238,7 @@ contract HubUpgradable is
         //Set Container
         IProcedure(address(newProxyContract)).setParentCTX(_msgSender());
         //Remember Parent (Same as Claims)
-        _procedures[address(newProxyContract)] = _msgSender();
+        _procedures[address(newProxyContract)] = _msgSender(); //! Should we allow human souls to deploy this?
         //Return
         return address(newProxyContract);
     }

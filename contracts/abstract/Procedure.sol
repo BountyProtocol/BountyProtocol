@@ -66,8 +66,8 @@ abstract contract Procedure is IProcedure, CTXEntityUpgradable, Posts {
     /// Initializer
     function initialize(string memory name_) public virtual override initializer {
         //Initializers
-        __ProtocolEntity_init(_msgSender());  //Sender is the Hub
-        _setTargetContract(getSoulAddr());
+        __ProtocolEntity_init(_msgSender()); //Sender is the Hub
+        _setTargetContract(getSoulAddr()); //SBT
         //Identifiers
         name = name_;
         //Init Default Roles

@@ -10,6 +10,7 @@ import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
+import "./interfaces/IERC1155RolesTracker.sol";
 import "./interfaces/ISoul.sol";
 import "./libraries/Utils.sol";
 import "./abstract/ProtocolEntityUpgradable.sol";
@@ -196,9 +197,9 @@ contract SoulUpgradable is
     }
 
     /// Burn NFTs
-    function burn(uint256 tokenId) external {
+    function burn(uint256 tokenId) external onlyOwner {
         //Validate - Contract Owner
-        require(_msgSender() == owner(), "Only Owner");
+        // require(_msgSender() == owner(), "Only Owner");
         //Burn Token
         _burn(tokenId);
         //Clear Handle
@@ -208,7 +209,8 @@ contract SoulUpgradable is
     /// Update Token's Metadata
     function update(uint256 tokenId, string memory uri) external override returns (uint256) {
         //Validate Owner of Token
-        require(_isApprovedOrOwner(_msgSender(), tokenId) || _msgSender() == owner(), "caller is not owner or approved");
+        // require(_isApprovedOrOwner(_msgSender(), tokenId) || _msgSender() == owner(), "caller is not owner or approved");
+        require(hasTokenControlAccount(tokenId, _msgSender()) || _msgSender() == owner(), "caller does not control token");
         _setTokenURI(tokenId, uri); //This Goes for Specific Metadata Set (IPFS and Such)
         //Emit URI Changed Event
         emit URI(uri, tokenId);
@@ -284,8 +286,12 @@ contract SoulUpgradable is
     /// Transfer Privileges are manged in the _beforeTokenTransfer function
     /// @dev Override the main Transfer privileges function
     function _isApprovedOrOwner(address spender, uint256 tokenId) internal view override returns (bool) {
-        //Approved or Seconday Owner
-        return (super._isApprovedOrOwner(spender, tokenId) || (_owners_rev[spender] == tokenId)); // Token Owner or Approved //Or Secondary Owner
+        // Token Owner or Approved, or Secondary Owner
+        return (
+            super._isApprovedOrOwner(spender, tokenId) 
+            || _owners_rev[spender] == tokenId
+            || _isContractOwner(tokenId)
+        ); 
     }
 
     /// Check if the Current Account has Control over a Token   //DEPRECATE?
@@ -293,24 +299,37 @@ contract SoulUpgradable is
         return hasTokenControlAccount(tokenId, _msgSender());
     }
 
-    /// Check if a Specific Account has control over a Token
+    /**
+     * Check if a Specific Account has control over a Token
+     * - owner or approved, or secondary owner
+     * - unowned token controlled by contract owner
+     * - owner of the owner contract
+     * ! admin role the owner (Game) entity
+     */
     function hasTokenControlAccount(uint256 tokenId, address account) public view override returns (bool) {
         address ownerAccount = ownerOf(tokenId);
         return (_isApprovedOrOwner(account, tokenId) || // Token Owner or Approved
             // ownerAccount == account //Token Owner (Support for Contract as Owner)
             (ownerAccount == address(this) && owner() == account) || //Unclaimed Tokens Controlled by Contract Owner Contract (DAO)
-            _isSecondaryOwner(tokenId)); //Owner of the owner contract
+            _isContractOwner(tokenId)); //Owner of the owner contract
     }
 
     /// Check if sender is the Owner of the Owner Contract
-    function _isSecondaryOwner(uint256 tokenId) internal view returns (bool) {
+    function _isContractOwner(uint256 tokenId) internal view returns (bool) {
         address ownerAccount = ownerOf(tokenId);
         if (ownerAccount.isContract()) {
-            try
-                OwnableUpgradeable(ownerAccount).owner() //Failure should not be fatal
+            //Check if Contract Owner
+            try OwnableUpgradeable(ownerAccount).owner() //Failure should not be fatal
             returns (address contractOwner) {
-                return (contractOwner == _msgSender()); //Ideally, any of the calling addresses in the stack.
+                return (contractOwner == _msgSender());
             } catch Error(string memory) {}
+            /* Pondering...
+            //Check if Game Admin
+            try IERC1155RolesTracker(ownerAccount).roleHas(_msgSender(), "admin") 
+            returns (bool result) {
+                if(result) return true;
+            } catch Error(string memory) {}
+            */
         }
         //Default to No
         return false;

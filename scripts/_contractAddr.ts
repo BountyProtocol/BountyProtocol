@@ -17,9 +17,9 @@ const contractAddr: any = {
     history:"0xce5F671e5e2C9c122e09Fe323aB0840155ab1D60", //0.5.1
   },
   mumbai:{
-    game: "0x5590Bf51Ba578448f8Ec40EC057B8cE383c8cf56", //0.6.0
-    claim: "0x615EBbd1ceF504E6E5A4e00f22E579560D0b07D1", //0.6.0
-    task: "0xec727Ea20A3EfFf39E75F96e6ddc9Dc261babCf8", //0.6.0
+    game: "0x91373f5d129B4eeBc55d13D7FEd9De528C59A495", //0.6.0
+    claim: "0x15D7aEF51CED9DaE07d03BaBF1b2492a7b83b1A4", //0.6.0
+    task: "0x56F7CB732aaEbC7967D1885899a83FFE48120d27", //0.6.0
     hub: "0xc0d1D74547356B2be0709cE841F5F2Fa5D8c63D7", //0.6.0 (Proxy)
     avatar: "0x232902B2460D82d61f04f76F49b888AF67f73ef2", //0.6.0 (Proxy)
     history: "0x95BD98a656C907fC037aF87Ea740fD94188Cd65f", //D4.4 (Proxy)

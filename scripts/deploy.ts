@@ -74,7 +74,7 @@ async function main() {
     await verify(contract.address, []);
   }
 
-  //--- TEST: Upgradable Hub
+  //-- Upgradable Hub
   if(!contractAddr.hub) {
     const params = [
       publicAddr.openRepo,
