@@ -20,8 +20,8 @@ This platform allows you to
 - Incentives - set up rules reactions for each org/game & reward them with various types of soulbound tokens (rep, xp, etc')
 - Design custom interaction flows between entities (Procedures)
 - Open, extendibe, customizable & complient with existing asset types (ERC20/721/1155, etc')
-- [TBD] Use soulbound tokens (role, rep, xp...) for governance
-- [TBD] Recursive control structure between games
+- [WIP] Simplified token-based permission mechanism 
+- [WIP] Use soulbound tokens (role, rep, xp...) for governance
 
 ## Architecture
 
