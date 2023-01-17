@@ -1,7 +1,9 @@
 Compossible architecture for representing society
 
 ```
-We are currently looking for a strong design partner with a matching use case. 
+NOTE! This project is still under development. It means the SoulSystem Protocol hasn't been audited and data structures may still change. 
+We are currently looking for a design partner with a matching use case to help guide progress. 
+If you might be interested or have any questions please use the Issues tab to reach out.  
 ```
 
 
