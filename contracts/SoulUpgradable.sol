@@ -181,7 +181,7 @@ contract SoulUpgradable is
         return sbt;
     }
     
-    /// Relate an entity to current account (creator)
+    /// Register a Relation type:'creator' to current account
     function relateToCretor(uint256 sbt) private {
         uint256 hubSBT = tokenByAddress(_msgSender());
         //Mint SBT for Hub
@@ -246,7 +246,7 @@ contract SoulUpgradable is
             _msgSender() == owner() || //Contract Owner
                 _msgSender() == address(_HUB) || //Hub
                 from == address(0), //Minting
-            "Sorry, assets are non-transferable"
+            "NON_TRANSFERABLE"
         );
 
         //Update Address Index
@@ -272,14 +272,11 @@ contract SoulUpgradable is
     }
 
     /// Override transferFrom()
-    /// @dev Remove Approval Check. Transfer Privileges are manged in the _beforeTokenTransfer function
     function transferFrom(
         address from,
         address to,
         uint256 tokenId
     ) public virtual override {
-        //solhint-disable-next-line max-line-length
-        // require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: caller is not token owner or approved");
         _transfer(from, to, tokenId);
     }
 
@@ -356,10 +353,9 @@ contract SoulUpgradable is
     function handleSet(uint256 tokenId, string calldata handle) external override {
         //Validate: token control
         require(hasTokenControl(tokenId), "SOUL_NOT_YOURS");
-        //Validate: no handle assigned yet
-        // require(Utils.stringMatch(handleGet(tokenId), ""), "SINGLE_HANDLE_ONLY");
         //Validate: handle available
         require(handleFind(handle) == 0, "HANDLE_TAKEN");
+        //TODO: Validate Acceptible Handles (length & such)
         //Set Handle
         _handleSet(tokenId, handle);
         //Event

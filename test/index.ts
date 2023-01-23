@@ -337,10 +337,10 @@ describe("Protocol", function () {
     // });
     
     it("Tokens should NOT be transferable", async function () {
-      //Should Fail to transfer -- "Sorry, assets are non-transferable"
+      //Should Fail to transfer -- "NON_TRANSFERABLE"
       await expect(
         soulContract.connect(tester).transferFrom(this.testerAddr, this.tester2Addr, soulTokens.tester)
-      ).to.be.revertedWith("Sorry, assets are non-transferable");
+      ).to.be.revertedWith("NON_TRANSFERABLE");
     });
 
     it("Can update token's metadata", async function () {
@@ -502,10 +502,10 @@ describe("Protocol", function () {
       
       // const newGameContract = await ethers.getContractFactory("ERC1155").then(res => res.attach(this.gameContract.address));
 
-      //Should Fail to transfer -- "Sorry, assets are non-transferable"
+      //Should Fail to transfer -- "NON_TRANSFERABLE"
       await expect(
         this.gameContract.connect(authority).safeTransferFrom(this.authorityAddr, this.testerAddr, authTokenId, 1, '')
-      ).to.be.revertedWith("Sorry, assets are non-transferable");
+      ).to.be.revertedWith("NON_TRANSFERABLE");
     });
     */
 
@@ -1248,7 +1248,12 @@ describe("Protocol", function () {
         // await this.claimContract.ruleRefAdd(ruleRef.game,  ruleRef.id, ruleRef.affected);
         await this.claimContract.connect(admin).ruleRefAdd(ruleRef.game,  ruleRef.id);
       });
-      
+
+      it("Should Check Rules", async function () {
+        // validatePermissions()
+      });
+
+
       it("Should Write a Post", async function () {
         let post = {
           tokenId: soulTokens.tester2,
