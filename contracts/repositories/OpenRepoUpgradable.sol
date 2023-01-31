@@ -72,7 +72,6 @@ contract OpenRepoUpgradable is
     /// Upgrade Permissions
     function _authorizeUpgrade(address newImplementation) internal onlyOwner override { }
 
-
     //-- Addresses
 
     /// Get First Address in Slot By Owner Node
