@@ -34,7 +34,6 @@ abstract contract Escrow is IEscrow {
      * functions].
      */
     receive() external payable virtual {
-        // emit PaymentReceived(_msgSender(), msg.value);   //Sometimes this is inherited by an upgradable contract and sometimes a regular contract
         emit PaymentReceived(msg.sender, msg.value);
     }
 
