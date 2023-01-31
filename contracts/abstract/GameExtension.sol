@@ -6,7 +6,9 @@ import "@openzeppelin/contracts/utils/Context.sol";
 import "../repositories/interfaces/IOpenRepo.sol";
 import "../interfaces/IERC1155RolesTracker.sol";
 import "../interfaces/IProtocolEntity.sol";
+import "../interfaces/IRules.sol";
 import "../interfaces/IGameUp.sol";
+import "../interfaces/IActionRepo.sol";
 import "../interfaces/IHub.sol";
 import "../interfaces/ISoul.sol";
 
@@ -67,4 +69,19 @@ abstract contract GameExtension is Context {
         return ISoul(getSoulAddr());
     }  
     
+    /// Get Action Repo Contract Address
+    function getActionAddr() internal view returns (address) {
+        return dataRepo().addressGetOf(getHubAddress(), "action");
+    }
+
+    /// Get Action Repo Contract Address
+    function actionRepo() internal view returns (IActionRepo) {
+        return IActionRepo(getActionAddr());
+    }
+    
+    /// Auto-Rules Interface
+    function rules() internal view returns (IRules) {
+        return IRules(address(this));
+    }
+
 }
