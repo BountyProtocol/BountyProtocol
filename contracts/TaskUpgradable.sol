@@ -33,9 +33,7 @@ contract TaskUpgradable is ITask, Procedure, Escrow {
     function initialize (string memory name_) public override initializer {
         super.initialize(name_);
         symbol = "TASK";
-        // _roleAssign(treasury, "donation", 1);    //TODO: Add Donation Config for Treasury? 
     }
-
 
     //** Wrappers
 
