@@ -150,7 +150,6 @@ contract OpenRepoUpgradable is
 
     //-- Booleans
 
-
     /// Get Boolean By Origin Owner Node
     function boolGetOf(address originContract, string memory key) public view override returns (bool) {
         //Validate
