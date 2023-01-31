@@ -117,8 +117,8 @@ abstract contract CTXEntityUpgradable is
     }
     
     /// Get Token URI by Token ID
-    function uri(uint256 token_id) public view override returns (string memory) {
-        return _tokenURIs[token_id];
+    function uri(uint256 tokenId) public view override returns (string memory) {
+        return _tokenURIs[tokenId];
     }
 
     /// Set Metadata URI For Role
