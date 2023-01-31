@@ -31,8 +31,8 @@ contract CourtExt is ICourtExt, GameExtension {
         // ICTXEntityUpgradable(newContract).roleCreate("witness");     //Witnesses
         // ICTXEntityUpgradable(newContract).roleCreate("affected");    //Affected Party (For reparations)
         //Assing Default Roles
-        ICTXEntityUpgradable(newContract).roleAssign(_msgSender(), "admin");
-        ICTXEntityUpgradable(newContract).roleAssign(_msgSender(), "creator");
+        ICTXEntityUpgradable(newContract).roleAssign(_msgSender(), "admin", 1);
+        ICTXEntityUpgradable(newContract).roleAssign(_msgSender(), "creator", 1);
         //Return new Contract Address
         return newContract;
     }
@@ -45,7 +45,7 @@ contract CourtExt is ICourtExt, GameExtension {
     ) private {
         //Assign Roles
         for (uint256 i = 0; i < assignRoles.length; ++i) {
-            ICTXEntityUpgradable(newContract).roleAssignToToken(assignRoles[i].tokenId, assignRoles[i].role);
+            ICTXEntityUpgradable(newContract).roleAssignToToken(assignRoles[i].tokenId, assignRoles[i].role, 1);
         }
         //Add Rules
         for (uint256 i = 0; i < rules.length; ++i) {

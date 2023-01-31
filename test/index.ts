@@ -399,36 +399,36 @@ describe("Protocol", function () {
       gameContract = await ethers.getContractFactory("GameUpgradable").then(res => res.attach(gameAddr)) as GameUpgradable;
       this.gameContract = gameContract;
 
-      expect(await this.gameContract.confGet("type")).to.equal(game.type);
-      expect(await this.gameContract.confGet("role")).to.equal(game.type);
+      expect(await gameContract.confGet("type")).to.equal(game.type);
+      expect(await gameContract.confGet("role")).to.equal(game.type);
     });
 
     it("Should Update Contract URI", async function () {
       //Before
-      expect(await this.gameContract.contractURI()).to.equal(test_uri);
+      expect(await gameContract.contractURI()).to.equal(test_uri);
       //Change
-      await this.gameContract.setContractURI(test_uri2);
+      await gameContract.setContractURI(test_uri2);
       //After
-      expect(await this.gameContract.contractURI()).to.equal(test_uri2);
+      expect(await gameContract.contractURI()).to.equal(test_uri2);
     });
 
     it("Users can join as a member", async function () {
       //Check Before
-      expect(await this.gameContract.roleHas(this.testerAddr, "member")).to.equal(false);
+      expect(await gameContract.roleHas(this.testerAddr, "member")).to.equal(false);
       //Join Game
-      await this.gameContract.connect(tester).join();
+      await gameContract.connect(tester).join();
       //Check After
-      expect(await this.gameContract.roleHas(this.testerAddr, "member")).to.equal(true);
+      expect(await gameContract.roleHas(this.testerAddr, "member")).to.equal(true);
     });
     
     it("Role Should Track Soul's Owner", async function () {
       //Check Before
-      expect(await this.gameContract.roleHas(this.tester5Addr, "member")).to.equal(false);
-      // expect(await this.gameContract.roleHas(this.tester5Addr, "member")).to.equal(false);
+      expect(await gameContract.roleHas(this.tester5Addr, "member")).to.equal(false);
+      // expect(await gameContract.roleHas(this.tester5Addr, "member")).to.equal(false);
       //Join Game
-      await this.gameContract.connect(tester5).join();
+      await gameContract.connect(tester5).join();
       //Check
-      expect(await this.gameContract.roleHas(this.tester5Addr, "member")).to.equal(true);
+      expect(await gameContract.roleHas(this.tester5Addr, "member")).to.equal(true);
       //Get Tester5's Soul TokenID
       let tokenId = await soulContract.tokenByAddress(this.tester5Addr);
       // console.log("Tester5 Soul Token ID: ", tokenId);
@@ -439,88 +439,88 @@ describe("Protocol", function () {
       //Expect Change of Ownership
       expect(await soulContract.ownerOf(tokenId)).to.equal(this.tester3Addr);
       //Check Membership
-      expect(await this.gameContract.roleHas(this.tester3Addr, "member")).to.equal(true);
-      // expect(await this.gameContract.roleHas(this.tester5Addr, "member")).to.equal(false);
+      expect(await gameContract.roleHas(this.tester3Addr, "member")).to.equal(true);
+      // expect(await gameContract.roleHas(this.tester5Addr, "member")).to.equal(false);
 
       //Should Fail - No Soul For Contract
       // await expect(
-      //   this.gameContract.roleHas(this.tester5Addr, "member")
+      //   gameContract.roleHas(this.tester5Addr, "member")
       // ).to.be.revertedWith("ERC1155Tracker: requested account not found on source contract");
       //Should Not Fail. 0/False if does not exist
-      expect(await this.gameContract.roleHas(this.tester5Addr, "member")).to.equal(false);
+      expect(await gameContract.roleHas(this.tester5Addr, "member")).to.equal(false);
     });
 
     it("Users can leave", async function () {
       //Check Before
-      expect(await this.gameContract.roleHas(this.testerAddr, "member")).to.equal(true);
+      expect(await gameContract.roleHas(this.testerAddr, "member")).to.equal(true);
       //Join Game
-      await this.gameContract.connect(tester).leave();
+      await gameContract.connect(tester).leave();
       //Check After
-      expect(await this.gameContract.roleHas(this.testerAddr, "member")).to.equal(false);
+      expect(await gameContract.roleHas(this.testerAddr, "member")).to.equal(false);
     });
 
     it("Owner can appoint Admin", async function () {
       //Check Before
-      expect(await this.gameContract.roleHas(this.adminAddr, "admin")).to.equal(false);
+      expect(await gameContract.roleHas(this.adminAddr, "admin")).to.equal(false);
       //Should Fail - Require Permissions
       await expect(
-        this.gameContract.connect(tester).roleAssign(this.adminAddr, "admin")
+        gameContract.connect(tester).roleAssign(this.adminAddr, "admin", 1)
       ).to.be.revertedWith("INVALID_PERMISSIONS");
       //Assign Admin
-      await this.gameContract.roleAssign(this.adminAddr, "admin");
+      await gameContract.roleAssign(this.adminAddr, "admin", 1);
       //Check After
-      expect(await this.gameContract.roleHas(this.adminAddr, "admin")).to.equal(true);
+      expect(await gameContract.roleHas(this.adminAddr, "admin")).to.equal(true);
     });
 
     it("Admin can appoint authority", async function () {
       //Check Before
-      expect(await this.gameContract.roleHas(this.authorityAddr, "authority")).to.equal(false);
+      expect(await gameContract.roleHas(this.authorityAddr, "authority")).to.equal(false);
       //Should Fail - Require Permissions
       await expect(
-        this.gameContract.connect(tester2).roleAssign(this.authorityAddr, "authority")
+        gameContract.connect(tester2).roleAssign(this.authorityAddr, "authority", 1)
       ).to.be.revertedWith("INVALID_PERMISSIONS");
       //Assign Authority
-      await this.gameContract.connect(admin).roleAssign(this.authorityAddr, "authority");
+      await gameContract.connect(admin).roleAssign(this.authorityAddr, "authority", 1);
       //Check After
-      expect(await this.gameContract.roleHas(this.authorityAddr, "authority")).to.equal(true);
+      expect(await gameContract.roleHas(this.authorityAddr, "authority")).to.equal(true);
     });
     
     it("Admin can Assign Roles to Lost-Souls", async function () {
       //Check Before
-      expect(await this.gameContract.roleHasByToken(soulTokens.unOwned, "authority")).to.equal(false);
+      expect(await gameContract.roleHasByToken(soulTokens.unOwned, "authority")).to.equal(false);
       //Assign Authority
-      await this.gameContract.connect(admin).roleAssignToToken(soulTokens.unOwned, "authority")
+      await gameContract.connect(admin).roleAssignToToken(soulTokens.unOwned, "authority", 1)
       //Check After
-      expect(await this.gameContract.roleHasByToken(soulTokens.unOwned, "authority")).to.equal(true);
+      expect(await gameContract.roleHasByToken(soulTokens.unOwned, "authority")).to.equal(true);
     });
     
     /* ERC1155 Tracker is now using Using ERC1155TrackerUpMin which doesn't have transfer functions
     it("Should NOT be transferable", async function () {
-      let authTokenId = await this.gameContract.roleToId("authority");
+      let authTokenId = await gameContract.roleToId("authority");
       console.log('authTokenId:', authTokenId, this.authorityAddr, this.testerAddr, authTokenId, 1, '');
       // authTokenId: BigNumber { value: "3" } 0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f 0x90F79bf6EB2c4f870365E785982E1f101E93b906 BigNumber { value: "3" } 1 
       
-      // const newGameContract = await ethers.getContractFactory("ERC1155").then(res => res.attach(this.gameContract.address));
+      // const newGameContract = await ethers.getContractFactory("ERC1155").then(res => res.attach(gameContract.address));
 
       //Should Fail to transfer -- "NON_TRANSFERABLE"
       await expect(
-        this.gameContract.connect(authority).safeTransferFrom(this.authorityAddr, this.testerAddr, authTokenId, 1, '')
+        gameContract.connect(authority).safeTransferFrom(this.authorityAddr, this.testerAddr, authTokenId, 1, '')
       ).to.be.revertedWith("NON_TRANSFERABLE");
     });
     */
 
     it("Can change Roles (Promote / Demote)", async function () {
       //Check Before
-      expect(await this.gameContract.roleHas(this.tester4Addr, "admin")).to.equal(false);
+      expect(await gameContract.roleHas(this.tester4Addr, "admin")).to.equal(false);
       //Join Game
-      let tx = await this.gameContract.connect(tester4).join();
+      let tx = await gameContract.connect(tester4).join();
       await tx.wait();
       //Check Before
-      expect(await this.gameContract.roleHas(this.tester4Addr, "member")).to.equal(true);
+      expect(await gameContract.roleHas(this.tester4Addr, "member")).to.equal(true);
       //Upgrade to Admin
-      await this.gameContract.roleChange(this.tester4Addr, "member", "admin");
+      await gameContract.roleChange(this.tester4Addr, "member", "admin");
       //Check After
-      expect(await this.gameContract.roleHas(this.tester4Addr, "admin")).to.equal(true);
+      expect(await gameContract.roleHas(this.tester4Addr, "admin")).to.equal(true);
     });
     
     it("Should store Rules", async function () {
@@ -800,6 +800,16 @@ describe("Protocol", function () {
       //Validate
       expect(await this.projectGameContract.confGet("type")).to.equal("PROJECT");
     });
+
+    
+    it("[WIP] Game should reward for contribution", async function () {
+      const value = ethers.utils.parseEther("0.001");
+      //Validate
+      // expect(await this.projectGameContract.connect(tester).deposit({value}))
+      // .to.emit(this.projectGameContract, 'PaymentReceived')
+      // .withArgs(this.testerAddr, value);
+    });
+
 
     it("Project Should Create a Task ", async function () {
       let value = 100; //ethers.utils.parseEther(0.001);
@@ -1082,7 +1092,6 @@ describe("Protocol", function () {
 
         //Simulate - Get New Claim Address
         let claimAddr = await this.courtContract.connect(admin).callStatic.caseMake(claimName, test_uri, ruleRefArr, roleRefArr, posts);
-        // console.log("New Claim Address: ", claimAddr);
 
         //Create New Claim
         let tx = await this.courtContract.connect(admin).caseMake(claimName, test_uri, ruleRefArr, roleRefArr, posts);
@@ -1177,7 +1186,7 @@ describe("Protocol", function () {
 
         //Assign as a Member (Needs to be both a member and an authority)
         // await gameContract.connect(authority).join();
-        await gameContract.connect(admin).roleAssign(this.authorityAddr, "member");
+        await gameContract.connect(admin).roleAssign(this.authorityAddr, "member", 1);
 
         //Simulate - Get New Claim Address
         let claimAddr = await this.courtContract.connect(authority).callStatic.caseMakeClosed(claim.name, test_uri, ruleRefArr, roleRefArr, posts, test_uri2);
@@ -1288,16 +1297,16 @@ describe("Protocol", function () {
 
       it("Should Assign Witness", async function () {
         //Assign Admin
-        await this.claimContract.connect(admin).roleAssign(this.tester3Addr, "witness");
+        await this.claimContract.connect(admin).roleAssign(this.tester3Addr, "witness", 1);
         //Validate
         expect(await this.claimContract.roleHas(this.tester3Addr, "witness")).to.equal(true);
       });
 
       it("Game Authoritys Can Assign Themselves to Claim", async function () {
         //Assign as Game Authority
-        gameContract.connect(admin).roleAssign(this.tester4Addr, "authority")
+        gameContract.connect(admin).roleAssign(this.tester4Addr, "authority", 1)
         //Assign Claim Authority
-        await this.claimContract.connect(tester4).roleAssign(this.tester4Addr, "authority");
+        await this.claimContract.connect(tester4).roleAssign(this.tester4Addr, "authority", 1);
         //Validate
         expect(await this.claimContract.roleHas(this.tester4Addr, "authority")).to.equal(true);
       });
@@ -1316,7 +1325,7 @@ describe("Protocol", function () {
       it("Should Validate Authority with parent game", async function () {
         //Validate
         await expect(
-          this.claimContract.connect(admin).roleAssign(this.tester3Addr, "authority")
+          this.claimContract.connect(admin).roleAssign(this.tester3Addr, "authority", 1)
         ).to.be.revertedWith("User Required to hold same role in the Game context");
       });
 
@@ -1332,7 +1341,7 @@ describe("Protocol", function () {
         //Check Before
         // expect(await gameContract.roleHas(this.testerAddr, "authority")).to.equal(true);
         //Assign Authority
-        await this.claimContract.connect(admin).roleAssign(this.authorityAddr, "authority");
+        await this.claimContract.connect(admin).roleAssign(this.authorityAddr, "authority", 1);
         //Check After
         expect(await this.claimContract.roleHas(this.authorityAddr, "authority")).to.equal(true);
       });

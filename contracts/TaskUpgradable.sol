@@ -47,7 +47,7 @@ contract TaskUpgradable is ITask, Procedure, Escrow {
     
     /// Accept Application (Assign Role)
     function acceptApplicant(uint256 sbtId) external override {
-        roleAssignToToken(sbtId, "applicant");
+        roleAssignToToken(sbtId, "applicant", 1);
     }
     
     //** Added Functionality
@@ -71,7 +71,7 @@ contract TaskUpgradable is ITask, Procedure, Escrow {
         //Validate Stage
         require(stage < DataTypes.ClaimStage.Closed , "STAGE:TOO_LATE");
         //Add as Subject
-        roleAssignToToken(sbtId, "subject");
+        roleAssignToToken(sbtId, "subject", 1);
         //Push Forward to Stage:Execusion
         if(stage < DataTypes.ClaimStage.Execution){
             _setStage(DataTypes.ClaimStage.Execution);

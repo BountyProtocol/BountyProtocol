@@ -30,8 +30,8 @@ contract ProjectExt is GameExtension {
         //Create Custom Roles
         ICTXEntityUpgradable(newContract).roleCreate("applicant");    //Applicants (Can Deliver Results)
         //Assing Default Roles
-        ICTXEntityUpgradable(newContract).roleAssign(_msgSender(), "admin");
-        ICTXEntityUpgradable(newContract).roleAssign(_msgSender(), "creator");
+        ICTXEntityUpgradable(newContract).roleAssign(_msgSender(), "admin", 1);
+        ICTXEntityUpgradable(newContract).roleAssign(_msgSender(), "creator", 1);
         //Fund Task
         if(msg.value > 0){
             (bool sent, ) = payable(newContract).call{value: msg.value}("");

@@ -39,6 +39,34 @@ contract ActionExt is GameExtension {
         return "WORKS";
     }
 
+
+    /// Test Permissions Test
+    function testPermissions(uint256 ruleRefId) public view returns(bool) {
+        return validatePermissions(ruleRefId, "everyone", "post", "comment", "");
+        // return validatePermissions(ruleRefId, "admin", "post", "announcement", "");
+    }
+
+    /// Check Permission Triple [TEST]
+    function validatePermissions(uint256 ruleRefId, string memory subject, string memory verb, string memory object, string memory tool) public view returns (bool) {
+        DataTypes.Rule memory rule = rules().ruleGet(ruleRefId);
+        DataTypes.SVO memory action = actionRepo().actionGet(rule.about);
+        //Match action
+        require(
+            Utils.stringMatch(action.subject, subject)
+            && Utils.stringMatch(action.verb, verb)
+            && Utils.stringMatch(action.object, object)
+            && Utils.stringMatch(action.tool, tool)
+            , "ActionExt:RULE_MISMATCH"
+        );
+        
+        //Validate Subject's Role
+        /// @dev user does not hold the claimed role
+        require(Utils.stringMatch(subject, "everyone") || gameRoles().roleHas(_msgSender(), subject), 
+            "ActionExt:ROLE_MISMATCH");
+
+        return !rule.negation;
+    }
+
     /// Run Custom Action
     function runActionData(bytes32 actionGUID, bytes memory data) external {
         //Fetch Action

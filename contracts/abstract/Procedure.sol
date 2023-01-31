@@ -151,7 +151,7 @@ abstract contract Procedure is IProcedure, CTXEntityUpgradable, Posts {
     }
 
     /// Assign to a Role
-    function roleAssign(address account, string memory role) public override roleExists(role) {
+    function roleAssign(address account, string memory role, uint256 amount) public override roleExists(role) {
         //Special Validations for Special Roles 
         if(_msgSender() != address(_HUB)  && _msgSender() != owner() && _msgSender() != getContainerAddr()){
             if (Utils.stringMatch(role, "admin") || Utils.stringMatch(role, "authority")) {
@@ -165,12 +165,12 @@ abstract contract Procedure is IProcedure, CTXEntityUpgradable, Posts {
             }
         }
         //Add
-        _roleAssign(account, role, 1);
+        _roleAssign(account, role, amount);
     }
     
     /// Assign Tethered Token to a Role
-    function roleAssignToToken(uint256 ownerToken, string memory role) public override AdminOrOwnerOrCTX {
-        _roleAssignToToken(ownerToken, role, 1);
+    function roleAssignToToken(uint256 ownerToken, string memory role, uint256 amount) public override AdminOrOwnerOrCTX {
+        _roleAssignToToken(ownerToken, role, amount);
     }
 
     /* Identical to parent

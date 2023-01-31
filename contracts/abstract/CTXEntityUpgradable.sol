@@ -89,43 +89,43 @@ abstract contract CTXEntityUpgradable is
         }
         _roleAssignToToken(sbt, role, amount);
     }
-
+    
     /// Assign Someone Else to a Role
-    function roleAssign(address account, string memory role) public virtual override roleExists(role) AdminOrOwnerOrHub {
-        _roleAssign(account, role, 1);
+    function roleAssign(address account, string memory role, uint256 amount) public virtual override AdminOrOwnerOrHub {
+        _roleAssign(account, role, amount);
     }
 
     /// Assign Tethered Token to a Role
-    function roleAssignToToken(uint256 sbt, string memory role) public virtual override roleExists(role) AdminOrOwnerOrHub {
-        _roleAssignToToken(sbt, role, 1);
+    function roleAssignToToken(uint256 sbt, string memory role, uint256 amount) public virtual override AdminOrOwnerOrHub {
+        _roleAssignToToken(sbt, role, amount);
     }
 
     /// Remove Someone Else from a Role
-    function roleRemove(address account, string memory role) public virtual override roleExists(role) AdminOrOwner {
-        _roleRemove(account, role, 1);
+    function roleRemove(address account, string memory role, uint256 amount) public virtual override roleExists(role) AdminOrOwner {
+        _roleRemove(account, role, amount);
     }
 
     /// Remove Tethered Token from a Role
-    function roleRemoveFromToken(uint256 sbt, string memory role) public virtual override roleExists(role) AdminOrOwner {
-        _roleRemoveFromToken(sbt, role, 1);
+    function roleRemoveFromToken(uint256 sbt, string memory role, uint256 amount) public virtual override roleExists(role) AdminOrOwner {
+        _roleRemoveFromToken(sbt, role, amount);
     }
-
+    
     /// Change Role Wrapper (Add & Remove)
     function roleChange(address account, string memory roleOld, string memory roleNew) external virtual override {
-        roleAssign(account, roleNew);
-        roleRemove(account, roleOld);
+        roleAssign(account, roleNew, 1);
+        roleRemove(account, roleOld, 1);
     }
     
     /// Get Token URI by Token ID
     function uri(uint256 tokenId) public view override returns (string memory) {
         return _tokenURIs[tokenId];
     }
-
+    
     /// Set Metadata URI For Role
     function setRoleURI(string memory role, string memory _tokenURI) external override AdminOrOwner {
         _setRoleURI(role, _tokenURI);
     }
-   
+
     /// Set Contract URI
     function setContractURI(string calldata contractUri) external override AdminOrOwner {
         //Set
