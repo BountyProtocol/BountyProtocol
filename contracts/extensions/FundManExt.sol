@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./interfaces/IFundManExt.sol";
 import "../abstract/GameExtension.sol";
 import "../abstract/Escrow.sol";
+import "../interfaces/ICTXEntityUpgradable.sol";
 
 /**
  * @title Game Extension: Escrow Capabilities (Receive and Send funds)
@@ -44,18 +45,19 @@ contract FundManExt is IFundManExt, GameExtension, Escrow {
         SafeERC20.safeTransfer(IERC20(token), to, amount);
     }
 
-    /**
-     * @dev The Ether received will be logged with {PaymentReceived} events. Note that these events are not fully
-     * reliable: it's possible for a contract to receive Ether without triggering this function. This only affects the
-     * reliability of the events, and not the actual splitting of Ether.
-     *
-     * To learn more about this see the Solidity documentation for
-     * https://solidity.readthedocs.io/en/latest/contracts.html#fallback-function[fallback
-     * functions].
-     */
-    // receive() external payable virtual {
-        // emit PaymentReceived(_msgSender(), msg.value);   //Sometimes this is inherited by an upgradable contract and sometimes a regular contract
-        // emit PaymentReceived(msg.sender, msg.value);
-    // }
+    /// Deposit Native Token
+    function deposit() external payable {
+        require(msg.value > 0, "NO_FUNDS_SENT");
+        emit PaymentReceived(_msgSender(), msg.value);
+        uint256 ratio = 100;
+        uint256 reward = msg.value*ratio;
+        //Reward
+        _reward(_msgSender(), reward);
+    }
+
+    /// Reward with contribution tokens
+    function _reward(address to, uint256 amount) private {
+        ICTXEntityUpgradable(address(this)).roleAssign(to, "contributor", amount);
+    }
 
 }
