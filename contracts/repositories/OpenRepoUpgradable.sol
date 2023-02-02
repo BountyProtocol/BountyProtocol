@@ -22,13 +22,14 @@ import "../libraries/StringArray.sol";
  * - Owned by Requesting Address/Booleans/Strings
  * - Support Multiple Similar Items
  *
- * Address Functions:
+ * Functions:
     Set 
     Add
     Remove 
     Get (first) 
     GetAll
     GetSlot(index)
+ * Supported Data Types: Address, Bool, String
  */
 contract OpenRepoUpgradable is 
         IOpenRepo, 
