@@ -63,7 +63,7 @@ contract ActionExt is GameExtension {
         /// @dev user does not hold the claimed role
         require(Utils.stringMatch(subject, "everyone") || gameRoles().roleHas(_msgSender(), subject), 
             "ActionExt:ROLE_MISMATCH");
-
+        
         return !rule.negation;
     }
 

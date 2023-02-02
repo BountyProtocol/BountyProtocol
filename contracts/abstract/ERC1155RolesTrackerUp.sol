@@ -1,10 +1,6 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
-// import "hardhat/console.sol";
-
-// import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
-// import "@openzeppelin/contracts/utils/Context.sol";
 import "../interfaces/IERC1155RolesTracker.sol";
 import "./ERC1155GUIDTrackerUp.sol";
 
@@ -34,24 +30,6 @@ abstract contract ERC1155RolesTrackerUp is
         require(roleExist(role), "INEXISTENT_ROLE");
         _;
     }
-    
-    /* CANCELLED
-    /// [TEST] Validate that account hold one of the role in Array
-    modifier onlyRoles(string[] calldata roles) {
-        bool hasRole;
-        for (uint256 i = 0; i < roles.length; ++i) {
-            if(roleHas(_msgSender(), roles[i])) hasRole = true;
-        }
-        require(hasRole, "ROLE:INVALID_PERMISSION");
-        _;
-    }
-
-    /// Validate that account hold one of the role in Array //Only works when the role is a parameter
-    modifier onlyRole(string calldata role) {
-        require(roleHas(_msgSender(), role), "ROLE:INVALID_PERMISSION");
-        _;
-    }
-    */
 
     //--- Functions
 
@@ -71,7 +49,6 @@ abstract contract ERC1155RolesTrackerUp is
 
     /// Unique Members Count (w/Token)
     function uniqueRoleMembersCount(string memory role) public override view returns (uint256) {
-        // return uniqueMembers(roleToId(role)).length;
         return uniqueMembersCount(roleToId(role));
     }
 
