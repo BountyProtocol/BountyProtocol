@@ -440,12 +440,6 @@ describe("Protocol", function () {
       expect(await soulContract.ownerOf(tokenId)).to.equal(this.tester3Addr);
       //Check Membership
       expect(await gameContract.roleHas(this.tester3Addr, "member")).to.equal(true);
-      // expect(await gameContract.roleHas(this.tester5Addr, "member")).to.equal(false);
-
-      //Should Fail - No Soul For Contract
-      // await expect(
-      //   gameContract.roleHas(this.tester5Addr, "member")
-      // ).to.be.revertedWith("ERC1155Tracker: requested account not found on source contract");
       //Should Not Fail. 0/False if does not exist
       expect(await gameContract.roleHas(this.tester5Addr, "member")).to.equal(false);
     });
@@ -561,43 +555,25 @@ describe("Protocol", function () {
       
       //Add Rule
       let tx = await this.gameContract.connect(admin).ruleAdd(rule, confirmation, effects1);
-      // const gameRules = await ethers.getContractAt("IRules", this.gameContract.address);
-      // let tx = await gameRules.connect(admin).ruleAdd(rule, confirmation, effects1);
-      
-      // wait until the transaction is mined
       await tx.wait();
-      // const receipt = await tx.wait()
-      // console.log("Rule Added", receipt.logs);
-      // console.log("Rule Added Events: ", receipt.events);
 
       //Expect Event
       await expect(tx).to.emit(this.ruleRepo, 'Rule').withArgs(this.gameContract.address, 1, rule.about, rule.affected, rule.uri, rule.negation);
-      
       for(let effect of effects1) {
+        //Expect Effects
         await expect(tx).to.emit(this.ruleRepo, 'RuleEffect').withArgs(this.gameContract.address, 1, effect.domain, effect.value);
       }
+      //Expect Confirmation
       await expect(tx).to.emit(this.ruleRepo, 'Confirmation').withArgs(this.gameContract.address, 1, confirmation.ruling, confirmation.evidence, confirmation.witness);
 
       //Add Another Rule
       let tx2 = await this.gameContract.connect(admin).ruleAdd(rule2, confirmation, effects2);
-      
-      
-            
       //Expect Event
       await expect(tx2).to.emit(this.ruleRepo, 'Rule').withArgs(this.gameContract.address, 2, rule2.about, rule2.affected, rule2.uri, rule2.negation);
       await expect(tx2).to.emit(this.ruleRepo, 'Confirmation').withArgs(this.gameContract.address, 2, confirmation.ruling, confirmation.evidence, confirmation.witness);
-
-      // expect(await this.gameContract.ruleAdd(actionContract.address)).to.equal("Hello, world!");
-      // let ruleData = await this.gameContract.ruleGet(1);
-      
-      // console.log("Rule Getter:", typeof ruleData, ruleData);   //some kind of object array crossbread
-      // console.log("Rule Getter Effs:", ruleData.effects);  //V
-      // console.log("Rule Getter:", JSON.stringify(ruleData)); //As array. No Keys
-      
-      // await expect(ruleData).to.include.members(Object.values(rule));
     });
 
-    it("Should Update Rule", async function () {
+    it("Should update rule", async function () {
       let actionGUID = '0xa7440c99ff5cd38fc9e0bff1d6dbf583cc757a83a3424bdc4f5fd6021a2e90e2';
       let rule = {
         about: actionGUID, //"0xa7440c99ff5cd38fc9e0bff1d6dbf583cc757a83a3424bdc4f5fd6021a2e90e2",
@@ -605,7 +581,7 @@ describe("Protocol", function () {
         uri: "ADDITIONAL_DATA_URI",
         negation: false,
       };
-      let  effects = [
+      let effects = [
         {domain:'environmental', value:1},
         {domain:'personal', value:1},
       ];
@@ -616,33 +592,40 @@ describe("Protocol", function () {
       // expect(curEffects).to.include.members(Object.values(effects));    //Doesn't Work...
 
     });
-
-    it("Should Write a Post", async function () {
-      let post = {
-        entRole:"member",
-        tokenId: soulTokens.tester,
-        uri:test_uri,
-      };
-
-      //Join Game
-      let tx1 = await this.gameContract.connect(tester).join();
-      await tx1.wait();
-      //Make Sure Account Has Role
-      expect(await this.gameContract.roleHas(this.testerAddr, "member")).to.equal(true);
-
-      //Validate Permissions
-      await expect(
-        //Failed Post
-        this.gameContract.connect(tester4).post(post.entRole, post.tokenId, post.uri)
-      ).to.be.revertedWith("POST:SOUL_NOT_YOURS");
-
-      //Successful Post
-      let tx2 = await this.gameContract.connect(tester).post(post.entRole, post.tokenId, post.uri);
-      await tx2.wait();  //wait until the transaction is mined
-      //Expect Event
-      await expect(tx2).to.emit(this.gameContract, 'Post').withArgs(this.testerAddr, post.tokenId, post.entRole, post.uri);
-    });
     
+    /**
+     * Game Contract
+     */
+    describe("Game Post", function () {
+
+      it("Should Write a Post", async function () {
+        let post = {
+          entRole:"member",
+          tokenId: soulTokens.tester,
+          uri:test_uri,
+        };
+
+        //Join Game
+        let tx1 = await this.gameContract.connect(tester).join();
+        await tx1.wait();
+        //Make Sure Account Has Role
+        expect(await this.gameContract.roleHas(this.testerAddr, "member")).to.equal(true);
+
+        //Validate Permissions
+        await expect(
+          //Failed Post
+          this.gameContract.connect(tester4).post(post.entRole, post.tokenId, post.uri)
+        ).to.be.revertedWith("POST:SOUL_NOT_YOURS");
+
+        //Successful Post
+        let tx2 = await this.gameContract.connect(tester).post(post.entRole, post.tokenId, post.uri);
+        await tx2.wait();  //wait until the transaction is mined
+        //Expect Event
+        await expect(tx2).to.emit(this.gameContract, 'Post').withArgs(this.testerAddr, post.tokenId, post.entRole, post.uri);
+      });
+    
+    });
+
     it("Should Update Membership Token URI", async function () {
       //Protected
       await expect(
