@@ -235,12 +235,14 @@ contract SoulUpgradable is
     }
 
     /// Token Transfer Rules
+    /// TODO: Consider Implementing Support For Multiple Tokens
     function _beforeTokenTransfer(
         address from,
         address to,
-        uint256 tokenId
-    ) internal virtual override(ERC721Upgradeable) {
-        super._beforeTokenTransfer(from, to, tokenId);
+        uint256 tokenId,
+        uint256 batchSize
+    ) internal virtual override {
+        super._beforeTokenTransfer(from, to, tokenId, batchSize);
         //Non-Transferable (by client)
         require(
             _msgSender() == owner() || //Contract Owner
@@ -258,11 +260,14 @@ contract SoulUpgradable is
     }
 
     /// Hook - After Token Transfer
+    /// TODO: Consider Implementing Support For Multiple Tokens
     function _afterTokenTransfer(
-        address,
+        address from,
         address to,
-        uint256 tokenId
+        uint256 tokenId,
+        uint256 batchSize
     ) internal virtual override {
+         super._beforeTokenTransfer(from, to, tokenId, batchSize);
         //Soul Type (Contract Symbol)
         string memory soulType = Utils.getAddressType(to);
         //Set
