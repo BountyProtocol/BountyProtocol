@@ -105,14 +105,27 @@ describe("Protocol", function () {
         
   });
 
-
   describe("OpenRepo", function () {
 
-    it("Should Get Empty Value", async function () {
-      //Change to Closed Game
-      await this.dataRepo.stringGet("TestKey");
-      await this.dataRepo.boolGet("TestKey");
-      await this.dataRepo.addressGet("TestKey");
+    it("Should Default to Empty Values", async function () {
+      expect(await this.dataRepo.stringGet("TestKey")).to.equal("");
+      expect(await this.dataRepo.boolGet("TestKey")).to.equal(false);
+      expect(await this.dataRepo.uintGet("TestKey")).to.equal(0);
+      expect(await this.dataRepo.addressGet("TestKey")).to.equal(ZERO_ADDR);
+    });
+
+    it("Should Store Values", async function () {
+      await this.dataRepo.stringSet("TestKey", "string");
+      expect(await this.dataRepo.stringGet("TestKey")).to.equal("string");
+
+      await this.dataRepo.boolSet("TestKey", true);
+      expect(await this.dataRepo.boolGet("TestKey")).to.equal(true);
+      
+      await this.dataRepo.uintSet("TestKey", 5);
+      expect(await this.dataRepo.uintGet("TestKey")).to.equal(5);
+      
+      await this.dataRepo.addressSet("TestKey", this.tester4Addr);
+      expect(await this.dataRepo.addressGet("TestKey")).to.equal(this.tester4Addr);
     });
 
   });
