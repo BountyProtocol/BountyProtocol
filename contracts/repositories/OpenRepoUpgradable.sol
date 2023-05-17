@@ -21,7 +21,9 @@ import "../libraries/StringArray.sol";
  * - Save & Return Associations
  * - Owned by Requesting Address/Booleans/Strings
  * - Support Multiple Similar Items
- *
+ * 
+ * @dev TODO: Enforce Single Type for each Key (register key's type when used)
+ * 
  * Address Functions:
     Set 
     Add
