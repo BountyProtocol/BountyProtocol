@@ -156,22 +156,25 @@ contract ActionExt is GameExtension {
     mapping(bytes32 => bytes) internal availableActions;
 
 //-- Getters
-    function getAddr(string memory role, RoleMap[] memory roleMap) internal view returns (address) {
+    function getAddr(string memory role, RoleMap[] memory roleMap) internal pure returns (address) {
         for (uint256 i = 0; i < roleMap.length; ++i) {
             if(Utils.stringMatch(role, roleMap[i].role)) return roleMap[i].addr;
         }
+        return address(0);
     }
 
-    function getInt(string memory role, IntMap[] memory intMap) internal view returns (uint256) {
+    function getInt(string memory role, IntMap[] memory intMap) internal pure returns (uint256) {
         for (uint256 i = 0; i < intMap.length; ++i) {
             if(Utils.stringMatch(role, intMap[i].role)) return intMap[i].value;
         }
+        return 0;
     }
 
-    function getStr(string memory role, StrMap[] memory strMap) internal view returns (string memory) {
+    function getStr(string memory role, StrMap[] memory strMap) internal pure returns (string memory) {
         for (uint256 i = 0; i < strMap.length; ++i) {
             if(Utils.stringMatch(role, strMap[i].role)) return strMap[i].value;
         }
+        return "";
     }
 
 }
