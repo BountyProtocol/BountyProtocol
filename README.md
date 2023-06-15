@@ -33,7 +33,7 @@ This platform allows you to
 
 - [Docs (Notion)](https://www.notion.so/virtualbrick/Contracts-4e383eb032e34cd08d5f035dee2dd9bb)
 - [Changelog](https://github.com/MentorDAO/BountyProtocol/releases)
-- [Partial Demo](https://solidify.space)
+- [Boilerplate/Demo](https://www.soulsystem.app)
 - [Architecture Schemas (Miro)](https://miro.com/app/board/uXjVOH541OI=/?share_link_id=612732936883)
 ## Getting Started
 
