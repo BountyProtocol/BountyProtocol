@@ -46,9 +46,9 @@ contract HubUpgradable is
     string public constant override role = "Hub";
     string public constant override symbol = "HUB";
     mapping(string => address) internal _beacons; // Mapping for Active Game Contracts
-    mapping(address => bool) internal _games; // Mapping for Active Game Contracts
-    mapping(address => address) internal _procedures; // Mapping for Claim Contracts  [G] => [R]
-
+    // Track Deployed Primitives (Children Contracts)
+    mapping(address => bool) internal _games; // Mapping for Active Game Contracts [G] => [Status]
+    mapping(address => address) internal _procedures; // Mapping for Procedure Contracts  [G] => [P]
 
     //--- Modifiers
 
