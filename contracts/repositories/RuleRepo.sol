@@ -22,6 +22,9 @@ import "../repositories/interfaces/IOpenRepo.sol";
  * Version 1.0
  * - Sender expected to be a protocol entity
  * - Sender expected to support getHub() & getRepoAddr()
+ * 
+ * Version 2.0
+ * - Add Conditions for rules [WIP]
  */
 contract RuleRepo is IRulesRepo {
 
@@ -36,6 +39,8 @@ contract RuleRepo is IRulesRepo {
     mapping(address => mapping(uint256 => DataTypes.RepChange[])) internal _effects;  //Rule Efects (Reputation Changes)   //effects[id][] => {direction:true, value:5, name:'personal'}  // Generic, Iterable & Extendable/Flexible
     mapping(address => mapping(uint256 => bytes32[])) internal _claims;  //Rule Claims (Consequences) //action GUIDs   
     // mapping(address => mapping(uint256 => string) internal _uri;
+
+    mapping(address => mapping(uint256 => DataTypes.Condition[])) internal _ruleConditions; //Conditions per Rule
 
     //--- Functions
 

@@ -10,13 +10,13 @@ library DataTypes {
 
     //---
 
-    /// NFT Identifiers
+    //NFT Identifiers
     struct Entity {
         address account;
         uint256 id;
         uint256 chain;
     }
-    /// Rating Domains
+    //Rating Domains
     enum Domain {
         Environment,
         Personal,
@@ -60,7 +60,7 @@ library DataTypes {
     
     // Rule Object
     struct Rule {
-        bytes32 about;   //About What (Action's GUID)      //TODO: Maybe Call This 'actionGUID'? 
+        bytes32 about;   //About What (Action's CID)      //TODO: Maybe Call This 'actionCID'? 
         string affected; //Affected Role. E.g. "investors"
         bool negation;   //0 - Commission  1 - Omission
         string uri;      //Test & Conditions
@@ -72,7 +72,7 @@ library DataTypes {
         string name;
         uint8 value;    // value: 5
         bool direction; // Direction: -
-        // bytes32 action; //Action GUID
+        // bytes32 action; //Action CID
         // bytes data;  //[TBD]
         bool disabled;  //1 - Rule Disabled
     }
@@ -82,7 +82,7 @@ library DataTypes {
         // uint256 domain;
         string domain;
         int256 value;    // value: 5
-        // bytes32 action; //Action GUID
+        // bytes32 action; //Action CID
         // bytes data;  //[TBD]
         bool disabled;  //1 - Rule Disabled
     }
@@ -118,6 +118,12 @@ library DataTypes {
         // evidence: true, //Require Evidence
         uint witness;
         // witness: 1,  //Minimal number of witnesses
+    }
+
+    //Conditions
+    struct Condition {
+        bytes32 id; //CID
+        string repo; //Identifier to use 
     }
 
     //--- Claim Data
