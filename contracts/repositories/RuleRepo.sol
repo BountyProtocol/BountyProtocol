@@ -189,14 +189,6 @@ contract RuleRepo is IRulesRepo {
         _ruleSet(id, rule, effects);
     }
     
-    /* REMOVED - This should probably be in the implementing Contract
-    /// Update Confirmation Method for Action
-    function confirmationSet(uint256 id, DataTypes.Confirmation memory confirmation) external override {
-        //TODO: Validate Caller's Permissions
-        _confirmationSet(id, confirmation);
-    }
-    */
-
     /// Set Action's Confirmation Object
     function _confirmationSet(uint256 id, DataTypes.Confirmation memory confirmation) internal {
         //Save
@@ -213,4 +205,12 @@ contract RuleRepo is IRulesRepo {
         emit Claim(msg.sender, id, claim);
     }
    
+    /* REMOVED - This should probably be in the implementing Contract
+    /// Update Confirmation Method for Action
+    function confirmationSet(uint256 id, DataTypes.Confirmation memory confirmation) external override {
+        //TODO: Validate Caller's Permissions
+        _confirmationSet(id, confirmation);
+    }
+    */
+
 }
