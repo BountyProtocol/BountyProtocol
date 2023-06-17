@@ -17,6 +17,15 @@ interface IRulesRepo {
     /// Get Rule's Effects By Owner
     function effectsGetOf(address ownerAddress, uint256 id) external view returns (DataTypes.RepChange[] memory);
 
+    /// Get Rule's Effects
+    function conditionsGet(uint256 id) external view returns (DataTypes.Condition[] memory);
+
+    /// Get Rule's Effects By Owner
+    function conditionsGetOf(address ownerAddress, uint256 id) external view returns (DataTypes.Condition[] memory);
+
+    /// Get Rule's Confirmation Method
+    function confirmationGetOf(address ownerAddress, uint256 id) external view returns (DataTypes.Confirmation memory);
+
     /// Get Rule's Confirmation Method
     function confirmationGet(uint256 id) external view returns (DataTypes.Confirmation memory);
 

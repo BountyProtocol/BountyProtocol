@@ -25,6 +25,8 @@ import "../repositories/interfaces/IOpenRepo.sol";
  * 
  * Version 2.0
  * - Add Conditions for rules [WIP]
+ * Version 2.1
+ * - Rule Conditions 
  */
 contract RuleRepo is IRulesRepo {
 
@@ -35,12 +37,11 @@ contract RuleRepo is IRulesRepo {
 
     //Rule Data
     mapping(address => mapping(uint256 => DataTypes.Rule)) internal _rules;
-    mapping(address => mapping(uint256 => DataTypes.Confirmation)) internal _ruleConfirmation;  //Rule Confirmations
     mapping(address => mapping(uint256 => DataTypes.RepChange[])) internal _effects;  //Rule Efects (Reputation Changes)   //effects[id][] => {direction:true, value:5, name:'personal'}  // Generic, Iterable & Extendable/Flexible
+    mapping(address => mapping(uint256 => DataTypes.Condition[])) internal _ruleConditions; //Conditions for Rule [WIP]
+    mapping(address => mapping(uint256 => DataTypes.Confirmation)) internal _ruleConfirmation;  //Rule Confirmations
     mapping(address => mapping(uint256 => bytes32[])) internal _claims;  //Rule Claims (Consequences) //action GUIDs   
     // mapping(address => mapping(uint256 => string) internal _uri;
-
-    mapping(address => mapping(uint256 => DataTypes.Condition[])) internal _ruleConditions; //Conditions per Rule
 
     //--- Functions
 
@@ -85,9 +86,24 @@ contract RuleRepo is IRulesRepo {
         return effectsGetOf(msg.sender, id);
     }
 
+    /// Get Rule's Conditions By Owner
+    function conditionsGetOf(address ownerAddress, uint256 id) public view override returns (DataTypes.Condition[] memory) {
+        return _ruleConditions[ownerAddress][id];
+    }
+
+    /// Get Rule's Conditions
+    function conditionsGet(uint256 id) public view override returns (DataTypes.Condition[] memory) {
+        return conditionsGetOf(msg.sender, id);
+    }
+
+    /// Get Rule's Confirmation Method
+    function confirmationGetOf(address ownerAddress, uint256 id) public view override returns (DataTypes.Confirmation memory) {
+        return _ruleConfirmation[ownerAddress][id];
+    }
+
     /// Get Rule's Confirmation Method
     function confirmationGet(uint256 id) public view override returns (DataTypes.Confirmation memory) {
-        return _ruleConfirmation[msg.sender][id];
+        return confirmationGetOf(msg.sender, id);
     }
 
     //-- Setters
