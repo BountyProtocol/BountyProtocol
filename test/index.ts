@@ -136,7 +136,7 @@ describe("Protocol", function () {
     describe("Action Repository", function () {
   
     it("Should store Actions", async function () {
-      let action = {
+      const action = {
         subject: "founder",     //Accused Role
         verb: "breach",
         object: "contract",
@@ -153,7 +153,7 @@ describe("Protocol", function () {
       // await expect(tx).to.emit(actionContract, 'URI').withArgs(actionGUID, test_uri);
 
       //Fetch Action's Struct
-      let actionRet = await actionContract.actionGet(actionGUID);
+      const actionRet = await actionContract.actionGet(actionGUID);
       
       // console.log("actionGet:", actionRet);
       // expect(Object.values(actionRet)).to.eql(Object.values(action));
@@ -538,12 +538,12 @@ describe("Protocol", function () {
     
     it("Should store Rules", async function () {
       // let actionGUID = '0xa7440c99ff5cd38fc9e0bff1d6dbf583cc757a83a3424bdc4f5fd6021a2e90e2';//await actionContract.callStatic.actionAdd(action);
-      let confirmation = {
+      const confirmation = {
         ruling: "authority",  //Decision Maker
         evidence: true, //Require Evidence
         witness: 1,  //Minimal number of witnesses
       };
-      let rule = {
+      const rule = {
         // uint256 about;    //About What (Token URI +? Contract Address)
         about: actionGUID, //"0xa7440c99ff5cd38fc9e0bff1d6dbf583cc757a83a3424bdc4f5fd6021a2e90e2",
         affected: "investor",  //Beneficiary
@@ -553,11 +553,11 @@ describe("Protocol", function () {
         negation: false,
       };
       // Effect Object (Describes Changes to Rating By Type)
-      let effects1 = [
+      const effects1 = [
         {domain:'professional', value:5,},
         {domain:'social', value:5,},
       ];
-      let rule2 = {
+      const rule2 = {
         // uint256 about;    //About What (Token URI +? Contract Address)
         about: actionGUID, //"0xa7440c99ff5cd38fc9e0bff1d6dbf583cc757a83a3424bdc4f5fd6021a2e90e2",
         affected: "god",  //Beneficiary
@@ -567,15 +567,15 @@ describe("Protocol", function () {
         negation: false,
       };
       // Effect Object (Describes Changes to Rating By Type)
-      let  effects2 = [
+      const  effects2 = [
         {domain:'environmental', value:10,},
         {domain:'personal', value:4,},
       ];
       
       //Add Rule
-      let tx = await this.gameContract.connect(admin).ruleAdd(rule, confirmation, effects1);
+      const tx = await this.gameContract.connect(admin).ruleAdd(rule, effects1, confirmation);
       // const gameRules = await ethers.getContractAt("IRules", this.gameContract.address);
-      // let tx = await gameRules.connect(admin).ruleAdd(rule, confirmation, effects1);
+      // const tx = await gameRules.connect(admin).ruleAdd(rule, confirmation, effects1);
       
       // wait until the transaction is mined
       await tx.wait();
@@ -592,17 +592,12 @@ describe("Protocol", function () {
       await expect(tx).to.emit(this.ruleRepo, 'Confirmation').withArgs(this.gameContract.address, 1, confirmation.ruling, confirmation.evidence, confirmation.witness);
 
       //Add Another Rule
-      let tx2 = await this.gameContract.connect(admin).ruleAdd(rule2, confirmation, effects2);
+      let tx2 = await this.gameContract.connect(admin).ruleAdd(rule2, effects2, confirmation);
       
-      
-            
       //Expect Event
       await expect(tx2).to.emit(this.ruleRepo, 'Rule').withArgs(this.gameContract.address, 2, rule2.about, rule2.affected, rule2.uri, rule2.negation);
       await expect(tx2).to.emit(this.ruleRepo, 'Confirmation').withArgs(this.gameContract.address, 2, confirmation.ruling, confirmation.evidence, confirmation.witness);
 
-      // expect(await this.gameContract.ruleAdd(actionContract.address)).to.equal("Hello, world!");
-      // let ruleData = await this.gameContract.ruleGet(1);
-      
       // console.log("Rule Getter:", typeof ruleData, ruleData);   //some kind of object array crossbread
       // console.log("Rule Getter Effs:", ruleData.effects);  //V
       // console.log("Rule Getter:", JSON.stringify(ruleData)); //As array. No Keys
@@ -611,23 +606,43 @@ describe("Protocol", function () {
     });
 
     it("Should Update Rule", async function () {
-      let actionGUID = '0xa7440c99ff5cd38fc9e0bff1d6dbf583cc757a83a3424bdc4f5fd6021a2e90e2';
-      let rule = {
+      const actionGUID = '0xa7440c99ff5cd38fc9e0bff1d6dbf583cc757a83a3424bdc4f5fd6021a2e90e2';
+      const ruleId = 2;
+      const rule = {
         about: actionGUID, //"0xa7440c99ff5cd38fc9e0bff1d6dbf583cc757a83a3424bdc4f5fd6021a2e90e2",
         affected: "god",  //Beneficiary
         uri: "ADDITIONAL_DATA_URI",
         negation: false,
       };
-      let  effects = [
+      const effects = [
         {domain:'environmental', value:1},
         {domain:'personal', value:1},
       ];
-      let tx = await this.gameContract.connect(admin).ruleUpdate(2, rule, effects);
+      const conditions = [
+        { repo: 'action', id:actionGUID },
+      ];
+      const confirmation = {
+        ruling: "admin",  //Decision Maker
+        evidence: false, //Require Evidence
+        witness: 1,  //Minimal number of witnesses
+      };
 
-      // let curEffects = await this.gameContract.effectsGet(2);
+      await this.gameContract.connect(admin).ruleUpdateEffects(ruleId, effects);
+      const curEffects = await this.gameContract.effectsGet(ruleId);
       // console.log("Effects", curEffects);
-      // expect(curEffects).to.include.members(Object.values(effects));    //Doesn't Work...
+      expect(curEffects).to.include.keys(Object.keys(effects));
+      // expect(curEffects).to.include.members(effects);    //Doesn't Work...
 
+      await this.gameContract.connect(admin).ruleUpdateConditions(ruleId, conditions);
+      const curConds = await this.gameContract.conditionsGet(ruleId);
+      // console.log("Conditions:", curConds);
+      expect(curConds).to.include.keys(Object.keys(conditions));
+      // expect(curConds).to.have.members([conditions[0].repo, conditions[0].id]);  //In an Array...
+
+      await this.gameContract.connect(admin).ruleUpdateConfirmation(ruleId, confirmation);
+      const curConfirmation = await this.gameContract.confirmationGet(ruleId);
+      expect(curConfirmation).to.include.keys(Object.keys(confirmation));
+      expect(curConfirmation).to.include.members([confirmation.ruling,confirmation.evidence]);
     });
 
     it("Should Write a Post", async function () {

@@ -326,9 +326,14 @@ contract GameUpgradable is IGame
         return _ruleRepo().ruleGet(ruleId);
     }
 
+    /// Get Rule's Conditions
+    function conditionsGet(uint256 ruleId) public view returns (DataTypes.Condition[] memory) {
+        return _ruleRepo().conditionsGet(ruleId);
+    }
+
     /// Get Rule's Effects
-    function effectsGet(uint256 effectId) public view returns (DataTypes.RepChange[] memory) {
-        return _ruleRepo().effectsGet(effectId);
+    function effectsGet(uint256 ruleId) public view returns (DataTypes.RepChange[] memory) {
+        return _ruleRepo().effectsGet(ruleId);
     }
 
     /// Get Rule's Confirmation Method
@@ -341,33 +346,50 @@ contract GameUpgradable is IGame
     /// Create New Rule
     function ruleAdd(
         DataTypes.Rule memory rule, 
-        DataTypes.Confirmation memory confirmation, 
-        DataTypes.RepChange[] memory effects
+        DataTypes.RepChange[] memory effects,
+        DataTypes.Confirmation memory confirmation
     ) public returns (uint256) {
         require(roleHas(_msgSender(), "admin"), "Admin Only");
-        return _ruleRepo().ruleAdd(rule, confirmation, effects);
+        return _ruleRepo().ruleAdd(rule, effects, confirmation);
     }
 
-    /// Update Rule
-    function ruleUpdate(
-        uint256 id, 
-        DataTypes.Rule memory rule, 
+    /// Update Rule URI
+    function ruleUpdateURI(
+        uint256 ruleId, 
+        string calldata uri
+    ) external {
+        require(roleHas(_msgSender(), "admin"), "Admin Only");
+        _ruleRepo().ruleUpdateURI(ruleId, uri);
+    }
+
+    /// Update Rule Effects
+    function ruleUpdateEffects(
+        uint256 ruleId, 
         DataTypes.RepChange[] memory effects
     ) external {
         require(roleHas(_msgSender(), "admin"), "Admin Only");
-        _ruleRepo().ruleUpdate(id, rule, effects);
+        _ruleRepo().ruleEffectsUpdate(ruleId, effects);
     }
 
+    /// Update Rule Conditions
+    function ruleUpdateConditions(
+        uint256 ruleId, 
+        DataTypes.Condition[] memory conditions
+    ) external {
+        require(roleHas(_msgSender(), "admin"), "Admin Only");
+        _ruleRepo().ruleUpdateConditions(ruleId, conditions);
+    }
+    
+    /// Update Rule's Confirmation Method
+    function ruleUpdateConfirmation(uint256 id, DataTypes.Confirmation memory confirmation) external {
+        require(roleHas(_msgSender(), "admin"), "Admin Only");
+        _ruleRepo().ruleUpdateConfirmation(id, confirmation);
+    }
+    
     /// Set Disable Status for Rule
     function ruleDisable(uint256 id, bool disabled) external {
         require(roleHas(_msgSender(), "admin"), "Admin Only");
         _ruleRepo().ruleDisable(id, disabled);
-    }
-
-    /// Update Rule's Confirmation Data
-    function ruleConfirmationUpdate(uint256 id, DataTypes.Confirmation memory confirmation) external {
-        require(roleHas(_msgSender(), "admin"), "Admin Only");
-        _ruleRepo().ruleConfirmationUpdate(id, confirmation);
     }
 
 }

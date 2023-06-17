@@ -66,9 +66,9 @@ contract RuleExt is IRuleExt, GameExtension {
     }
 
     /// Update Rule's Confirmation Data
-    function ruleConfirmationUpdate(uint256 id, DataTypes.Confirmation memory confirmation) external override {
+    function ruleUpdateConfirmation(uint256 id, DataTypes.Confirmation memory confirmation) external override {
         require(gameRoles().roleHas(_msgSender(), "admin"), "Admin Only");
-        _ruleRepo().ruleConfirmationUpdate(id, confirmation);
+        _ruleRepo().ruleUpdateConfirmation(id, confirmation);
     }
 
     

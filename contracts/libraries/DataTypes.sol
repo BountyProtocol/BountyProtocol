@@ -63,6 +63,7 @@ library DataTypes {
         bytes32 about;   //About What (Action's CID)      //TODO: Maybe Call This 'actionCID'? 
         string affected; //Affected Role. E.g. "investors"
         bool negation;   //0 - Commission  1 - Omission
+        //-- Mutable
         string uri;      //Test & Conditions
         bool disabled;   //1 - Rule Disabled
     }
@@ -122,8 +123,8 @@ library DataTypes {
 
     //Conditions
     struct Condition {
-        bytes32 id; //CID
-        string repo; //Identifier to use 
+        string repo; //Condition Repository Identifier 
+        bytes32 id; //Condition CID
     }
 
     //--- Claim Data
