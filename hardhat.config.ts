@@ -33,7 +33,7 @@ const config = {
   solidity: {
     compilers: [
       {
-        version: "0.8.4",
+        version: "0.8.9",
         settings: {
           optimizer: {
             enabled: true,
@@ -84,7 +84,8 @@ const config = {
       url: "https://mainnet.aurora.dev/",
       accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
-    aurora_testnet:{
+    aurora_test:{
+      // chainId: 1313161555
       url: "https://testnet.aurora.dev/",
       accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
