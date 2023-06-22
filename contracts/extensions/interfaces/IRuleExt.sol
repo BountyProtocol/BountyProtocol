@@ -34,6 +34,6 @@ interface IRuleExt {
     function ruleDisable(uint256 id, bool disabled) external;
 
     /// Update Rule's Confirmation Data
-    function ruleConfirmationUpdate(uint256 id, DataTypes.Confirmation memory confirmation) external;
+    function ruleUpdateConfirmation(uint256 id, DataTypes.Confirmation memory confirmation) external;
 
 }
