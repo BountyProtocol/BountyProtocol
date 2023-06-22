@@ -48,18 +48,17 @@ const config = {
   networks: {
     hardhat: {
     },
-    rinkeby: {
-      url: process.env.RINKEBY_RPC || "",
-      accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
-      gas: 2100000,
-      gasPrice: 8000000000
-      // gasPrice: 10000000000,
-    },
-    goerli: {
-      url: process.env.GOERLI_RPC || "",
-      accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
-    },
-
+    // rinkeby: {
+    //   url: process.env.RINKEBY_RPC || "",
+    //   accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    //   gas: 2100000,
+    //   gasPrice: 8000000000
+    //   // gasPrice: 10000000000,
+    // },
+    // goerli: {
+    //   url: process.env.GOERLI_RPC || "",
+    //   accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    // },
     mumbai: {
       // url: process.env.MUMBAI_RPC || "",
       // url: "https://rpc-mumbai.maticvigil.com",
@@ -77,7 +76,8 @@ const config = {
     aurora_plus:{ // Aurora+    
       // chainId: 1313161554
       // Block explorer: https://aurorascan.dev  
-      url: "https://mainnet.aurora.dev/8fNTokuxHri5urDvGrZ9NN477sVDN27iiyxFgD2zjGy",
+      url: process.env.AURORA_RPC || "" ,
+      // url: "https://mainnet.aurora.dev/7FoWjbcX9Y2EQdAXkFmjG6pNpv4RYdQTdpE4psY7QBd", //0x3cd4f2D1B4fE810B9C024B0f99DdE37E7B9Ed654
       accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
     aurora:{
