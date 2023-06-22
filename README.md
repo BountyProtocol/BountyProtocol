@@ -46,7 +46,6 @@ Clone .env.example to .env and fill in your environment parameters
 - Install environemnt: `npm install`
 - Run tests: `npx hardhat test`
 - Check contract size: `npx hardhat size-contracts`
-- Deploy protocol (Rinkeby): `npx hardhat run scripts/deploy.ts --network rinkeby`
 - Deploy foundation (Mumbai): `npx hardhat run scripts/foundation.ts --network mumbai`
 - Deploy protocol (Mumbai): `npx hardhat run scripts/deploy.ts --network mumbai`
 - Compile contracts: `npx hardhat compile`
