@@ -12,6 +12,7 @@ const chain = hre.hardhatArguments.network;
 import contractAddrs from "./_contractAddr";
 const contractAddr = contractAddrs[chain];
 import publicAddrs from "./_publicAddrs";
+if(!publicAddrs.hasOwnProperty(chain)) throw "Unknown Chain:"+chain;
 const publicAddr = publicAddrs[chain];
 let deployed: any = [];
 

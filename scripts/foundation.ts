@@ -11,6 +11,7 @@ const chain = hre.hardhatArguments.network;
 
 //Track Addresses (Fill in present addresses to prevent new deplopyment)
 import publicAddrs from "./_publicAddrs";
+if(!publicAddrs.hasOwnProperty(chain)) throw "Unknown Chain:"+chain;
 const publicAddr = publicAddrs[chain];
 
 /**
