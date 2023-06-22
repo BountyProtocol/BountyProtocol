@@ -37,7 +37,8 @@ const config = {
         settings: {
           optimizer: {
             enabled: true,
-            runs: 10,
+            runs: 200,
+            // runs: 10,
           },
         },
       },
@@ -73,7 +74,12 @@ const config = {
       // gasPrice: 1000000000,
       // accounts: [process.env.PRIVATE_KEY]
     },
-
+    aurora_plus:{ // Aurora+    
+      // chainId: 1313161554
+      // Block explorer: https://aurorascan.dev  
+      url: "https://mainnet.aurora.dev/8fNTokuxHri5urDvGrZ9NN477sVDN27iiyxFgD2zjGy",
+      accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
     aurora:{
       url: "https://mainnet.aurora.dev/",
       accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
@@ -105,6 +111,7 @@ const config = {
       polygonMumbai: process.env.ETHERSCAN_API_KEY_POLY,
       optimisticEthereum: process.env.ETHERSCAN_API_KEY_OP,
       optimisticKovan: process.env.ETHERSCAN_API_KEY_OP,
+      aurora: process.env.ETHERSCAN_API_KEY_AURORA,
     }    
   },
 

@@ -56,6 +56,14 @@ const contractAddr: any = {
     avatar: "",
     history:"",
   },
+  aurora_plus:{ //0.6.0
+    game: "0x9DB046C958D1C6B2eA3B307C7FE05e3d3568ca2c",
+    claim: "0x9E91a8dDF365622771312bD859A2B0063097ad34",
+    task: "0x2370db9cc7ceeAb665701bfed58D18D36de58ec5",
+    hub: "0xd869c82C14144A0c5F7EFb6462127e929d9e9879",
+    avatar: "0xDE8D146D80f4ADA4BC2F110f28830fF1C92b49f9",
+    history:"",
+  },
 };
 
 export default contractAddr;
