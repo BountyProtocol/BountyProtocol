@@ -54,7 +54,7 @@ const contractAddr: any = {
     task: "0xb36D35f902DEaE9af4a996735a9b4F8dE64a7309",
     hub: "0x3CfF0AC9554Bc90ac37b8b84c2449F5B27f35740", //Owner: 0x3cd4f2D1B4fE810B9C024B0f99DdE37E7B9Ed654
     avatar: "0xD1b792De2c9c358F0C765C9f07DD618A12d8E97C",
-    history: "",
+    history: "0x75228869bD1Bbae3b534681826730134e2385a13",
   },
   aurora_test:{
     game: "",

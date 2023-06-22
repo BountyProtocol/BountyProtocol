@@ -42,6 +42,16 @@ const config = {
           },
         },
       },
+      {
+        version: "0.8.14",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+            // runs: 10,
+          },
+        },
+      },
     ],
   },
 
@@ -74,6 +84,8 @@ const config = {
       // accounts: [process.env.PRIVATE_KEY]
     },
     aurora_plus:{ // Aurora+    
+      // gas: 2100000,
+      // gasPrice: 8000000000,
       // chainId: 1313161554
       // Block explorer: https://aurorascan.dev  
       url: process.env.AURORA_RPC || "" ,
