@@ -221,7 +221,6 @@ contract RuleRepo is IRulesRepo {
         emit RuleURI(msg.sender, ruleId, uri);
     }
     
-
     /// Set Rule
     function _ruleSet(
         uint256 ruleId, 
