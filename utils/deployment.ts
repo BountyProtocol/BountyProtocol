@@ -132,7 +132,7 @@ export const hubAssocUpdate = async () => {
 
 /// Verify Contract on Etherscan
 export const verify = async (contractAddress: string, args: any[]) => {
-  if(!!chain){
+  if(!!chain && chain ! in ['aurora_test','aurora_plus','aurora']){
     // console.log("Verifying contract...")
     await run("verify:verify", {
       address: contractAddress,

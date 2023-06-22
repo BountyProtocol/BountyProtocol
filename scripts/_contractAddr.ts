@@ -64,6 +64,14 @@ const contractAddr: any = {
     avatar: "0xDE8D146D80f4ADA4BC2F110f28830fF1C92b49f9",
     history:"",
   },
+  aurora_test:{
+    game: "",
+    claim: "",
+    task: "",
+    hub: "",
+    avatar: "",
+    history:"",
+  },
 };
 
 export default contractAddr;
