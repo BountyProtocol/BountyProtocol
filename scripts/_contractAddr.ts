@@ -25,17 +25,9 @@ const contractAddr: any = {
     history: "0x95BD98a656C907fC037aF87Ea740fD94188Cd65f", //D4.4 (Proxy)
   },
   optimism_kovan:{
-    // game: "0xCFeE012952A2ECf7482790aB3EAe15Bd28AE5ae8", //0.5.1
-    // claim: "0xF351C1b7a86E38B59D6Bf0C054Cbf710105b4F0a", //0.5.1
-    // task: "0x59fC460631864A869404F3E79149d2Ac33C24301", //0.5.1
-    // hub: "0x274e54BFFDbb94442FC8Df155d47b42BEF90c76B", //0.5.1
-    // avatar: "0x5d15e4713fA815D0E9c1B5186C80c689a9a6cA21", //0.5.1
-    // history: "0x954b877d371F88238DD7A749BF01758e5f20C3C2", //0.5.1 //Wrong Address. This is the implementation
-
     game: "0xA8846989cBcbE4370B5628D4279271af4E87C036", //0.5.2
     claim: "0xA6F2d6d114778556FDf55eE6B83e20b1d2809C6a", //0.5.2
     task: "0x2E3c328B1F7796D9f0841634494c65f31b9eF24e", //0.5.2
-
     hub: "0x274e54BFFDbb94442FC8Df155d47b42BEF90c76B", //0.5.2 D220807
     avatar: "0x5d25e4713fA815D0E9c1B5186C80c689a9a6cA21", //0.5.2
     history: "0xCC76EB23Fc740f3617a33d236F3E5781B2a27C69", //0.5.2
@@ -56,13 +48,13 @@ const contractAddr: any = {
     avatar: "",
     history:"",
   },
-  aurora_plus:{ //0.6.0
-    game: "0x9DB046C958D1C6B2eA3B307C7FE05e3d3568ca2c",
-    claim: "0x9E91a8dDF365622771312bD859A2B0063097ad34",
-    task: "0x2370db9cc7ceeAb665701bfed58D18D36de58ec5",
-    hub: "0xd869c82C14144A0c5F7EFb6462127e929d9e9879",
-    avatar: "0xDE8D146D80f4ADA4BC2F110f28830fF1C92b49f9",
-    history:"",
+  aurora_plus:{ //0.6.1.1
+    game: "0x938Ce74dee47035C58a9aFeA1FC13B48BA8Dbe3d",
+    claim: "0xE70691993390a674A7a62f91e674BE5C843aE4f9",
+    task: "0xb36D35f902DEaE9af4a996735a9b4F8dE64a7309",
+    hub: "0x3CfF0AC9554Bc90ac37b8b84c2449F5B27f35740", //Owner: 0x3cd4f2D1B4fE810B9C024B0f99DdE37E7B9Ed654
+    avatar: "0xD1b792De2c9c358F0C765C9f07DD618A12d8E97C",
+    history: "",
   },
   aurora_test:{
     game: "",
