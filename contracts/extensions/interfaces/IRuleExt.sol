@@ -19,8 +19,8 @@ interface IRuleExt {
     /// Create New Rule
     function ruleAdd(
         DataTypes.Rule memory rule, 
-        DataTypes.Confirmation memory confirmation, 
-        DataTypes.RepChange[] memory effects
+        DataTypes.RepChange[] memory effects,
+        DataTypes.Confirmation memory confirmation
     ) external returns (uint256);
 
     /// Update Rule
