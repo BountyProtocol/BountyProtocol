@@ -61,9 +61,6 @@ const config = {
     // rinkeby: {
     //   url: process.env.RINKEBY_RPC || "",
     //   accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
-    //   gas: 2100000,
-    //   gasPrice: 8000000000
-    //   // gasPrice: 10000000000,
     // },
     // goerli: {
     //   url: process.env.GOERLI_RPC || "",

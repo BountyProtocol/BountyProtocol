@@ -20,11 +20,10 @@ let deployed: any = [];
  * MISC COMMANDS
  */
 async function main() {
-    // let hubContract: Contract;
 
     //Hub Associations & Validation 
-    if(contractAddr.hub){
-        let hubContract = await ethers.getContractFactory("HubUpgradable").then(res => res.attach(contractAddr.hub));
+    if(0 && contractAddr.hub){
+        const hubContract = await ethers.getContractFactory("HubUpgradable").then(res => res.attach(contractAddr.hub));
 
         //Game Extension: Court of Law
         await deployContract("CourtExt", []).then(async res => {

@@ -10,7 +10,7 @@ const contractAddr = contractAddrs[chain];
  */
 async function main() {
   //Demo Souls
-  let soulContract = await ethers.getContractFactory("SoulUpgradable").then(res => res.attach(contractAddr.avatar));
+  const soulContract = await ethers.getContractFactory("SoulUpgradable").then(res => res.attach(contractAddr.avatar));
   for(let soul of getSoulsData()){
     try{
       await soulContract.mintFor(soul.owner, soul.uri);

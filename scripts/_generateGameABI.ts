@@ -16,8 +16,8 @@ async function main() {
 
     let abiExtFiles = ['ActionExt','RuleExt','FundManExt','MicroDAOExt','ProjectExt','VotesExt','CourtExt'];
     for(let abiExtFileName of abiExtFiles){
-        let abiExtFile = `../artifacts/contracts/extensions/${abiExtFileName}.sol/${abiExtFileName}.json`;
-        let extABI = getTheAbi(abiExtFile)
+        const abiExtFile = `../artifacts/contracts/extensions/${abiExtFileName}.sol/${abiExtFileName}.json`;
+        const extABI = getTheAbi(abiExtFile)
         // const { extABI } = await hre.artifacts.readArtifact(abiExtFileName);
         if(!!extABI){
             abis.push(extABI);
