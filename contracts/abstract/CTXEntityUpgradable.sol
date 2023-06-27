@@ -91,12 +91,12 @@ abstract contract CTXEntityUpgradable is
     }
 
     /// Assign Someone Else to a Role
-    function roleAssign(address account, string memory role) public virtual override roleExists(role) AdminOrOwnerOrHub {
+    function roleAssign(address account, string memory role) public virtual override AdminOrOwnerOrHub {
         _roleAssign(account, role, 1);
     }
 
     /// Assign Tethered Token to a Role
-    function roleAssignToToken(uint256 sbt, string memory role) public virtual override roleExists(role) AdminOrOwnerOrHub {
+    function roleAssignToToken(uint256 sbt, string memory role) public virtual override AdminOrOwnerOrHub {
         _roleAssignToToken(sbt, role, 1);
     }
 

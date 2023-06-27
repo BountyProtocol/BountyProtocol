@@ -116,9 +116,7 @@ abstract contract ERC1155RolesTrackerUp is
     /// Assign Tethered Token to a Role
     function _roleAssignToToken(uint256 ownerToken, string memory role, uint256 amount) internal virtual {
         //Create Role if does not Exist
-        if(!roleExist(role)) {
-            _roleCreate(role);
-        }
+        if(!roleExist(role)) _roleCreate(role);
         //Assign
         _GUIDAssignToToken(ownerToken, _stringToBytes32(role), amount);
         //TODO: Role Assigned Event?
@@ -149,7 +147,7 @@ abstract contract ERC1155RolesTrackerUp is
 
     /// Create a new Role
     function _roleCreate(string memory role) internal returns (uint256) {
-        uint256 tokenId =  _GUIDMake(_stringToBytes32(role));
+        uint256 tokenId = _GUIDMake(_stringToBytes32(role));
         emit RoleCreated(tokenId, role);
         return tokenId;
     }
