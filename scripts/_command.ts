@@ -16,20 +16,40 @@ if(!publicAddrs.hasOwnProperty(chain)) throw "Unknown Chain:"+chain;
 const publicAddr = publicAddrs[chain];
 let deployed: any = [];
 
+
 /**
  * MISC COMMANDS
  */
 async function main() {
+    //Change Game's Conf
+    // const gameContract = await ethers.getContractFactory("GameUpgradable").then(res => res.attach("0x1c879765c9ec09706d80939d58acf1b663de9795"));
+    // await gameContract.confSet("type", "GAME");
+    // await gameContract.confSet("role", "MDAO");
+
+    
+    //Soul
+    if(0 && contractAddr.avatar){
+        const soulContract = await ethers.getContractAt('SoulUpgradable', contractAddr.avatar);
+
+        //Mint a Soul
+        let tokenId = await soulContract.mint("");
+        // let tokenId = await soulContract.tokenByAddress(this.tester5Addr);
+        console.log("Soul Token ID: ", tokenId);
+
+    }
+    // else console.error("Failed to find address for 'avatar' Contract", contractAddr);
 
     //Hub Associations & Validation 
     if(0 && contractAddr.hub){
-        const hubContract = await ethers.getContractFactory("HubUpgradable").then(res => res.attach(contractAddr.hub));
+        const hubContract = await ethers.getContractAt('HubUpgradable', contractAddr.hub);
 
-        //Game Extension: Court of Law
-        await deployContract("CourtExt", []).then(async res => {
-            await hubContract.assocSet("GAME_COURT", res.address);
-            console.log("Deployed Court Ext. ", res.address);
-        });
+        //Transfer Protocol Ownership
+        // const hubContract = await ethers.getContractAt('OwnableUpgradeable', contractAddr.hub);
+        // hubContract.transferOwnership("0xE1a71E7cCCCc9D06f8bf1CcA3f236C0D04Da741B");
+
+        //Deploy a New Game
+        // await hubContract.makeGame("MDAO", "Virtual Brick", "ipfs://QmWhoRa1oYoJ1xrhgq2BUqQUiY2CFR4udGk26sU8iRBrVb");       
+
         /*
         console.log("Deploy All Game Extensions & Set to Hub");
         if(hubContract){
@@ -37,7 +57,16 @@ async function main() {
             deployGameExt(hubContract);
         }
         */
+
+        
+        //Game Extension: Court of Law
+        // await deployContract("CourtExt", []).then(async res => {
+        //     await hubContract.assocSet("GAME_COURT", res.address);
+        //     console.log("Deployed Court Ext. ", res.address);
+        // });
+       
     }
+    // else console.error("Failed to find address for Hub Contract", contractAddr);
 
 }
 
