@@ -47,7 +47,8 @@ async function main() {
         // hubContract.transferOwnership("0xE1a71E7cCCCc9D06f8bf1CcA3f236C0D04Da741B");
 
         //Deploy a New Game
-        // await hubContract.makeGame("MDAO", "Virtual Brick", "ipfs://QmWhoRa1oYoJ1xrhgq2BUqQUiY2CFR4udGk26sU8iRBrVb");       
+        // await hubContract.makeGame("MDAO", "Virtual Brick", "ipfs://QmWhoRa1oYoJ1xrhgq2BUqQUiY2CFR4udGk26sU8iRBrVb");
+        // await hubContract.makeGame("PROJECT", "Love Store", "ipfs://Qmc7AABpuW6zw8WHus8vNPXs25ueaX4guSKCNL8byvPAJi");
 
         /*
         console.log("Deploy All Game Extensions & Set to Hub");
