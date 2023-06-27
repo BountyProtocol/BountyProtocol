@@ -34,6 +34,7 @@ describe("Protocol", function () {
   let tester3: Signer;
   let tester4: Signer;
   let tester5: Signer;
+  let tester6: Signer;
   let authority: Signer;
   let addrs: Signer[];
 
@@ -41,7 +42,7 @@ describe("Protocol", function () {
   before(async function () {
 
     //Populate Accounts
-    [owner, admin, admin2, tester, tester2, tester3, tester4, tester5, authority, ...addrs] = await ethers.getSigners();
+    [owner, admin, admin2, tester, tester2, tester3, tester4, tester5, tester6, authority, ...addrs] = await ethers.getSigners();
 
     //Fetch Addresses
     this.ownerAddr = await owner.getAddress();
@@ -52,6 +53,7 @@ describe("Protocol", function () {
     this.tester3Addr = await tester3.getAddress();
     this.tester4Addr = await tester4.getAddress();
     this.tester5Addr = await tester5.getAddress();
+    this.tester6Addr = await tester6.getAddress();
     this.authorityAddr = await authority.getAddress();
 
 
@@ -600,6 +602,15 @@ describe("Protocol", function () {
       // console.log("Rule Getter:", JSON.stringify(ruleData)); //As array. No Keys
       
       // await expect(ruleData).to.include.members(Object.values(rule));
+    });
+
+    it("The Soulless Can Create a New Game", async function () {
+      //Deploy a New Game
+      const game = {name: "Soulless Project", type: "PROJECT"};
+      await hubContract.connect(addrs[0]).makeGame(game.type, game.name, test_uri);
+      //Deploy new SafeERC Contracts
+      await hubContract.connect(addrs[1]).makeERC721("NAME", "SYMBOL", "URI721");
+      await hubContract.connect(addrs[2]).makeERC1155("URI1155");
     });
 
     it("Should Update Rule", async function () {

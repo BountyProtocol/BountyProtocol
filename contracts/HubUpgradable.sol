@@ -87,6 +87,19 @@ contract HubUpgradable is
         _beaconAdd("task", taskContract);
     }
 
+    /// Get SBT for Account. Mint if needed. //Like the Tracker //TODO: Maybe to be inherited...
+    function _getExtTokenIdOrMake(address account) internal returns (uint256) {
+        address objectContract = dataRepo().addressGet("SBT");
+        uint256 tokenId = ISoul(objectContract).tokenByAddress(account);
+        //Support for Soulless accounts
+        if(tokenId == 0){
+            //Auto-mint token for Account
+            tokenId = ISoul(objectContract).mintFor(account, "");
+            // mintForAccount(account, "")
+        }        
+        return tokenId;
+    }
+
     /// Upgrade Permissions
     function _authorizeUpgrade(address newImplementation) internal onlyOwner override { }
 
@@ -142,7 +155,7 @@ contract HubUpgradable is
     function getRepoAddr() external view override returns (address) {
         return address(dataRepo());
     }
-
+    
     //--- Factory 
 
     /// Make a new Game
@@ -151,13 +164,10 @@ contract HubUpgradable is
         string calldata name_, 
         string calldata uri_
     ) external override returns (address) {
-        /* [WIP]
+        
         //Support for Soulless accounts
-        if(_getExtTokenId(tx.origin) == 0){
-            //Auto-mint token for Account
-            _mintSoul(tx.origin, "");
-        }
-        */
+        _getExtTokenIdOrMake(_msgSender());
+
         //Deploy
         BeaconProxy newProxyContract = new BeaconProxy(
             _beacons["game"],
@@ -166,6 +176,9 @@ contract HubUpgradable is
                 name_
             )
         );
+        //Remember
+        _games[address(newProxyContract)] = true;
+
         //Register as a Soul
         _mintSoul(address(newProxyContract), uri_);
         //Event
@@ -176,8 +189,6 @@ contract HubUpgradable is
         //Assing Default Roles
         ICTXEntityUpgradable(address(newProxyContract)).roleAssign(_msgSender(), "admin");
         ICTXEntityUpgradable(address(newProxyContract)).roleAssign(_msgSender(), "member");
-        //Remember
-        _games[address(newProxyContract)] = true;
         //Register Game to Repo
         dataRepo().addressAdd("game", address(newProxyContract));
         //Return
