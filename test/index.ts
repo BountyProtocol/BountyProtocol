@@ -573,10 +573,7 @@ describe("Protocol", function () {
       ];
       
       //Add Rule
-      const tx = await this.gameContract.connect(admin).ruleAdd(rule, effects1, confirmation);
-      // const gameRules = await ethers.getContractAt("IRules", this.gameContract.address);
-      // const tx = await gameRules.connect(admin).ruleAdd(rule, confirmation, effects1);
-      
+      const tx = await this.gameContract.connect(admin).ruleAdd(rule, effects1, confirmation);      
       // wait until the transaction is mined
       await tx.wait();
       // const receipt = await tx.wait()
