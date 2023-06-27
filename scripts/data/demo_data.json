@@ -1,0 +1,170 @@
+[
+    {
+        "id": "1",
+        "owner": "0xc0d1d74547356b2be0709ce841f5f2fa5d8c63d7",
+        "name": "",
+        "type": "HUB",
+        "role": "",
+        "uri": null
+    },
+    {
+        "id": "10",
+        "owner": "0xec438d76b5504cc0cf5971b7850b4c776de5b8b7",
+        "name": "SoulSystem Protocol",
+        "type": "GAME",
+        "role": "PROJECT",
+        "uri": "ipfs://QmZ9oHCQ5ehGhuLSN5UWagENAjqVhyL1hxKDjtVd76qBCF"
+    },
+    {
+        "id": "11",
+        "owner": "0xe6eb36fc95a316628ab8118b05261d76019affd7",
+        "name": "Display POAPs on profile",
+        "type": "TASK",
+        "role": "bounty",
+        "uri": "ipfs://QmP3QUDtyXVSDADvn9EzX9U89xKLdnquxtpk1fyH7iZiaT"
+    },
+    {
+        "id": "12",
+        "owner": "0x9a22ae4da446a05181a5856fe7bc777850320425",
+        "name": "Add a Soul Search Box",
+        "type": "TASK",
+        "role": "bounty",
+        "uri": "ipfs://QmW9n9PcqgapU7N91sXTdF8VaMzEYQXLLfsJfy5t2RnuTG"
+    },
+    {
+        "id": "13",
+        "owner": "0x6a101e16d2c0d2c0fd6beb5e7b4dbc5c6813cdc6",
+        "name": "Looking for a designer referral ",
+        "type": "TASK",
+        "role": "bounty",
+        "uri": "ipfs://QmdAck5HTk3nGJcpK6MtJPE65moyHBdZgsND4q5TpcsJ4Q"
+    },
+    {
+        "id": "17",
+        "owner": "0x5f6f4aba0f2fb53a271415561a5b5b120c63ec90",
+        "name": "Elon Tusk",
+        "type": "",
+        "role": "",
+        "uri": "ipfs://QmPkEPAmCkRTkSUMwLb44Q1MgaMpEwSzjf5SoXNc3xzfgG"
+    },
+    {
+        "id": "18",
+        "owner": "0x62c32f0b4e7db12711302880a55751747fe883a9",
+        "name": "RoyVerse",
+        "type": "GAME",
+        "role": "PROJECT",
+        "uri": "ipfs://QmY1KYSmKZEkekPmimuoMx3bX6zSw5SAEnoEiznunZdZZb"
+    },
+    {
+        "id": "19",
+        "owner": "0x1c1898db49016e96922c477e518d91d400aeccf8",
+        "name": "Elmaliah Amos",
+        "type": "",
+        "role": "",
+        "uri": "ipfs://QmSN2jzjse2azvfFEEYMkz1Lc8RQUkMEyRFjTSZgtyvsqC"
+    },
+    {
+        "id": "2",
+        "owner": "0x4306d7a79265d2cb85db0c5a55ea5f4f6f73c4b1",
+        "name": "",
+        "type": "",
+        "role": "",
+        "uri": "https://ipfs.infura.io/ipfs/QmcQGNWgoba9bQyuB69wPhnxSRg1kunwTUnrNp97NiaLgB"
+    },
+    {
+        "id": "20",
+        "owner": "0xdfe29e6d515819aca94e5b292fac0bf66cb0847d",
+        "name": "DMV WA",
+        "type": "GAME",
+        "role": "MDAO",
+        "uri": "ipfs://QmeH6XbYEGxQoKLKL8ggcZmNtxs63XJH1KtQj5eQpgFDiR"
+    },
+    {
+        "id": "21",
+        "owner": "0x489d80f44c764721e488ed77388e9a7c9f291b1b",
+        "name": "Pockets of light",
+        "type": "GAME",
+        "role": "PROJECT",
+        "uri": "ipfs://QmPNwxdbvAtJJ8ZmmwPZCDJa8S6p57DLwHZDtT1971QJEb"
+    },
+    {
+        "id": "22",
+        "owner": "0x92e6e145a4490dbc46531708a9b0a6854580f2f4",
+        "name": "Start your own community and spread the light!",
+        "type": "TASK",
+        "role": "bounty",
+        "uri": "ipfs://Qmf3qAb7FeLXaDSmp1CrD5gJF2zde77r51nsAxDDVdni4i"
+    },
+    {
+        "id": "23",
+        "owner": "0x10a7b128be4c4361ad9daaa6ef4a877268e8dfc0",
+        "name": "Ecotopia",
+        "type": "GAME",
+        "role": "PROJECT",
+        "uri": "ipfs://QmYJLY8BQf8ppXQke9ybRwSVziPxDt2wFJxWV5XVwUDpDr"
+    },
+    {
+        "id": "24",
+        "owner": "0x6ac7a5f4e338fdfa6ff19cb8013df62ee1281318",
+        "name": "Love Store",
+        "type": "GAME",
+        "role": "PROJECT",
+        "uri": "ipfs://Qmc7AABpuW6zw8WHus8vNPXs25ueaX4guSKCNL8byvPAJi"
+    },
+    {
+        "id": "3",
+        "owner": "0x70867d94302a4eef645436699607b58122ee9fa9",
+        "name": "",
+        "type": "",
+        "role": "",
+        "uri": "https://ipfs.infura.io/ipfs/QmaYLYTWn1DEJMDm5L6P9eybbYARJ8cz3Hcgcq73pqcRsE"
+    },
+    {
+        "id": "4",
+        "owner": "0x70d374376c987a3ebcf8168f8ff7f84097664868",
+        "name": "JJ the neighbor",
+        "type": "",
+        "role": "",
+        "uri": "ipfs://QmQrbnxHsNKzMFFpfnB5qPyvnZT4xzwFKkDs6vdRgxxWhm"
+    },
+    {
+        "id": "5",
+        "owner": "0xe1a71e7ccccc9d06f8bf1cca3f236c0d04da741b",
+        "name": "",
+        "type": "",
+        "role": "",
+        "uri": "https://ipfs.infura.io/ipfs/QmNrx3xzYLNFVkmR5z6Hs2F8idLWtjz3mW7zzvcFwvwC99"
+    },
+    {
+        "id": "6",
+        "owner": "0x874a6e7f5e9537c4f934fa0d6cea906e24fc287d",
+        "name": "Roy Toledo",
+        "type": "",
+        "role": "",
+        "uri": "ipfs://QmVoTKk2VuHD4qfcWU4dzgZcCfy5cy4Nf6uikLh28t6r7C"
+    },
+    {
+        "id": "7",
+        "owner": "0x3f121f9a16bd6c83d325985417ada3fe0f517b7d",
+        "name": "",
+        "type": "",
+        "role": "",
+        "uri": "https://ipfs.infura.io/ipfs/QmStWbXsxwDbXVfAKmvg5GYGXGyL1bvVD6xHr6UKEbHCso"
+    },
+    {
+        "id": "8",
+        "owner": "0x8b08bda46eb904b18e8385f1423a135167647ca3",
+        "name": "Alan Watts",
+        "type": "",
+        "role": "",
+        "uri": "ipfs://Qma8kj5sTEQAgV42hrLqmqj14NvNcaXn2RfgMdzu2M15DJ"
+    },
+    {
+        "id": "9",
+        "owner": "0xf5ba237edbdc189be4de7fbb3e22f21978bc6929",
+        "name": "Virtual Brick",
+        "type": "GAME",
+        "role": "MDAO",
+        "uri": "ipfs://QmWhoRa1oYoJ1xrhgq2BUqQUiY2CFR4udGk26sU8iRBrVb"
+    }
+]
