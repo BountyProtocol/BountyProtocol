@@ -18,13 +18,21 @@ async function main() {
   console.log('JSON:', demo_data);
 
   //Demo Souls
-  const soulContract = await ethers.getContractFactory("SoulUpgradable").then(res => res.attach(contractAddr.avatar));
+  // const soulContract = await ethers.getContractFactory("SoulUpgradable").then(res => res.attach(contractAddr.avatar));
+  const soulContract = await ethers.getContractAt('SoulUpgradable', contractAddr.avatar);
+  const hubContract = await ethers.getContractAt('HubUpgradable', contractAddr.hub);
+
   // for(let soul of getSoulsData()){
   for(let soul of demo_data){
-    if(soul.type == '' && soul.role == '')
     try{
-      await soulContract.mintFor(soul.owner, soul.uri);
-      console.log(`Soul Added for Account:'${soul.owner}'`)
+      if(soul.type == '' && soul.role == ''){
+        await soulContract.mintFor(soul.owner, soul.uri);
+        console.log(`Soul Added for Account:'${soul.owner}'`);
+      }
+      else if(soul.type == 'GAME'){
+        //Deploy a New Game
+        // await hubContract.makeGame(soul.role, soul.name, soul.uri);
+      }
     }catch(error){
       console.log("[CAUGHT] Skip Account:"+soul.owner, error);
     }
