@@ -72,4 +72,7 @@ interface IHub {
     /// New Contract Created
     event HubChanged(address contractAddress);
 
+    /// Single Token Transfer [From ERC1155Tracker]
+    event TransferByToken(address indexed operator, uint256 indexed fromOwnerToken, uint256 indexed toOwnerToken, uint256 id, uint256 value);
+
 }

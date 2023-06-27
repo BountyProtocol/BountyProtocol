@@ -167,7 +167,7 @@ contract HubUpgradable is
             )
         );
         //Register as a Soul
-        _mintSoul(address(newProxyContract), uri_);
+        uint256 sbt = _mintSoul(address(newProxyContract), uri_);
         //Event
         emit ContractCreated("game", address(newProxyContract));
         //Set Type (to be called after creating a Soul)
@@ -180,6 +180,12 @@ contract HubUpgradable is
         _games[address(newProxyContract)] = true;
         //Register Game to Repo
         dataRepo().addressAdd("game", address(newProxyContract));
+        
+        //Pretend to be ERC1155Tracker
+        address operator = _msgSender();
+        uint id = dataRepo().addressGetAll("game").length;
+        emit TransferByToken(operator, 0, sbt, id, 1);
+
         //Return
         return address(newProxyContract);
     }
@@ -207,8 +213,16 @@ contract HubUpgradable is
         ICTXEntityUpgradable(address(newProxyContract)).confSet("role", type_);
         //Set Container
         IProcedure(address(newProxyContract)).setParentCTX(_msgSender());
-        //Remember Parent
+        //Remember Parent (Owner)
         _procedures[address(newProxyContract)] = _msgSender();
+
+        
+        //Pretend to be ERC1155Tracker
+        address operator = _msgSender();
+        uint id = dataRepo().addressGetAll("game").length;
+        emit TransferByToken(operator, 0, sbt, id, 1);
+
+
         //Return
         return address(newProxyContract);
     }
