@@ -44,7 +44,6 @@ async function main() {
         const hubContract = await ethers.getContractAt('HubUpgradable', contractAddr.hub);
 
         //Transfer Protocol Ownership
-        // const hubContract = await ethers.getContractAt('OwnableUpgradeable', contractAddr.hub);
         // hubContract.transferOwnership("0xE1a71E7cCCCc9D06f8bf1CcA3f236C0D04Da741B");
 
         //Deploy a New Game
