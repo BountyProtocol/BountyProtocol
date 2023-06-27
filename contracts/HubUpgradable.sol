@@ -187,8 +187,8 @@ contract HubUpgradable is
         ICTXEntityUpgradable(address(newProxyContract)).confSet("type", type_);
         ICTXEntityUpgradable(address(newProxyContract)).confSet("role", type_);
         //Assing Default Roles
-        ICTXEntityUpgradable(address(newProxyContract)).roleAssign(_msgSender(), "admin");
-        ICTXEntityUpgradable(address(newProxyContract)).roleAssign(_msgSender(), "member");
+        ICTXEntityUpgradable(address(newProxyContract)).roleAssign(_msgSender(), "admin", 1);
+        ICTXEntityUpgradable(address(newProxyContract)).roleAssign(_msgSender(), "member", 1);
         //Register Game to Repo
         dataRepo().addressAdd("game", address(newProxyContract));
         //Return

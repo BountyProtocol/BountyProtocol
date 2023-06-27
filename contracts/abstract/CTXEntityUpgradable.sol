@@ -8,7 +8,7 @@ import "../libraries/DataTypes.sol";
 
 /**
  * @title Base for CTX Entities
- * @dev Version 1.0.0
+ * @dev Version 1.1.0
  */
 abstract contract CTXEntityUpgradable is 
     ICTXEntityUpgradable,
@@ -91,29 +91,29 @@ abstract contract CTXEntityUpgradable is
     }
 
     /// Assign Someone Else to a Role
-    function roleAssign(address account, string memory role) public virtual override AdminOrOwnerOrHub {
-        _roleAssign(account, role, 1);
+    function roleAssign(address account, string memory role, uint256 amount) public virtual override AdminOrOwnerOrHub {
+        _roleAssign(account, role, amount);
     }
 
     /// Assign Tethered Token to a Role
-    function roleAssignToToken(uint256 sbt, string memory role) public virtual override AdminOrOwnerOrHub {
-        _roleAssignToToken(sbt, role, 1);
+    function roleAssignToToken(uint256 sbt, string memory role, uint256 amount) public virtual override AdminOrOwnerOrHub {
+        _roleAssignToToken(sbt, role, amount);
     }
 
     /// Remove Someone Else from a Role
-    function roleRemove(address account, string memory role) public virtual override roleExists(role) AdminOrOwner {
-        _roleRemove(account, role, 1);
+    function roleRemove(address account, string memory role, uint256 amount) public virtual override roleExists(role) AdminOrOwner {
+        _roleRemove(account, role, amount);
     }
 
     /// Remove Tethered Token from a Role
-    function roleRemoveFromToken(uint256 sbt, string memory role) public virtual override roleExists(role) AdminOrOwner {
-        _roleRemoveFromToken(sbt, role, 1);
+    function roleRemoveFromToken(uint256 sbt, string memory role, uint256 amount) public virtual override roleExists(role) AdminOrOwner {
+        _roleRemoveFromToken(sbt, role, amount);
     }
 
     /// Change Role Wrapper (Add & Remove)
-    function roleChange(address account, string memory roleOld, string memory roleNew) external virtual override {
-        roleAssign(account, roleNew);
-        roleRemove(account, roleOld);
+    function roleChange(address account, string memory roleOld, string memory roleNew, uint256 amount) external virtual override {
+        roleAssign(account, roleNew, amount);
+        roleRemove(account, roleOld, amount);
     }
     
     /// Get Token URI by Token ID

@@ -12,8 +12,7 @@ import "./interfaces/ITask.sol";
 
 /**
  * @title Task / Request for Product (RFP) Entity
- * @dev Version 1.2.1
- * [TODO] Support for different share withing roles
+ * @dev Version 1.3.0
  * [TODO] Distribute config for different roles
  * [TODO] Protocol Treasury Donation
  */
@@ -49,7 +48,7 @@ contract TaskUpgradable is ITask, Procedure, Escrow {
     
     /// Accept Application (Assign Role)
     function acceptApplicant(uint256 sbtId) external override {
-        roleAssignToToken(sbtId, "applicant");
+        roleAssignToToken(sbtId, "applicant", 1);
     }
     
     //** Added Functionality
@@ -69,11 +68,11 @@ contract TaskUpgradable is ITask, Procedure, Escrow {
 
     /// Approve Delivery (Close Case w/Positive Verdict)
     /// @dev only Authority by inheritance 
-    function deliveryApprove(uint256 sbtId) external override {
+    function deliveryApprove(uint256 sbtId, uint256 amount) external override {
         //Validate Stage
         require(stage < DataTypes.ClaimStage.Closed , "STAGE:TOO_LATE");
         //Add as Subject
-        roleAssignToToken(sbtId, "subject");
+        roleAssignToToken(sbtId, "subject", amount);
         //Push Forward to Stage:Execusion
         if(stage < DataTypes.ClaimStage.Execution){
             _setStage(DataTypes.ClaimStage.Execution);

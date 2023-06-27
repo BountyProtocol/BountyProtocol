@@ -147,6 +147,7 @@ library DataTypes {
     struct InputRoleToken {
         uint256 tokenId;
         string role;
+        // uint256 amount;  //TBD - breaking upgrade?
     }
 
     //Decision Input

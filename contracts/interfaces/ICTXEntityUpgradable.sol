@@ -12,19 +12,19 @@ interface ICTXEntityUpgradable {
     function roleCreate(string calldata role) external;
 
     /// Assign Someone to a Role
-    function roleAssign(address account, string calldata role) external;
+    function roleAssign(address account, string calldata role, uint256 amount) external;
 
     /// Assign Tethered Token to a Role
-    function roleAssignToToken(uint256 toToken, string memory role) external;
+    function roleAssignToToken(uint256 toToken, string memory role, uint256 amount) external;
 
     /// Remove Someone Else from a Role
-    function roleRemove(address account, string calldata role) external;
+    function roleRemove(address account, string calldata role, uint256 amount) external;
 
     /// Remove Tethered Token from a Role
-    function roleRemoveFromToken(uint256 sbt, string memory role) external;
+    function roleRemoveFromToken(uint256 sbt, string memory role, uint256 amount) external;
 
     /// Change Role Wrapper (Add & Remove)
-    function roleChange(address account, string memory roleOld, string memory roleNew) external;
+    function roleChange(address account, string memory roleOld, string memory roleNew, uint256 amount) external;
 
     /// Get Token URI by Token ID
     function uri(uint256 token_id) external returns (string memory);
