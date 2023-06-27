@@ -49,7 +49,7 @@ const contractAddr: any = {
     history:"",
   },
   aurora_plus:{ //0.6.1.1
-    game: "0x938Ce74dee47035C58a9aFeA1FC13B48BA8Dbe3d",
+    game: "0x8B233CcCf7Ee27F36D70492D07a59ca649C1c2ad",
     claim: "0xE70691993390a674A7a62f91e674BE5C843aE4f9",
     task: "0xb36D35f902DEaE9af4a996735a9b4F8dE64a7309",
     hub: "0x3CfF0AC9554Bc90ac37b8b84c2449F5B27f35740", //Owner: 0x3cd4f2D1B4fE810B9C024B0f99DdE37E7B9Ed654
