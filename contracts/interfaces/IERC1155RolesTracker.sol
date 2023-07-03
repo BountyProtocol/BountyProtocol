@@ -33,6 +33,4 @@ interface IERC1155RolesTracker {
     /// New Role Created
     event RoleCreated(uint256 indexed id, string role);
 
-    /// URI Change Event
-    event RoleURIChange(string value, string role);
 }

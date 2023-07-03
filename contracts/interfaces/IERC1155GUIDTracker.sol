@@ -18,8 +18,5 @@ interface IERC1155GUIDTracker {
 
     /// New GUID Created
     event GUIDCreated(uint256 indexed id, bytes32 guid);
-    
-    /// URI Change Event
-    event GUIDURIChange(string value, bytes32 indexed guid);
    
 }

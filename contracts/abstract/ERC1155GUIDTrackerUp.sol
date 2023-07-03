@@ -132,7 +132,7 @@ abstract contract ERC1155GUIDTrackerUp is
         uint256 tokenId = _GUIDToId(guid);
         _tokenURIs[tokenId] = _tokenURI;
         //URI Changed Event
-        emit GUIDURIChange(_tokenURI, guid);
+        emit URI(_tokenURI, tokenId);
     }
 
     /// Get Metadata URI by GUID

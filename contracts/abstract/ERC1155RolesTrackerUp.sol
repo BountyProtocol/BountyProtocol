@@ -162,7 +162,7 @@ abstract contract ERC1155RolesTrackerUp is
         uint256 tokenId = roleToId(role);
         _tokenURIs[tokenId] = _tokenURI;
         //URI Changed Event
-        emit RoleURIChange(_tokenURI, role);
+        emit URI(_tokenURI, tokenId);
     }
 
 }
