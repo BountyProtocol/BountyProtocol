@@ -48,10 +48,10 @@ const contractAddr: any = {
     avatar: "",
     history:"",
   },
-  aurora_plus:{ //0.6.1.1
-    game: "0x04d9Afa36005F28d3Da3c19b2b7A1220d12A7a49", //0.6.2
-    claim: "0xE70691993390a674A7a62f91e674BE5C843aE4f9",
-    task: "0xb36D35f902DEaE9af4a996735a9b4F8dE64a7309",
+  aurora_plus:{ //0.6.2
+    game: "0xe42a960537e1fB2F39361b6cffFa6CeD6162752b", //0.6.2 v2
+    claim: "0xdd2E3C7d34eA7f5876bF7A05775106968b80BA83", //0.6.2 v2
+    task: "0xAb4B21d7651b1484986E1D2790b125be8b6c460B", //0.6.2 v2
     hub: "0x3CfF0AC9554Bc90ac37b8b84c2449F5B27f35740", //Owner: 0xE1a71E7cCCCc9D06f8bf1CcA3f236C0D04Da741B
     avatar: "0xD1b792De2c9c358F0C765C9f07DD618A12d8E97C",
     history: "0x75228869bD1Bbae3b534681826730134e2385a13",
