@@ -11,6 +11,9 @@ interface ICTXEntityUpgradable {
     /// Create a new Role
     function roleCreate(string calldata role) external;
 
+    /// Create a new Role & Set URI
+    function roleMake(string memory role, string memory uri) external;
+
     /// Assign Someone to a Role
     function roleAssign(address account, string calldata role, uint256 amount) external;
 

@@ -500,6 +500,25 @@ describe("Protocol", function () {
       expect(await this.gameContract.roleHas(this.authorityAddr, "authority")).to.equal(true);
     });
     
+    it("Admin can Create New Roles", async function () {
+      const newRoles = [{name:"NewRole1", uri:"NewURI1"}, {name:"NewRole2", uri:"NewURI2"}];
+
+      this.gameContract.connect(admin).roleCreate(newRoles[0].name);
+      //No Duplicates
+      await expect(
+        this.gameContract.connect(admin).roleCreate(newRoles[0].name)
+      ).to.be.reverted;
+
+      this.gameContract.connect(admin).roleMake(newRoles[1].name, newRoles[1].uri);
+      //No Duplicates
+      await expect(
+        this.gameContract.connect(admin).roleMake(newRoles[1].name, newRoles[1].uri)
+      ).to.be.reverted;
+      //Validate URI      
+      expect(await this.gameContract.roleURI(newRoles[1].name)).to.equal(newRoles[1].uri);
+
+    });
+    
     it("Admin can Assign Roles to Lost-Souls", async function () {
       //Check Before
       expect(await this.gameContract.roleHasByToken(soulTokens.unOwned, "authority")).to.equal(false);

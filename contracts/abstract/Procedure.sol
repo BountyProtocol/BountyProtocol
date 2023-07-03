@@ -146,8 +146,16 @@ abstract contract Procedure is IProcedure, CTXEntityUpgradable, Posts {
     //** Role Management
     
     /// Create a new Role
+    ///@dev override just to change the permissions mofidier
     function roleCreate(string memory role) external override AdminOrOwnerOrCTX {
         _roleCreate(role);
+    }
+
+    /// Create a new Role & Set URI
+    ///@dev override just to change the permissions mofidier
+    function roleMake(string memory role, string memory _tokenURI) external virtual override AdminOrOwnerOrCTX {
+        _roleCreate(role);
+        _setRoleURI(role, _tokenURI);
     }
 
     /// Assign to a Role

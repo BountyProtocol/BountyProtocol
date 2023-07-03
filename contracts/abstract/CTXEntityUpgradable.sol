@@ -80,6 +80,12 @@ abstract contract CTXEntityUpgradable is
         _roleCreate(role);
     }
 
+    /// Create a new Role & Set URI
+    function roleMake(string memory role, string memory _tokenURI) external virtual override AdminOrOwnerOrHub {
+        _roleCreate(role);
+        _setRoleURI(role, _tokenURI);
+    }
+
     /// Override Assign Tethered Token to a Role
     function _roleAssign(address account, string memory role, uint256 amount) internal override {
         uint256 sbt = _getExtTokenId(account);
