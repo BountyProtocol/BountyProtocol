@@ -27,14 +27,20 @@ async function main() {
     // await gameContract.confSet("role", "MDAO");
 
     
+    
     //Soul
-    if(0 && contractAddr.avatar){
+    if(1 && contractAddr.avatar){
         const soulContract = await ethers.getContractAt('SoulUpgradable', contractAddr.avatar);
 
         //Mint a Soul
-        let tokenId = await soulContract.mint("");
+        // let tokenId = await soulContract.mint("");
         // let tokenId = await soulContract.tokenByAddress(this.tester5Addr);
-        console.log("Soul Token ID: ", tokenId);
+        // console.log("Soul Token ID: ", tokenId);
+
+
+        //Aurora - Transfer Profile between Account 
+        // await soulContract.transferFrom("0x8b08BDA46eB904B18E8385F1423a135167647cA3", "0xE1a71E7cCCCc9D06f8bf1CcA3f236C0D04Da741B", 8); //Alan
+        // await soulContract.transferFrom("0x874a6E7F5e9537C4F934Fa0d6cea906e24fc287D", "0x8b08BDA46eB904B18E8385F1423a135167647cA3", 6); //Roy
 
     }
     // else console.error("Failed to find address for 'avatar' Contract", contractAddr);
@@ -57,7 +63,6 @@ async function main() {
             deployGameExt(hubContract);
         }
         */
-
         
         //Game Extension: Court of Law
         // await deployContract("CourtExt", []).then(async res => {
