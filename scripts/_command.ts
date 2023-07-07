@@ -27,9 +27,16 @@ async function main() {
     // await gameContract.confSet("role", "MDAO");
 
     
-    
+    //Open Repo
+    if(0 && publicAddr.openRepo){
+        const openRepoContract = await ethers.getContractAt('OpenRepoUpgradable', publicAddr.openRepo);
+
+        const res = await openRepoContract.addressGetAllOf('0xcf516b3218ea79aa51c886b643adfd699d9e09ac', 'claim');
+        console.log("Claims:", res);
+    }
+
     //Soul
-    if(1 && contractAddr.avatar){
+    if(0 && contractAddr.avatar){
         const soulContract = await ethers.getContractAt('SoulUpgradable', contractAddr.avatar);
 
         //Mint a Soul
@@ -46,8 +53,15 @@ async function main() {
     // else console.error("Failed to find address for 'avatar' Contract", contractAddr);
 
     //Hub Associations & Validation 
-    if(0 && contractAddr.hub){
+    if(1 && contractAddr.hub){
         const hubContract = await ethers.getContractAt('HubUpgradable', contractAddr.hub);
+
+        //Update Game Extension: Project
+        // await deployContract("ProjectExt", []).then(async res => {
+        //     console.log("(i) Deployed Game Extension: ProjectExt", res.address);
+        //     await hubContract.assocSet("GAME_PROJECT", res.address);
+        // });
+    
 
         //Transfer Protocol Ownership
         // hubContract.transferOwnership("0xE1a71E7cCCCc9D06f8bf1CcA3f236C0D04Da741B");
