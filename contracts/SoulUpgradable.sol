@@ -246,9 +246,9 @@ contract SoulUpgradable is
         //Non-Transferable (by client)
         require(
             _msgSender() == owner() || //Contract Owner
-                _msgSender() == address(_HUB) || //Hub
-                from == address(0), //Minting
-            "Sorry, assets are non-transferable"
+            _msgSender() == address(_HUB) || //Hub
+            from == address(0), //Minting
+            "SOUL:NON-transferable"
         );
 
         //Update Address Index
@@ -277,14 +277,12 @@ contract SoulUpgradable is
     }
 
     /// Override transferFrom()
-    /// @dev Remove Approval Check. Transfer Privileges are manged in the _beforeTokenTransfer function
+    /// @dev Removed Approval Check. Transfer Privileges are manged in the _beforeTokenTransfer function
     function transferFrom(
         address from,
         address to,
         uint256 tokenId
     ) public virtual override {
-        //solhint-disable-next-line max-line-length
-        // require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: caller is not token owner or approved");
         _transfer(from, to, tokenId);
     }
 
