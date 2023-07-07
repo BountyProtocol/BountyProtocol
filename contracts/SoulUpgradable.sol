@@ -267,7 +267,7 @@ contract SoulUpgradable is
         uint256 tokenId,
         uint256 batchSize
     ) internal virtual override {
-         super._beforeTokenTransfer(from, to, tokenId, batchSize);
+         super._afterTokenTransfer(from, to, tokenId, batchSize);
         //Soul Type (Contract Symbol)
         string memory soulType = Utils.getAddressType(to);
         //Set
