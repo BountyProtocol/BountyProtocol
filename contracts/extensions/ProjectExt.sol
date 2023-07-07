@@ -22,7 +22,7 @@ contract ProjectExt is GameExtension {
         string calldata uri_
     ) public payable returns (address) {
         //Validate Caller Permissions (Member of Game)
-        require(gameRoles().roleHas(_msgSender(), "member"), "Members Only");
+        require(gameRoles().roleHas(_msgSender(), "admin"), "Admins Only");
         //Create new Claim
         address newContract = hub().makeTask(type_, name_, uri_);
         //Register New Contract
