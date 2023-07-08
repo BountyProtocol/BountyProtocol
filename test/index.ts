@@ -562,7 +562,7 @@ describe("Protocol", function () {
       const confirmation = {
         ruling: "authority",  //Decision Maker
         evidence: true, //Require Evidence
-        witness: 1,  //Minimal number of witnesses
+        quorum: 1,  //Minimal number of witnesses
       };
       const rule = {
         // uint256 about;    //About What (Token URI +? Contract Address)
@@ -607,14 +607,14 @@ describe("Protocol", function () {
       for(let effect of effects1) {
         await expect(tx).to.emit(this.ruleRepo, 'RuleEffect').withArgs(this.gameContract.address, 1, effect.domain, effect.value);
       }
-      await expect(tx).to.emit(this.ruleRepo, 'Confirmation').withArgs(this.gameContract.address, 1, confirmation.ruling, confirmation.evidence, confirmation.witness);
+      await expect(tx).to.emit(this.ruleRepo, 'Confirmation').withArgs(this.gameContract.address, 1, confirmation.ruling, confirmation.evidence, confirmation.quorum);
 
       //Add Another Rule
       let tx2 = await this.gameContract.connect(admin).ruleAdd(rule2, effects2, confirmation);
       
       //Expect Event
       await expect(tx2).to.emit(this.ruleRepo, 'Rule').withArgs(this.gameContract.address, 2, rule2.about, rule2.affected, rule2.uri, rule2.negation);
-      await expect(tx2).to.emit(this.ruleRepo, 'Confirmation').withArgs(this.gameContract.address, 2, confirmation.ruling, confirmation.evidence, confirmation.witness);
+      await expect(tx2).to.emit(this.ruleRepo, 'Confirmation').withArgs(this.gameContract.address, 2, confirmation.ruling, confirmation.evidence, confirmation.quorum);
 
       // console.log("Rule Getter:", typeof ruleData, ruleData);   //some kind of object array crossbread
       // console.log("Rule Getter Effs:", ruleData.effects);  //V
@@ -651,7 +651,7 @@ describe("Protocol", function () {
       const confirmation = {
         ruling: "admin",  //Decision Maker
         evidence: false, //Require Evidence
-        witness: 1,  //Minimal number of witnesses
+        quorum: 1,  //Minimal number of witnesses
       };
 
       await this.gameContract.connect(admin).ruleUpdateEffects(ruleId, effects);

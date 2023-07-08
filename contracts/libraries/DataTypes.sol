@@ -113,12 +113,10 @@ library DataTypes {
 
     //Rule Confirmation Method
     struct Confirmation {
-        string ruling;
-        // ruling: "authority"|"jury"|"democracy",  //Decision Maker
-        bool evidence;
-        // evidence: true, //Require Evidence
-        uint witness;
-        // witness: 1,  //Minimal number of witnesses
+        string ruling; //Decision Maker ["authority"|"jury"|"democracy"]
+        bool evidence; //Require Evidence
+        // uint witness; //Minimal number of witnesses //Removed
+        uint quorum; //Minimal number/percent of voters  //Added
     }
 
     //Conditions

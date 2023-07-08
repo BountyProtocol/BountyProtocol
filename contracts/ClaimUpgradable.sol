@@ -115,6 +115,7 @@ contract ClaimUpgradable is IClaim, Procedure {
         require(uniqueRoleMembersCount("subject") > 0 , "ROLE:MISSING_SUBJECT");
         //Validate - Prevent Self Report? (subject != affected)
 
+        /* DEPRECATED
         //Validate Witnesses
         for (uint256 ruleId = 1; ruleId <= _ruleIds.current(); ++ruleId) {
             // DataTypes.Rule memory rule = ruleGet(ruleId);
@@ -124,6 +125,8 @@ contract ClaimUpgradable is IClaim, Procedure {
             //Validate Min Witness Requirements
             require(witnesses >= confirmation.witness, "INSUFFICIENT_WITNESSES");
         }
+        */
+
         //Claim is now Open
         _setStage(DataTypes.ClaimStage.Open);
     }

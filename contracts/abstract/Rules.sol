@@ -120,7 +120,7 @@ abstract contract Rules is IRules {
     /// Set Action's Confirmation Object
     function _confirmationSet(uint256 id, DataTypes.Confirmation memory confirmation) internal {
         _ruleConfirmation[id] = confirmation;
-        emit Confirmation(id, confirmation.ruling, confirmation.evidence, confirmation.witness);
+        emit Confirmation(id, confirmation.ruling, confirmation.evidence, confirmation.quorum);
     }
 
 }

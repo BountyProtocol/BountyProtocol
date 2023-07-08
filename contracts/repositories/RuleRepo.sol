@@ -262,7 +262,7 @@ contract RuleRepo is IRulesRepo {
         //Save
         _ruleConfirmation[msg.sender][id] = confirmation;
         //Event
-        emit Confirmation(msg.sender, id, confirmation.ruling, confirmation.evidence, confirmation.witness);
+        emit Confirmation(msg.sender, id, confirmation.ruling, confirmation.evidence, confirmation.quorum);
     }
 
     /* What is that doing here?
