@@ -7,9 +7,9 @@ If you might be interested or have any questions please use the Issues tab to re
 ```
 
 
-# The Soul-System Protocol 
+# The SoulSystem Protocol 
 
-A Soul-System is a collection of composible primitives based around a soulbound token contract.
+A SoulSystem is a collection of composable primitives based around a soulbound token contract.
 
 
 ## Overview
@@ -18,10 +18,10 @@ This platform allows you to
 
 - Mint SBT profiles to represent users 
 - Create games to represent groups with rules (Distributed Social Organizations)
-- Assign users roles (member, admin, dev, etc') within the distributed organizations (DAO, Pod, etc')
-- Incentives - set up rules reactions for each org/game & reward them with various types of soulbound tokens (rep, xp, etc')
+- Assign users roles (member, admin, dev, etc.) within the distributed organizations (DAO, Pod, etc.)
+- Incentives - set up rules reactions for each org/game & reward them with various types of soulbound tokens (rep, xp, etc.)
 - Design custom interaction flows between entities (Procedures)
-- Open, extendibe, customizable & complient with existing asset types (ERC20/721/1155, etc')
+- Open, extendible, customizable & compliant with existing asset types (ERC20/721/1155, etc.)
 - [WIP] Simplified token-based permission mechanism 
 - [WIP] Use soulbound tokens (role, rep, xp...) for governance
 
@@ -39,15 +39,15 @@ This platform allows you to
 
 ### Environment
 
-Clone .env.example to .env and fill in your environment parameters
+Use .env and add your custom environment variables
 
 ### Commands
 
-- Install environemnt: `npm install`
+- Install environment: `npm install`
 - Run tests: `npx hardhat test`
 - Check contract size: `npx hardhat size-contracts`
-- Deploy foundation (Mumbai): `npx hardhat run scripts/foundation.ts --network mumbai`
-- Deploy protocol (Mumbai): `npx hardhat run scripts/deploy.ts --network mumbai`
+- Deploy foundation (Mumbai): `npx hardhat run scripts/foundation.ts --network aurora`
+- Deploy protocol (Mumbai): `npx hardhat run scripts/deploy.ts --network aurora`
 - Compile contracts: `npx hardhat compile`
 - Cleanup: `npx hardhat clean`
 
