@@ -1,12 +1,6 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.14;
 
-// import "hardhat/console.sol";
-
-// import "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155PausableUpgradeable.sol";
-// import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
-// import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";  //Track Token Supply & Check 
-// import "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "../interfaces/IERC1155GUIDTracker.sol";
 import "../abstract/ERC1155TrackerUpMin.sol";
@@ -75,8 +69,8 @@ abstract contract ERC1155GUIDTrackerUp is
     }
 
     /// Check if GUID Exists
-    // function GUIDExists(bytes32 guid) internal view returns (bool) {
-    //     return (_GUID[guid] != 0);
+    // function GUIDExists(bytes32 guid) external view override returns (bool) {
+    //     return _GUIDExists(guid);
     // }
 
     /// Check if GUID Exists

@@ -110,7 +110,6 @@ abstract contract ERC1155RolesTrackerUp is
         require(_getExtTokenId(account) != 0, "ERC1155RolesTracker: account must own a token on source contract");
         //Assign
         _GUIDAssign(account, _stringToBytes32(role), amount);
-        //TODO: Role Assigned Event?
     }
     
     /// Assign Tethered Token to a Role
@@ -119,19 +118,16 @@ abstract contract ERC1155RolesTrackerUp is
         if(!roleExist(role)) _roleCreate(role);
         //Assign
         _GUIDAssignToToken(ownerToken, _stringToBytes32(role), amount);
-        //TODO: Role Assigned Event?
     }
 
     /// Remove Someone Else from a Role
     function _roleRemoveFromToken(uint256 ownerToken, string memory role, uint256 amount) internal roleExists(role) {
         _GUIDRemoveFromToken(ownerToken, _stringToBytes32(role), amount);
-        //TODO: Role Removed Event?
     }
 
     /// Remove Someone Else from a Role
     function _roleRemove(address account, string memory role, uint256 amount) internal roleExists(role) {
         _GUIDRemove(account, _stringToBytes32(role), amount);
-        //TODO: Role Removed Event?
     }
 
     /// Translate Role to Token ID
