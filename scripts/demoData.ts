@@ -15,7 +15,7 @@ async function main() {
   const path = require("path");
   const dir = path.resolve(__dirname, "./data/demo_data.json");
   const demo_data = JSON.parse(fs.readFileSync(dir, "utf8"));
-  console.log('JSON:', demo_data);
+  // console.log('JSON:', demo_data);
 
   //Demo Souls
   // const soulContract = await ethers.getContractFactory("SoulUpgradable").then(res => res.attach(contractAddr.avatar));
@@ -25,13 +25,13 @@ async function main() {
   // for(let soul of getSoulsData()){
   for(let soul of demo_data){
     try{
-      if(soul.type == '' && soul.role == ''){
+      if(0 && soul.type == '' && soul.role == ''){
         await soulContract.mintFor(soul.owner, soul.uri);
         console.log(`Soul Added for Account:'${soul.owner}'`);
       }
-      else if(soul.type == 'GAME'){
+      else if(0 && soul.type == 'GAME'){
         //Deploy a New Game
-        // await hubContract.makeGame(soul.role, soul.name, soul.uri);
+        await hubContract.makeGame(soul.role, soul.name, soul.uri);
       }
     }catch(error){
       console.log("[CAUGHT] Skip Account:"+soul.owner, error);
