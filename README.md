@@ -1,13 +1,15 @@
 Compossible architecture for representing society
 
 ```
-We are currently looking for a strong design partner with a matching use case. 
+NOTE! This project is still under development. It means the SoulSystem Protocol hasn't been audited and data structures may still change. 
+We are currently partnering with design partners to help ground the progress of the protocol. 
+If you might be interested, have a matching use-case, or just want to say hello, please use the _Issues_ tab to reach out.  
 ```
 
 
-# The Soul-System Protocol 
+# The SoulSystem Protocol 
 
-A Soul-System is a collection of composible primitives based around a soulbound token contract.
+A SoulSystem is a collection of composable primitives based around a soulbound token contract.
 
 
 ## Overview
@@ -16,12 +18,12 @@ This platform allows you to
 
 - Mint SBT profiles to represent users 
 - Create games to represent groups with rules (Distributed Social Organizations)
-- Assign users roles (member, admin, dev, etc') within the distributed organizations (DAO, Pod, etc')
-- Incentives - set up rules reactions for each org/game & reward them with various types of soulbound tokens (rep, xp, etc')
+- Assign users roles (member, admin, dev, etc.) within the distributed organizations (DAO, Pod, etc.)
+- Incentives - set up rules reactions for each org/game & reward them with various types of soulbound tokens (rep, xp, etc.)
 - Design custom interaction flows between entities (Procedures)
-- Open, extendibe, customizable & complient with existing asset types (ERC20/721/1155, etc')
-- [TBD] Use soulbound tokens (role, rep, xp...) for governance
-- [TBD] Recursive control structure between games
+- Open, extendible, customizable & compliant with existing asset types (ERC20/721/1155, etc.)
+- [WIP] Simplified token-based permission mechanism 
+- [WIP] Use soulbound tokens (role, rep, xp...) for governance
 
 ## Architecture
 
@@ -31,22 +33,21 @@ This platform allows you to
 
 - [Docs (Notion)](https://www.notion.so/virtualbrick/Contracts-4e383eb032e34cd08d5f035dee2dd9bb)
 - [Changelog](https://github.com/MentorDAO/BountyProtocol/releases)
-- [Partial Demo](https://solidify.space)
-
+- [Boilerplate/Demo](https://www.soulsystem.app)
+- [Architecture Schemas (Miro)](https://miro.com/app/board/uXjVOH541OI=/?share_link_id=612732936883)
 ## Getting Started
 
 ### Environment
 
-Clone .env.example to .env and fill in your environment parameters
+Use .env and add your custom environment variables
 
 ### Commands
 
-- Install environemnt: `npm install`
+- Install environment: `npm install`
 - Run tests: `npx hardhat test`
 - Check contract size: `npx hardhat size-contracts`
-- Deploy protocol (Rinkeby): `npx hardhat run scripts/deploy.ts --network rinkeby`
-- Deploy foundation (Mumbai): `npx hardhat run scripts/foundation.ts --network mumbai`
-- Deploy protocol (Mumbai): `npx hardhat run scripts/deploy.ts --network mumbai`
+- Deploy foundation (Mumbai): `npx hardhat run scripts/foundation.ts --network aurora`
+- Deploy protocol (Mumbai): `npx hardhat run scripts/deploy.ts --network aurora`
 - Compile contracts: `npx hardhat compile`
 - Cleanup: `npx hardhat clean`
 

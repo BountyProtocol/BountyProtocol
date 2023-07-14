@@ -22,7 +22,7 @@ contract ProjectExt is GameExtension {
         string calldata uri_
     ) public payable returns (address) {
         //Validate Caller Permissions (Member of Game)
-        require(gameRoles().roleHas(_msgSender(), "member"), "Members Only");
+        require(gameRoles().roleHas(_msgSender(), "admin"), "Admins Only");
         //Create new Claim
         address newContract = hub().makeTask(type_, name_, uri_);
         //Register New Contract
@@ -46,8 +46,7 @@ contract ProjectExt is GameExtension {
     /// Register New Claim Contract
     function _registerNewClaim(address claimContract) private {
         //Register Child Contract
-        dataRepo().addressAdd("claim", claimContract);
-        // dataRepo().addressAdd("task", claimContract);   //TODO: Change this to 'task' or 'child' or 'part'...
+        dataRepo().addressAdd("task", claimContract);
     }
 
 }

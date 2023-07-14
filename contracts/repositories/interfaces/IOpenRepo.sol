@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.4;
+pragma solidity 0.8.14;
 
+/**
+ * @title Inteface for a Generic Data Repository 
+ * Version 2.3.0
+ */
 interface IOpenRepo {
 
     //--- Functions
@@ -64,6 +68,30 @@ interface IOpenRepo {
     function boolRemove(string memory key, bool value) external;
 
 
+    //-- Uint256
+
+    /// Get Association
+    function uintGet(string memory key) external view returns (uint256);
+
+    /// Get Contract Association
+    function uintGetOf(address originContract, string memory key) external view returns (uint256);
+
+    /// Get First Address in Index
+    function uintGetIndexOf(address originContract, string memory key, uint256 index) external view returns (uint256);
+
+    /// Get First Address in Index
+    function uintGetIndex(string memory key, uint256 index) external view returns (uint256);
+
+    /// Set  Association
+    function uintSet(string memory key, uint256 value) external;
+
+    /// Add Address to Slot
+    function uintAdd(string memory key, uint256 value) external;
+
+    /// Remove Address from Slot
+    function uintRemove(string memory key, uint256 value) external;
+
+
     //-- Strings
 
     /// Get Association
@@ -112,6 +140,18 @@ interface IOpenRepo {
 
     /// Association Added
     event BoolRemoved(address originContract, string key, bool value);
+
+
+    //-- Uint
+
+    /// Association Set
+    event UintSet(address originContract, string key, uint256 value);
+
+    /// Association Added
+    event UintAdd(address originContract, string key, uint256 value);
+
+    /// Association Added
+    event UintRemoved(address originContract, string key, uint256 value);
 
 
     //-- Strings

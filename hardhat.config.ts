@@ -33,11 +33,22 @@ const config = {
   solidity: {
     compilers: [
       {
-        version: "0.8.4",
+        version: "0.8.9",
         settings: {
           optimizer: {
             enabled: true,
-            runs: 10,
+            runs: 200,
+            // runs: 10,
+          },
+        },
+      },
+      {
+        version: "0.8.14",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+            // runs: 10,
           },
         },
       },
@@ -47,18 +58,14 @@ const config = {
   networks: {
     hardhat: {
     },
-    rinkeby: {
-      url: process.env.RINKEBY_RPC || "",
-      accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
-      gas: 2100000,
-      gasPrice: 8000000000
-      // gasPrice: 10000000000,
-    },
-    goerli: {
-      url: process.env.GOERLI_RPC || "",
-      accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
-    },
-
+    // rinkeby: {
+    //   url: process.env.RINKEBY_RPC || "",
+    //   accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    // },
+    // goerli: {
+    //   url: process.env.GOERLI_RPC || "",
+    //   accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    // },
     mumbai: {
       // url: process.env.MUMBAI_RPC || "",
       // url: "https://rpc-mumbai.maticvigil.com",
@@ -73,12 +80,21 @@ const config = {
       // gasPrice: 1000000000,
       // accounts: [process.env.PRIVATE_KEY]
     },
-
+    aurora_plus:{ // Aurora+    
+      // gas: 2100000,
+      // gasPrice: 8000000000,
+      // chainId: 1313161554
+      // Block explorer: https://aurorascan.dev  
+      url: process.env.AURORA_RPC || "" ,
+      // url: "https://mainnet.aurora.dev/7FoWjbcX9Y2EQdAXkFmjG6pNpv4RYdQTdpE4psY7QBd", //0x3cd4f2D1B4fE810B9C024B0f99DdE37E7B9Ed654
+      accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
     aurora:{
       url: "https://mainnet.aurora.dev/",
       accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
-    aurora_testnet:{
+    aurora_test:{
+      // chainId: 1313161555
       url: "https://testnet.aurora.dev/",
       accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
@@ -105,6 +121,7 @@ const config = {
       polygonMumbai: process.env.ETHERSCAN_API_KEY_POLY,
       optimisticEthereum: process.env.ETHERSCAN_API_KEY_OP,
       optimisticKovan: process.env.ETHERSCAN_API_KEY_OP,
+      aurora: process.env.ETHERSCAN_API_KEY_AURORA,
     }    
   },
 

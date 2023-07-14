@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
-pragma solidity 0.8.4;
+pragma solidity 0.8.14;
 
 /**
  * @title DataTypes
@@ -10,13 +10,13 @@ library DataTypes {
 
     //---
 
-    /// NFT Identifiers
+    //NFT Identifiers
     struct Entity {
         address account;
         uint256 id;
         uint256 chain;
     }
-    /// Rating Domains
+    //Rating Domains
     enum Domain {
         Environment,
         Personal,
@@ -60,9 +60,10 @@ library DataTypes {
     
     // Rule Object
     struct Rule {
-        bytes32 about;   //About What (Action's GUID)      //TODO: Maybe Call This 'actionGUID'? 
+        bytes32 about;   //About What (Action's CID)      //TODO: Maybe Call This 'actionCID'? 
         string affected; //Affected Role. E.g. "investors"
         bool negation;   //0 - Commission  1 - Omission
+        //-- Mutable
         string uri;      //Test & Conditions
         bool disabled;   //1 - Rule Disabled
     }
@@ -72,7 +73,7 @@ library DataTypes {
         string name;
         uint8 value;    // value: 5
         bool direction; // Direction: -
-        // bytes32 action; //Action GUID
+        // bytes32 action; //Action CID
         // bytes data;  //[TBD]
         bool disabled;  //1 - Rule Disabled
     }
@@ -82,7 +83,7 @@ library DataTypes {
         // uint256 domain;
         string domain;
         int256 value;    // value: 5
-        // bytes32 action; //Action GUID
+        // bytes32 action; //Action CID
         // bytes data;  //[TBD]
         bool disabled;  //1 - Rule Disabled
     }
@@ -112,12 +113,16 @@ library DataTypes {
 
     //Rule Confirmation Method
     struct Confirmation {
-        string ruling;
-        // ruling: "authority"|"jury"|"democracy",  //Decision Maker
-        bool evidence;
-        // evidence: true, //Require Evidence
-        uint witness;
-        // witness: 1,  //Minimal number of witnesses
+        string ruling; //Decision Maker ["authority"|"jury"|"democracy"]
+        bool evidence; //Require Evidence
+        // uint witness; //Minimal number of witnesses //Removed
+        uint quorum; //Minimal number/percent of voters  //Added
+    }
+
+    //Conditions
+    struct Condition {
+        string repo; //Condition Repository Identifier 
+        bytes32 id; //Condition CID
     }
 
     //--- Claim Data
@@ -140,6 +145,7 @@ library DataTypes {
     struct InputRoleToken {
         uint256 tokenId;
         string role;
+        // uint256 amount;  //TBD - breaking upgrade?
     }
 
     //Decision Input

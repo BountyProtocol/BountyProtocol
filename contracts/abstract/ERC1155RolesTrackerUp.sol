@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: MIT
-pragma solidity 0.8.4;
+pragma solidity 0.8.14;
 
 import "../interfaces/IERC1155RolesTracker.sol";
 import "./ERC1155GUIDTrackerUp.sol";
@@ -87,30 +87,24 @@ abstract contract ERC1155RolesTrackerUp is
         require(_getExtTokenId(account) != 0, "ERC1155RolesTracker: account must own a token on source contract");
         //Assign
         _GUIDAssign(account, _stringToBytes32(role), amount);
-        //TODO: Role Assigned Event?
     }
     
     /// Assign Tethered Token to a Role
     function _roleAssignToToken(uint256 ownerToken, string memory role, uint256 amount) internal virtual {
         //Create Role if does not Exist
-        if(!roleExist(role)) {
-            _roleCreate(role);
-        }
+        if(!roleExist(role)) _roleCreate(role);
         //Assign
         _GUIDAssignToToken(ownerToken, _stringToBytes32(role), amount);
-        //TODO: Role Assigned Event?
     }
 
     /// Remove Someone Else from a Role
     function _roleRemoveFromToken(uint256 ownerToken, string memory role, uint256 amount) internal roleExists(role) {
         _GUIDRemoveFromToken(ownerToken, _stringToBytes32(role), amount);
-        //TODO: Role Removed Event?
     }
 
     /// Remove Someone Else from a Role
     function _roleRemove(address account, string memory role, uint256 amount) internal roleExists(role) {
         _GUIDRemove(account, _stringToBytes32(role), amount);
-        //TODO: Role Removed Event?
     }
 
     /// Translate Role to Token ID
@@ -126,7 +120,7 @@ abstract contract ERC1155RolesTrackerUp is
 
     /// Create a new Role
     function _roleCreate(string memory role) internal returns (uint256) {
-        uint256 tokenId =  _GUIDMake(_stringToBytes32(role));
+        uint256 tokenId = _GUIDMake(_stringToBytes32(role));
         emit RoleCreated(tokenId, role);
         return tokenId;
     }
@@ -141,7 +135,7 @@ abstract contract ERC1155RolesTrackerUp is
         uint256 tokenId = roleToId(role);
         _tokenURIs[tokenId] = _tokenURI;
         //URI Changed Event
-        emit RoleURIChange(_tokenURI, role);
+        emit URI(_tokenURI, tokenId);
     }
 
 }

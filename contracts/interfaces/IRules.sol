@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.4;
+pragma solidity 0.8.14;
 
 import "../libraries/DataTypes.sol";
 
@@ -25,18 +25,18 @@ interface IRules {
     /// Generate a Global Unique Identifier for a Rule
     // function ruleGUID(DataTypes.Rule memory rule) external pure returns (bytes32);
 
-
     /// Create New Rule
+    //@todo For Compatibility, effects should be the 2nd argument
     function ruleAdd(
         DataTypes.Rule memory rule, 
-        DataTypes.Confirmation memory confirmation, 
-        DataTypes.RepChange[] memory effects
+        DataTypes.RepChange[] memory effects, 
+        DataTypes.Confirmation memory confirmation
     ) external returns (uint256);
 
     /// Update Rule
     function ruleUpdate(
         uint256 id, 
-        DataTypes.Rule memory rule, 
+        DataTypes.Rule memory rule,
         DataTypes.RepChange[] memory effects
     ) external;
     
@@ -44,7 +44,7 @@ interface IRules {
     function ruleDisable(uint256 id, bool disabled) external;
 
     /// Update Rule's Confirmation Data
-    function ruleConfirmationUpdate(uint256 id, DataTypes.Confirmation memory confirmation) external;
+    function ruleUpdateConfirmation(uint256 id, DataTypes.Confirmation memory confirmation) external;
   
     //--- Events
 

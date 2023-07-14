@@ -25,17 +25,9 @@ const contractAddr: any = {
     history: "0x95BD98a656C907fC037aF87Ea740fD94188Cd65f", //D4.4 (Proxy)
   },
   optimism_kovan:{
-    // game: "0xCFeE012952A2ECf7482790aB3EAe15Bd28AE5ae8", //0.5.1
-    // claim: "0xF351C1b7a86E38B59D6Bf0C054Cbf710105b4F0a", //0.5.1
-    // task: "0x59fC460631864A869404F3E79149d2Ac33C24301", //0.5.1
-    // hub: "0x274e54BFFDbb94442FC8Df155d47b42BEF90c76B", //0.5.1
-    // avatar: "0x5d15e4713fA815D0E9c1B5186C80c689a9a6cA21", //0.5.1
-    // history: "0x954b877d371F88238DD7A749BF01758e5f20C3C2", //0.5.1 //Wrong Address. This is the implementation
-
     game: "0xA8846989cBcbE4370B5628D4279271af4E87C036", //0.5.2
     claim: "0xA6F2d6d114778556FDf55eE6B83e20b1d2809C6a", //0.5.2
     task: "0x2E3c328B1F7796D9f0841634494c65f31b9eF24e", //0.5.2
-
     hub: "0x274e54BFFDbb94442FC8Df155d47b42BEF90c76B", //0.5.2 D220807
     avatar: "0x5d25e4713fA815D0E9c1B5186C80c689a9a6cA21", //0.5.2
     history: "0xCC76EB23Fc740f3617a33d236F3E5781B2a27C69", //0.5.2
@@ -49,6 +41,22 @@ const contractAddr: any = {
     history:"",
   },
   polygon:{
+    game: "",
+    claim: "",
+    task: "",
+    hub: "",
+    avatar: "",
+    history:"",
+  },
+  aurora_plus:{ //0.6.2
+    game: "0xF5FFe526c4a4b308Af20e546835FC6F71FEE45D2", //0.6.2 v3
+    claim: "0xdd2E3C7d34eA7f5876bF7A05775106968b80BA83", //0.6.2 v2 (OUT OF DATE)
+    task: "0x30811feD45cD855145BCB7e89109a018Ab946126", //0.6.2 v3
+    hub: "0x3CfF0AC9554Bc90ac37b8b84c2449F5B27f35740", //Owner: 0xE1a71E7cCCCc9D06f8bf1CcA3f236C0D04Da741B
+    avatar: "0xD1b792De2c9c358F0C765C9f07DD618A12d8E97C",
+    history: "0x75228869bD1Bbae3b534681826730134e2385a13",
+  },
+  aurora_test:{
     game: "",
     claim: "",
     task: "",

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // OpenZeppelin Contracts v4.4.1 (access/IAccessControl.sol)
 
-pragma solidity 0.8.4;
+pragma solidity 0.8.14;
 
 /**
  * @dev External interface of AccessControl declared to support ERC165 detection.
@@ -33,6 +33,4 @@ interface IERC1155RolesTracker {
     /// New Role Created
     event RoleCreated(uint256 indexed id, string role);
 
-    /// URI Change Event
-    event RoleURIChange(string value, string role);
 }

@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: MIT
-pragma solidity 0.8.4;
+pragma solidity 0.8.14;
 
 // import "hardhat/console.sol";
 
@@ -11,18 +11,21 @@ import "./interfaces/IOpenRepo.sol";
 import "../abstract/ContractBase.sol";
 import "../libraries/AddressArray.sol";
 import "../libraries/BoolArray.sol";
+import "../libraries/UintArray.sol";
 import "../libraries/StringArray.sol";
 
 
 /**
  * @title Generic Data Repository
  * @dev Retains Data for Other Contracts
- * Version 2.2.0
+ * Version 2.3.0
  * - Save & Return Associations
  * - Owned by Requesting Address/Booleans/Strings
  * - Support Multiple Similar Items
- *
- * Functions:
+ * 
+ * @dev TODO: Enforce Single Type for each Key (register key's type when used)
+ * 
+ * Address Functions:
     Set 
     Add
     Remove 
@@ -55,6 +58,10 @@ contract OpenRepoUpgradable is
     //Associations by Contract Address
     using BoolArray for bool[];
     mapping(address => mapping(string => bool[])) internal _RepoBool;
+
+    //Associations by Contract Address
+    using UintArray for uint256[];
+    mapping(address => mapping(string => uint256[])) internal _RepoUint;
 
     //--- Functions
 
@@ -199,6 +206,60 @@ contract OpenRepoUpgradable is
         //Association Changed Event
         emit BoolRemoved(_msgSender(), key, value);
     }
+
+
+    //-- Uint
+
+    /// Get Uint By Origin Owner Node
+    function uintGetOf(address originContract, string memory key) public view override returns (uint256) {
+        //Validate
+        if(_RepoUint[originContract][key].length == 0) return 0; //Redundant
+        //Return Item
+        return _RepoUint[originContract][key][0];
+    }
+
+    /// Get First Uint in Slot
+    function uintGet(string memory key) external view override returns (uint256) {
+        return uintGetOf(_msgSender(), key);
+    }
+    
+    /// Get First Uint by Index
+    function uintGetIndexOf(address originContract, string memory key, uint256 index) public view override returns (uint256) {
+        return _RepoUint[originContract][key][index];
+    }
+
+    /// Get First Uint in Index
+    function uintGetIndex(string memory key, uint256 index) external view override returns (uint256) {
+        return uintGetIndexOf(_msgSender(), key, index);
+    }
+    
+    /// Get All Uint in Slot
+    function uintGetAll(string memory key) external view returns (uint256[] memory) {
+        return _RepoUint[_msgSender()][key];
+    }
+
+    /// Set Uint
+    function uintSet(string memory key, uint256 value) external override {
+        //Set as the first slot of a new empty array
+        _RepoUint[_msgSender()][key] = [value];
+        //Association Changed Event
+        emit UintSet(_msgSender(), key, value);
+    }
+    
+    /// Add Uint to Slot
+    function uintAdd(string memory key, uint256 value) external override {
+        _RepoUint[_msgSender()][key].push(value);
+        //Association Changed Event
+        emit UintAdd(_msgSender(), key, value);
+    }
+    
+    /// Remove Uint from Slot
+    function uintRemove(string memory key, uint256 value) external override {
+        _RepoUint[_msgSender()][key].removeItem(value);
+        //Association Changed Event
+        emit UintRemoved(_msgSender(), key, value);
+    }
+
 
     //-- Strings
         

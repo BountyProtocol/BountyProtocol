@@ -24,6 +24,19 @@ const publicAddr: any = {
     openRepo: "0xFF20BA5dcD0485e2587F1a75117c0fc80941B61C",
     ruleRepo: "0x98B28D02AF16600790aAE38d8F587eA99585BBb2",
   },
+  aurora:{
+    openRepo: "",
+    ruleRepo: "",
+  },
+  aurora_plus:{
+    //Owner: 0x874a6E7F5e9537C4F934Fa0d6cea906e24fc287D
+    openRepo: "0x2C9cc43C53141AA1CD16699f4Fe24742269c2Fe5", //0.6.1.1
+    ruleRepo: "0xc877ef0c936DF03cB3fC637EF3Db719EFFbED493", //0.6.1.1
+  },
+  aurora_test:{
+    openRepo: "0x0075A3c4c30e3F67C4efABfE6e25532e79bea4b3", //0.6.1.1
+    ruleRepo: "0xFF3aC21bE90C625f1de9EB5a89d3b0BeDb100Db0", //0.6.1.1
+  },
 };
 
 export default publicAddr;

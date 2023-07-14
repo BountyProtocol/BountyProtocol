@@ -34,6 +34,7 @@ describe("Protocol", function () {
   let tester3: Signer;
   let tester4: Signer;
   let tester5: Signer;
+  let tester6: Signer;
   let authority: Signer;
   let addrs: Signer[];
 
@@ -41,7 +42,7 @@ describe("Protocol", function () {
   before(async function () {
 
     //Populate Accounts
-    [owner, admin, admin2, tester, tester2, tester3, tester4, tester5, authority, ...addrs] = await ethers.getSigners();
+    [owner, admin, admin2, tester, tester2, tester3, tester4, tester5, tester6, authority, ...addrs] = await ethers.getSigners();
 
     //Fetch Addresses
     this.ownerAddr = await owner.getAddress();
@@ -52,6 +53,7 @@ describe("Protocol", function () {
     this.tester3Addr = await tester3.getAddress();
     this.tester4Addr = await tester4.getAddress();
     this.tester5Addr = await tester5.getAddress();
+    this.tester6Addr = await tester6.getAddress();
     this.authorityAddr = await authority.getAddress();
 
 
@@ -105,14 +107,27 @@ describe("Protocol", function () {
         
   });
 
-
   describe("OpenRepo", function () {
 
-    it("Should Get Empty Value", async function () {
-      //Change to Closed Game
-      await this.dataRepo.stringGet("TestKey");
-      await this.dataRepo.boolGet("TestKey");
-      await this.dataRepo.addressGet("TestKey");
+    it("Should Default to Empty Values", async function () {
+      expect(await this.dataRepo.stringGet("TestKey")).to.equal("");
+      expect(await this.dataRepo.boolGet("TestKey")).to.equal(false);
+      expect(await this.dataRepo.uintGet("TestKey")).to.equal(0);
+      expect(await this.dataRepo.addressGet("TestKey")).to.equal(ZERO_ADDR);
+    });
+
+    it("Should Store Values", async function () {
+      await this.dataRepo.stringSet("TestKey", "string");
+      expect(await this.dataRepo.stringGet("TestKey")).to.equal("string");
+
+      await this.dataRepo.boolSet("TestKey", true);
+      expect(await this.dataRepo.boolGet("TestKey")).to.equal(true);
+      
+      await this.dataRepo.uintSet("TestKey", 5);
+      expect(await this.dataRepo.uintGet("TestKey")).to.equal(5);
+      
+      await this.dataRepo.addressSet("TestKey", this.tester4Addr);
+      expect(await this.dataRepo.addressGet("TestKey")).to.equal(this.tester4Addr);
     });
 
   });
@@ -123,7 +138,7 @@ describe("Protocol", function () {
     describe("Action Repository", function () {
   
     it("Should store Actions", async function () {
-      let action = {
+      const action = {
         subject: "founder",     //Accused Role
         verb: "breach",
         object: "contract",
@@ -140,7 +155,7 @@ describe("Protocol", function () {
       // await expect(tx).to.emit(actionContract, 'URI').withArgs(actionGUID, test_uri);
 
       //Fetch Action's Struct
-      let actionRet = await actionContract.actionGet(actionGUID);
+      const actionRet = await actionContract.actionGet(actionGUID);
       
       // console.log("actionGet:", actionRet);
       // expect(Object.values(actionRet)).to.eql(Object.values(action));
@@ -337,10 +352,10 @@ describe("Protocol", function () {
     // });
     
     it("Tokens should NOT be transferable", async function () {
-      //Should Fail to transfer -- "NON_TRANSFERABLE"
+      //Should Fail to transfer -- "SOUL:NON_TRANSFERABLE"
       await expect(
         soulContract.connect(tester).transferFrom(this.testerAddr, this.tester2Addr, soulTokens.tester)
-      ).to.be.revertedWith("NON_TRANSFERABLE");
+      ).to.be.revertedWith("SOUL:NON_TRANSFERABLE");
     });
 
     it("Can update token's metadata", async function () {
@@ -458,10 +473,10 @@ describe("Protocol", function () {
       expect(await gameContract.roleHas(this.adminAddr, "admin")).to.equal(false);
       //Should Fail - Require Permissions
       await expect(
-        gameContract.connect(tester).roleAssign(this.adminAddr, "admin", 1)
+        this.gameContract.connect(tester).roleAssign(this.adminAddr, "admin", 1)
       ).to.be.revertedWith("INVALID_PERMISSIONS");
       //Assign Admin
-      await gameContract.roleAssign(this.adminAddr, "admin", 1);
+      await this.gameContract.roleAssign(this.adminAddr, "admin", 1);
       //Check After
       expect(await gameContract.roleHas(this.adminAddr, "admin")).to.equal(true);
     });
@@ -471,19 +486,19 @@ describe("Protocol", function () {
       expect(await gameContract.roleHas(this.authorityAddr, "authority")).to.equal(false);
       //Should Fail - Require Permissions
       await expect(
-        gameContract.connect(tester2).roleAssign(this.authorityAddr, "authority", 1)
+        this.gameContract.connect(tester2).roleAssign(this.authorityAddr, "authority")
       ).to.be.revertedWith("INVALID_PERMISSIONS");
       //Assign Authority
-      await gameContract.connect(admin).roleAssign(this.authorityAddr, "authority", 1);
+      await this.gameContract.connect(admin).roleAssign(this.authorityAddr, "authority");
       //Check After
-      expect(await gameContract.roleHas(this.authorityAddr, "authority")).to.equal(true);
+      expect(await this.gameContract.roleHas(this.authorityAddr, "authority")).to.equal(true);
     });
     
     it("Admin can Assign Roles to Lost-Souls", async function () {
       //Check Before
       expect(await gameContract.roleHasByToken(soulTokens.unOwned, "authority")).to.equal(false);
       //Assign Authority
-      await gameContract.connect(admin).roleAssignToToken(soulTokens.unOwned, "authority", 1)
+      await this.gameContract.connect(admin).roleAssignToToken(soulTokens.unOwned, "authority")
       //Check After
       expect(await gameContract.roleHasByToken(soulTokens.unOwned, "authority")).to.equal(true);
     });
@@ -496,10 +511,10 @@ describe("Protocol", function () {
       
       // const newGameContract = await ethers.getContractFactory("ERC1155").then(res => res.attach(gameContract.address));
 
-      //Should Fail to transfer -- "NON_TRANSFERABLE"
+      //Should Fail to transfer -- "Sorry, assets are non-transferable"
       await expect(
-        gameContract.connect(authority).safeTransferFrom(this.authorityAddr, this.testerAddr, authTokenId, 1, '')
-      ).to.be.revertedWith("NON_TRANSFERABLE");
+        this.gameContract.connect(authority).safeTransferFrom(this.authorityAddr, this.testerAddr, authTokenId, 1, '')
+      ).to.be.revertedWith("Sorry, assets are non-transferable");
     });
     */
 
@@ -512,19 +527,19 @@ describe("Protocol", function () {
       //Check Before
       expect(await gameContract.roleHas(this.tester4Addr, "member")).to.equal(true);
       //Upgrade to Admin
-      await gameContract.roleChange(this.tester4Addr, "member", "admin");
+      await this.gameContract.roleChange(this.tester4Addr, "member", "admin");
       //Check After
       expect(await gameContract.roleHas(this.tester4Addr, "admin")).to.equal(true);
     });
     
     it("Should store Rules", async function () {
       // let actionGUID = '0xa7440c99ff5cd38fc9e0bff1d6dbf583cc757a83a3424bdc4f5fd6021a2e90e2';//await actionContract.callStatic.actionAdd(action);
-      let confirmation = {
+      const confirmation = {
         ruling: "authority",  //Decision Maker
         evidence: true, //Require Evidence
-        witness: 1,  //Minimal number of witnesses
+        quorum: 1,  //Minimal number of witnesses
       };
-      let rule = {
+      const rule = {
         // uint256 about;    //About What (Token URI +? Contract Address)
         about: actionGUID, //"0xa7440c99ff5cd38fc9e0bff1d6dbf583cc757a83a3424bdc4f5fd6021a2e90e2",
         affected: "investor",  //Beneficiary
@@ -534,11 +549,11 @@ describe("Protocol", function () {
         negation: false,
       };
       // Effect Object (Describes Changes to Rating By Type)
-      let effects1 = [
+      const effects1 = [
         {domain:'professional', value:5,},
         {domain:'social', value:5,},
       ];
-      let rule2 = {
+      const rule2 = {
         // uint256 about;    //About What (Token URI +? Contract Address)
         about: actionGUID, //"0xa7440c99ff5cd38fc9e0bff1d6dbf583cc757a83a3424bdc4f5fd6021a2e90e2",
         affected: "god",  //Beneficiary
@@ -548,13 +563,14 @@ describe("Protocol", function () {
         negation: false,
       };
       // Effect Object (Describes Changes to Rating By Type)
-      let  effects2 = [
+      const  effects2 = [
         {domain:'environmental', value:10,},
         {domain:'personal', value:4,},
       ];
       
       //Add Rule
-      let tx = await this.gameContract.connect(admin).ruleAdd(rule, confirmation, effects1);
+      const tx = await this.gameContract.connect(admin).ruleAdd(rule, effects1, confirmation);      
+      // wait until the transaction is mined
       await tx.wait();
 
       //Expect Event
@@ -563,17 +579,37 @@ describe("Protocol", function () {
         //Expect Effects
         await expect(tx).to.emit(this.ruleRepo, 'RuleEffect').withArgs(this.gameContract.address, 1, effect.domain, effect.value);
       }
-      //Expect Confirmation
       await expect(tx).to.emit(this.ruleRepo, 'Confirmation').withArgs(this.gameContract.address, 1, confirmation.ruling, confirmation.evidence, confirmation.witness);
 
       //Add Another Rule
       let tx2 = await this.gameContract.connect(admin).ruleAdd(rule2, confirmation, effects2);
+      
+      
+            
       //Expect Event
       await expect(tx2).to.emit(this.ruleRepo, 'Rule').withArgs(this.gameContract.address, 2, rule2.about, rule2.affected, rule2.uri, rule2.negation);
       await expect(tx2).to.emit(this.ruleRepo, 'Confirmation').withArgs(this.gameContract.address, 2, confirmation.ruling, confirmation.evidence, confirmation.witness);
+
+      // expect(await this.gameContract.ruleAdd(actionContract.address)).to.equal("Hello, world!");
+      // let ruleData = await this.gameContract.ruleGet(1);
+      
+      // console.log("Rule Getter:", typeof ruleData, ruleData);   //some kind of object array crossbread
+      // console.log("Rule Getter Effs:", ruleData.effects);  //V
+      // console.log("Rule Getter:", JSON.stringify(ruleData)); //As array. No Keys
+      
+      // await expect(ruleData).to.include.members(Object.values(rule));
     });
 
-    it("Should update rule", async function () {
+    it("The Soulless Can Create a New Game", async function () {
+      //Deploy a New Game
+      const game = {name: "Soulless Project", type: "PROJECT"};
+      await hubContract.connect(addrs[0]).makeGame(game.type, game.name, test_uri);
+      //Deploy new SafeERC Contracts
+      await hubContract.connect(addrs[1]).makeERC721("NAME", "SYMBOL", "URI721");
+      await hubContract.connect(addrs[2]).makeERC1155("URI1155");
+    });
+
+    it("Should Update Rule", async function () {
       let actionGUID = '0xa7440c99ff5cd38fc9e0bff1d6dbf583cc757a83a3424bdc4f5fd6021a2e90e2';
       let rule = {
         about: actionGUID, //"0xa7440c99ff5cd38fc9e0bff1d6dbf583cc757a83a3424bdc4f5fd6021a2e90e2",
@@ -581,16 +617,35 @@ describe("Protocol", function () {
         uri: "ADDITIONAL_DATA_URI",
         negation: false,
       };
-      let effects = [
+      let  effects = [
         {domain:'environmental', value:1},
         {domain:'personal', value:1},
       ];
-      let tx = await this.gameContract.connect(admin).ruleUpdate(2, rule, effects);
+      const conditions = [
+        { repo: 'action', id:actionGUID },
+      ];
+      const confirmation = {
+        ruling: "admin",  //Decision Maker
+        evidence: false, //Require Evidence
+        quorum: 1,  //Minimal number of witnesses
+      };
 
-      // let curEffects = await this.gameContract.effectsGet(2);
+      await this.gameContract.connect(admin).ruleUpdateEffects(ruleId, effects);
+      const curEffects = await this.gameContract.effectsGet(ruleId);
       // console.log("Effects", curEffects);
-      // expect(curEffects).to.include.members(Object.values(effects));    //Doesn't Work...
+      expect(curEffects).to.include.keys(Object.keys(effects));
+      // expect(curEffects).to.include.members(effects);    //Doesn't Work...
 
+      await this.gameContract.connect(admin).ruleUpdateConditions(ruleId, conditions);
+      const curConds = await this.gameContract.conditionsGet(ruleId);
+      // console.log("Conditions:", curConds);
+      expect(curConds).to.include.keys(Object.keys(conditions));
+      // expect(curConds).to.have.members([conditions[0].repo, conditions[0].id]);  //In an Array...
+
+      await this.gameContract.connect(admin).ruleUpdateConfirmation(ruleId, confirmation);
+      const curConfirmation = await this.gameContract.confirmationGet(ruleId);
+      expect(curConfirmation).to.include.keys(Object.keys(confirmation));
+      expect(curConfirmation).to.include.members([confirmation.ruling,confirmation.evidence]);
     });
     
     /**
@@ -880,10 +935,10 @@ describe("Protocol", function () {
     it("Should Apporove Delivery", async function () {
       //Should Fail - Require Permissions
       await expect(
-        this.task1.connect(tester).deliveryApprove(soulTokens.mDAO1)
+        this.task1.connect(tester).deliveryApprove(soulTokens.mDAO1, 1)
       ).to.be.revertedWith("INVALID_PERMISSIONS");
       //Accept Applicant (to Role)
-      await this.task1.connect(admin).deliveryApprove(soulTokens.mDAO1);
+      await this.task1.connect(admin).deliveryApprove(soulTokens.mDAO1, 1);
       //Check After
       expect(await this.task1.roleHasByToken(soulTokens.mDAO1, "subject")).to.equal(true);
     });
@@ -1287,7 +1342,7 @@ describe("Protocol", function () {
 
       it("Game Authoritys Can Assign Themselves to Claim", async function () {
         //Assign as Game Authority
-        gameContract.connect(admin).roleAssign(this.tester4Addr, "authority", 1)
+        gameContract.connect(admin).roleAssign(this.tester4Addr, "authority")
         //Assign Claim Authority
         await this.claimContract.connect(tester4).roleAssign(this.tester4Addr, "authority", 1);
         //Validate

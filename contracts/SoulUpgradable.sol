@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.4;
+pragma solidity 0.8.14;
 
 // import "hardhat/console.sol";
 
@@ -60,7 +60,7 @@ contract SoulUpgradable is
     /// Initializer
     function initialize(address hub) public initializer {
         //Initializers
-        __ERC721_init("Soulbound Tokens (Identity)", "SBT");
+        __ERC721_init("Soulbound Identity", "SBT");
         __ERC721URIStorage_init();
         __UUPSUpgradeable_init();
         __ProtocolEntity_init(hub);
@@ -235,18 +235,20 @@ contract SoulUpgradable is
     }
 
     /// Token Transfer Rules
+    /// TODO: Consider Implementing Support For Multiple Tokens
     function _beforeTokenTransfer(
         address from,
         address to,
-        uint256 tokenId
-    ) internal virtual override(ERC721Upgradeable) {
-        super._beforeTokenTransfer(from, to, tokenId);
+        uint256 tokenId,
+        uint256 batchSize
+    ) internal virtual override {
+        super._beforeTokenTransfer(from, to, tokenId, batchSize);
         //Non-Transferable (by client)
         require(
             _msgSender() == owner() || //Contract Owner
                 _msgSender() == address(_HUB) || //Hub
                 from == address(0), //Minting
-            "NON_TRANSFERABLE"
+            "SOUL:NON_TRANSFERABLE"
         );
 
         //Update Address Index
@@ -258,11 +260,14 @@ contract SoulUpgradable is
     }
 
     /// Hook - After Token Transfer
+    /// TODO: Consider Implementing Support For Multiple Tokens
     function _afterTokenTransfer(
-        address,
+        address from,
         address to,
-        uint256 tokenId
+        uint256 tokenId,
+        uint256 batchSize
     ) internal virtual override {
+         super._afterTokenTransfer(from, to, tokenId, batchSize);
         //Soul Type (Contract Symbol)
         string memory soulType = Utils.getAddressType(to);
         //Set
@@ -272,6 +277,7 @@ contract SoulUpgradable is
     }
 
     /// Override transferFrom()
+    /// @dev Remove Approval Check. Transfer Privileges are manged in the _beforeTokenTransfer function
     function transferFrom(
         address from,
         address to,

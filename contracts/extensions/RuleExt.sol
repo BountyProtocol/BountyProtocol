@@ -42,11 +42,11 @@ contract RuleExt is IRuleExt, GameExtension {
     /// Create New Rule
     function ruleAdd(
         DataTypes.Rule memory rule, 
-        DataTypes.Confirmation memory confirmation, 
-        DataTypes.RepChange[] memory effects
+        DataTypes.RepChange[] memory effects, 
+        DataTypes.Confirmation memory confirmation
     ) public override returns (uint256) {
         require(gameRoles().roleHas(_msgSender(), "admin"), "Admin Only");
-        return _ruleRepo().ruleAdd(rule, confirmation, effects);
+        return _ruleRepo().ruleAdd(rule, effects, confirmation);
     }
 
     /// Update Rule
@@ -66,9 +66,9 @@ contract RuleExt is IRuleExt, GameExtension {
     }
 
     /// Update Rule's Confirmation Data
-    function ruleConfirmationUpdate(uint256 id, DataTypes.Confirmation memory confirmation) external override {
+    function ruleUpdateConfirmation(uint256 id, DataTypes.Confirmation memory confirmation) external override {
         require(gameRoles().roleHas(_msgSender(), "admin"), "Admin Only");
-        _ruleRepo().ruleConfirmationUpdate(id, confirmation);
+        _ruleRepo().ruleUpdateConfirmation(id, confirmation);
     }
 
     

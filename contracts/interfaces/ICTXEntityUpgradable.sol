@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.4;
+pragma solidity 0.8.14;
 
 interface ICTXEntityUpgradable {
 
@@ -11,8 +11,11 @@ interface ICTXEntityUpgradable {
     /// Create a new Role
     function roleCreate(string calldata role) external;
 
+    /// Create a new Role & Set URI
+    function roleMake(string memory role, string memory uri) external;
+
     /// Assign Someone to a Role
-    function roleAssign(address account, string memory role, uint256 amount) external;
+    function roleAssign(address account, string calldata role, uint256 amount) external;
 
     /// Assign Tethered Token to a Role
     function roleAssignToToken(uint256 toToken, string memory role, uint256 amount) external;
@@ -24,7 +27,7 @@ interface ICTXEntityUpgradable {
     function roleRemoveFromToken(uint256 sbt, string memory role, uint256 amount) external;
 
     /// Change Role Wrapper (Add & Remove)
-    function roleChange(address account, string memory roleOld, string memory roleNew) external;
+    function roleChange(address account, string memory roleOld, string memory roleNew, uint256 amount) external;
 
     /// Get Token URI by Token ID
     function uri(uint256 token_id) external returns (string memory);

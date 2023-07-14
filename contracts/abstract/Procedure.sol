@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: MIT
-pragma solidity 0.8.4;
+pragma solidity 0.8.14;
 
 // import "hardhat/console.sol";
 
@@ -146,8 +146,16 @@ abstract contract Procedure is IProcedure, CTXEntityUpgradable, Posts {
     //** Role Management
     
     /// Create a new Role
+    ///@dev override just to change the permissions mofidier
     function roleCreate(string memory role) external override AdminOrOwnerOrCTX {
         _roleCreate(role);
+    }
+
+    /// Create a new Role & Set URI
+    ///@dev override just to change the permissions mofidier
+    function roleMake(string memory role, string memory _tokenURI) external virtual override AdminOrOwnerOrCTX {
+        _roleCreate(role);
+        _setRoleURI(role, _tokenURI);
     }
 
     /// Assign to a Role
@@ -175,8 +183,8 @@ abstract contract Procedure is IProcedure, CTXEntityUpgradable, Posts {
 
     /* Identical to parent
     /// Remove Tethered Token from a Role
-    function roleRemoveFromToken(uint256 ownerToken, string memory role) public override roleExists(role) AdminOrOwner {
-        _roleRemoveFromToken(ownerToken, role, 1);
+    function roleRemoveFromToken(uint256 ownerToken, string memory role, uint256 amount) public override roleExists(role) AdminOrOwner {
+        _roleRemoveFromToken(ownerToken, role, amount);
     }
     */
 

@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: MIT
-pragma solidity 0.8.4;
+pragma solidity 0.8.14;
 
 import "../interfaces/ICTXEntityUpgradable.sol";
 import "../abstract/ProtocolEntityUpgradable.sol";
@@ -8,7 +8,7 @@ import "../libraries/DataTypes.sol";
 
 /**
  * @title Base for CTX Entities
- * @dev Version 1.0.0
+ * @dev Version 1.1.0
  */
 abstract contract CTXEntityUpgradable is 
     ICTXEntityUpgradable,
@@ -80,6 +80,12 @@ abstract contract CTXEntityUpgradable is
         _roleCreate(role);
     }
 
+    /// Create a new Role & Set URI
+    function roleMake(string memory role, string memory _tokenURI) external virtual override AdminOrOwnerOrHub {
+        _roleCreate(role);
+        _setRoleURI(role, _tokenURI);
+    }
+
     /// Override Assign Tethered Token to a Role
     function _roleAssign(address account, string memory role, uint256 amount) internal override {
         uint256 sbt = _getExtTokenId(account);
@@ -111,9 +117,9 @@ abstract contract CTXEntityUpgradable is
     }
     
     /// Change Role Wrapper (Add & Remove)
-    function roleChange(address account, string memory roleOld, string memory roleNew) external virtual override {
-        roleAssign(account, roleNew, 1);
-        roleRemove(account, roleOld, 1);
+    function roleChange(address account, string memory roleOld, string memory roleNew, uint256 amount) external virtual override {
+        roleAssign(account, roleNew, amount);
+        roleRemove(account, roleOld, amount);
     }
     
     /// Get Token URI by Token ID

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.4;
+pragma solidity 0.8.14;
 
 interface ITask {
 
@@ -21,7 +21,7 @@ interface ITask {
     /// Deliver (Just use the Post function directly)
 
     /// Approve Delivery (Close Case w/Positive Verdict)
-    function deliveryApprove(uint256 sbtId) external;
+    function deliveryApprove(uint256 sbtId, uint256 amount) external;
 
     /// Reject Application (Ignore / dApp Function)
     

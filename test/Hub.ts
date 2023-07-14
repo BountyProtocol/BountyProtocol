@@ -39,6 +39,9 @@ describe("Hub", function () {
 
         //--- Deploy Avatar
         avatarContract = await deployUUPS("SoulUpgradable", [hubContract.address]);
+
+        //TODO!! Make these into constants, please! 
+
         //Set Avatar Contract to Hub
         hubContract.assocSet("SBT", avatarContract.address);
         hubContract2.assocSet("SBT", avatarContract.address);

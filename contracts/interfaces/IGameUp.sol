@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.4;
+pragma solidity 0.8.14;
 
 import "../libraries/DataTypes.sol";
 
@@ -29,6 +29,9 @@ interface IGame {
     /// Leave member role in current game
     function leave() external returns (uint256);
 
+    /// Request to Join
+    // function nominate(uint256 soulToken, string memory uri) external;
+    
     /// Add Reputation (Positive or Negative)
     // function repAdd(address contractAddr, uint256 tokenId, string calldata domain, bool rating, uint8 amount) external;
 

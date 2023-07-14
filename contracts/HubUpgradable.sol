@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: MIT
-pragma solidity 0.8.4;
+pragma solidity 0.8.14;
 
 // import "hardhat/console.sol";
 
@@ -46,9 +46,9 @@ contract HubUpgradable is
     string public constant override role = "Hub";
     string public constant override symbol = "HUB";
     mapping(string => address) internal _beacons; // Mapping for Active Game Contracts
-    mapping(address => bool) internal _games; // Mapping for Active Game Contracts
-    mapping(address => address) internal _procedures; // Mapping for Claim Contracts  [G] => [R]
-
+    // Track Deployed Primitives (Children Contracts)
+    mapping(address => bool) internal _games; // Mapping for Active Game Contracts [G] => [Status]
+    mapping(address => address) internal _procedures; // Mapping for Procedure Contracts  [G] => [P]
 
     //--- Modifiers
 
@@ -85,6 +85,19 @@ contract HubUpgradable is
         _beaconAdd("claim", claimContract);
         //Init Task Contract Beacon
         _beaconAdd("task", taskContract);
+    }
+
+    /// Get SBT for Account. Mint if needed. //Like the Tracker //TODO: Maybe to be inherited...
+    function _getExtTokenIdOrMake(address account) internal returns (uint256) {
+        address objectContract = dataRepo().addressGet("SBT");
+        uint256 tokenId = ISoul(objectContract).tokenByAddress(account);
+        //Support for Soulless accounts
+        if(tokenId == 0){
+            //Auto-mint token for Account
+            tokenId = ISoul(objectContract).mintFor(account, "");
+            // mintForAccount(account, "")
+        }        
+        return tokenId;
     }
 
     /// Upgrade Permissions
@@ -142,7 +155,7 @@ contract HubUpgradable is
     function getRepoAddr() external view override returns (address) {
         return address(dataRepo());
     }
-
+    
     //--- Factory 
 
     /// Make a new Game
@@ -151,13 +164,10 @@ contract HubUpgradable is
         string calldata name_, 
         string calldata uri_
     ) external override returns (address) {
-        /* [WIP]
+        
         //Support for Soulless accounts
-        if(_getExtTokenId(tx.origin) == 0){
-            //Auto-mint token for Account
-            _mintSoul(tx.origin, "");
-        }
-        */
+        _getExtTokenIdOrMake(_msgSender());
+
         //Deploy
         BeaconProxy newProxyContract = new BeaconProxy(
             _beacons["game"],
@@ -166,6 +176,9 @@ contract HubUpgradable is
                 name_
             )
         );
+        //Remember
+        _games[address(newProxyContract)] = true;
+
         //Register as a Soul
         _mintSoul(address(newProxyContract), uri_);
         //Event
@@ -176,8 +189,6 @@ contract HubUpgradable is
         //Assing Default Roles
         ICTXEntityUpgradable(address(newProxyContract)).roleAssign(_msgSender(), "admin", 1);
         ICTXEntityUpgradable(address(newProxyContract)).roleAssign(_msgSender(), "member", 1);
-        //Remember
-        _games[address(newProxyContract)] = true;
         //Register Game to Repo
         dataRepo().addressAdd("game", address(newProxyContract));
         //Return

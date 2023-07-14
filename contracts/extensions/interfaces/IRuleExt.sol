@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.4;
+pragma solidity 0.8.14;
 
 import "../../libraries/DataTypes.sol";
 
@@ -19,8 +19,8 @@ interface IRuleExt {
     /// Create New Rule
     function ruleAdd(
         DataTypes.Rule memory rule, 
-        DataTypes.Confirmation memory confirmation, 
-        DataTypes.RepChange[] memory effects
+        DataTypes.RepChange[] memory effects,
+        DataTypes.Confirmation memory confirmation
     ) external returns (uint256);
 
     /// Update Rule
@@ -34,6 +34,6 @@ interface IRuleExt {
     function ruleDisable(uint256 id, bool disabled) external;
 
     /// Update Rule's Confirmation Data
-    function ruleConfirmationUpdate(uint256 id, DataTypes.Confirmation memory confirmation) external;
+    function ruleUpdateConfirmation(uint256 id, DataTypes.Confirmation memory confirmation) external;
 
 }
