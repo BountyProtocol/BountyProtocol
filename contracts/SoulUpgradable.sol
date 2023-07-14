@@ -145,9 +145,9 @@ contract SoulUpgradable is
         int256 score
     ) external override {
         //Validate - Only By Hub
-        // require(_msgSender() == address(_HUB), "Soul:UNAUTHORIZED_ACCESS");
+        // require(_msgSender() == address(_HUB), "SOUL:UNAUTHORIZED_ACCESS");
         //Not by hub - directly by opinion owner
-        require(_msgSender() != address(_HUB), "Soul:UNAUTHORIZED_ACCESS");
+        require(_msgSender() != address(_HUB), "SOUL:UNAUTHORIZED_ACCESS");
         _opinionChange(address(this), tokenId, domain, score);
     }
 
@@ -159,7 +159,7 @@ contract SoulUpgradable is
         int256 score
     ) external override {
         //Not by hub - directly by opinion owner
-        require(_msgSender() != address(_HUB), "Soul:UNAUTHORIZED_ACCESS");
+        require(_msgSender() != address(_HUB), "SOUL:UNAUTHORIZED_ACCESS");
         _opinionChange(contractAddr, tokenId, domain, score);
     }
 
@@ -181,7 +181,7 @@ contract SoulUpgradable is
         return sbt;
     }
     
-    /// Register a Relation type:'creator' to current account
+    /// Relate an entity to current account (creator)
     function relateToCretor(uint256 sbt) private {
         uint256 hubSBT = tokenByAddress(_msgSender());
         //Mint SBT for Hub
@@ -277,7 +277,7 @@ contract SoulUpgradable is
     }
 
     /// Override transferFrom()
-    /// @dev Remove Approval Check. Transfer Privileges are manged in the _beforeTokenTransfer function
+    /// @dev Removed Approval Check. Transfer Privileges are manged in the _beforeTokenTransfer function
     function transferFrom(
         address from,
         address to,
@@ -359,9 +359,10 @@ contract SoulUpgradable is
     function handleSet(uint256 tokenId, string calldata handle) external override {
         //Validate: token control
         require(hasTokenControl(tokenId), "SOUL_NOT_YOURS");
+        //Validate: no handle assigned yet
+        // require(Utils.stringMatch(handleGet(tokenId), ""), "SINGLE_HANDLE_ONLY");
         //Validate: handle available
         require(handleFind(handle) == 0, "HANDLE_TAKEN");
-        //TODO: Validate Acceptible Handles (length & such)
         //Set Handle
         _handleSet(tokenId, handle);
         //Event
