@@ -352,10 +352,10 @@ describe("Protocol", function () {
     // });
     
     it("Tokens should NOT be transferable", async function () {
-      //Should Fail to transfer -- "SOUL:NON-transferable"
+      //Should Fail to transfer -- "SOUL:NON_TRANSFERABLE"
       await expect(
         soulContract.connect(tester).transferFrom(this.testerAddr, this.tester2Addr, soulTokens.tester)
-      ).to.be.revertedWith("SOUL:NON-transferable");
+      ).to.be.revertedWith("SOUL:NON_TRANSFERABLE");
     });
 
     it("Can update token's metadata", async function () {
@@ -536,10 +536,10 @@ describe("Protocol", function () {
       
       // const newGameContract = await ethers.getContractFactory("ERC1155").then(res => res.attach(this.gameContract.address));
 
-      //Should Fail to transfer -- "SOUL:NON-transferable"
+      //Should Fail to transfer -- "SOUL:NON_TRANSFERABLE"
       await expect(
         this.gameContract.connect(authority).safeTransferFrom(this.authorityAddr, this.testerAddr, authTokenId, 1, '')
-      ).to.be.revertedWith("SOUL:NON-transferable");
+      ).to.be.revertedWith("SOUL:NON_TRANSFERABLE");
     });
     */
 

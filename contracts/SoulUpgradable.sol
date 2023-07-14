@@ -248,7 +248,7 @@ contract SoulUpgradable is
             _msgSender() == owner() || //Contract Owner
             _msgSender() == address(_HUB) || //Hub
             from == address(0), //Minting
-            "SOUL:NON-transferable"
+            "SOUL:NON_TRANSFERABLE"
         );
 
         //Update Address Index
