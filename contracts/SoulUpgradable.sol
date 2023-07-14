@@ -246,8 +246,8 @@ contract SoulUpgradable is
         //Non-Transferable (by client)
         require(
             _msgSender() == owner() || //Contract Owner
-                _msgSender() == address(_HUB) || //Hub
-                from == address(0), //Minting
+            _msgSender() == address(_HUB) || //Hub
+            from == address(0), //Minting
             "SOUL:NON_TRANSFERABLE"
         );
 
