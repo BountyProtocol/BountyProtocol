@@ -605,8 +605,10 @@ describe("Protocol", function () {
       await expect(tx).to.emit(this.ruleRepo, 'Rule').withArgs(this.gameContract.address, 1, rule.about, rule.affected, rule.uri, rule.negation);
       
       for(let effect of effects1) {
+        //Expect Effects
         await expect(tx).to.emit(this.ruleRepo, 'RuleEffect').withArgs(this.gameContract.address, 1, effect.domain, effect.value);
       }
+      //Expect Confirmation
       await expect(tx).to.emit(this.ruleRepo, 'Confirmation').withArgs(this.gameContract.address, 1, confirmation.ruling, confirmation.evidence, confirmation.quorum);
 
       //Add Another Rule
