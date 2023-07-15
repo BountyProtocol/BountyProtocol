@@ -16,7 +16,7 @@ library DataTypes {
         uint256 id;
         uint256 chain;
     }
-    //Rating Domains
+    //Rating Domains /* DEPRECATE */
     enum Domain {
         Environment,
         Personal,
@@ -78,9 +78,8 @@ library DataTypes {
         bool disabled;  //1 - Rule Disabled
     }
     */
-    // Effect Structure (Reputation Changes)
+    // Effect Structure (Reputation Changes) 
     struct RepChange {
-        // uint256 domain;
         string domain;
         int256 value;    // value: 5
         // bytes32 action; //Action CID
