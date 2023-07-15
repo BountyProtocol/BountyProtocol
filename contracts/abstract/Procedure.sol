@@ -188,14 +188,14 @@ abstract contract Procedure is IProcedure, CTXEntityUpgradable, Posts {
     function post(string calldata entRole, uint256 tokenId, string calldata uri_) public override {
         //Validate that User Controls The Token
         require(ISoul(getSoulAddr()).hasTokenControlAccount(tokenId, _msgSender())
-            // || ISoul(getSoulAddr()).hasTokenControlAccount(tokenId, tx.origin)
+            || ISoul(getSoulAddr()).hasTokenControlAccount(tokenId, tx.origin)
             , "POST:SOUL_NOT_YOURS"); //Supports Contract Permissions
         //Validate: Soul Assigned to the Role 
-        require(roleHasByToken(tokenId, entRole), "POST:ROLE_NOT_ASSIGNED");    //Validate the Calling Account
+        require(roleHasByToken(tokenId, entRole), "POST:ROLE_NOT_ASSIGNED"); //Validate the Caller Account
         //Validate Stage
         require(stage < DataTypes.ClaimStage.Closed, "STAGE:CLOSED");
         //Post Event
-        _post(_msgSender(), tokenId, entRole, uri_);
+        _post(tx.origin, tokenId, entRole, uri_);
     }
 }
     

@@ -923,7 +923,7 @@ describe("Protocol", function () {
     });
 
     /// Deliver a Task
-    it("Should Post a Delivery (as mDAO)", async function () {
+    it("Should Post a Delivery (as a Game)", async function () {
       let post = {taskAddr: this.task1.address, uri: test_uri2};
       //Validate Permissions
       await expect(
