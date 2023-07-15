@@ -138,29 +138,29 @@ contract SoulUpgradable is
 
     //** Reputation **/
 
-    /// Add Reputation (about another SBT on the same contract)
+    /// Opinion about another soul (SBT on the same contract)
     function opinionAboutSoul(
         uint256 tokenId,
         string calldata domain,
-        int256 score
+        int256 delta
     ) external override {
         //Validate - Only By Hub
         // require(_msgSender() == address(_HUB), "SOUL:UNAUTHORIZED_ACCESS");
         //Not by hub - directly by opinion owner
         require(_msgSender() != address(_HUB), "SOUL:UNAUTHORIZED_ACCESS");
-        _opinionChange(address(this), tokenId, domain, score);
+        _opinionChange(address(this), tokenId, domain, delta);
     }
 
-    /// Add Reputation (Positive or Negative)
+    /// Opinion about another token
     function opinionAboutToken(
         address contractAddr,
         uint256 tokenId,
         string calldata domain,
-        int256 score
+        int256 delta
     ) external override {
         //Not by hub - directly by opinion owner
         require(_msgSender() != address(_HUB), "SOUL:UNAUTHORIZED_ACCESS");
-        _opinionChange(contractAddr, tokenId, domain, score);
+        _opinionChange(contractAddr, tokenId, domain, delta);
     }
 
     //** Token Actions **/

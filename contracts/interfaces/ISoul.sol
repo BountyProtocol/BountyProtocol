@@ -26,7 +26,7 @@ interface ISoul {
     /// Update Token's Metadata
     function update(uint256 tokenId, string memory uri) external returns (uint256);
 
-    /// Add Reputation
+    /// Opinion about another soul
     // function repAdd(uint256 tokenId, string calldata domain, bool rating, uint8 amount) external;
     function opinionAboutSoul(
         uint256 tokenId,
@@ -34,6 +34,7 @@ interface ISoul {
         int256 score
     ) external;
 
+    /// Opinion about another token
     function opinionAboutToken(
         address contractAddr,
         uint256 tokenId,
