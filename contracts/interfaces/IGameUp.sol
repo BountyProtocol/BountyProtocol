@@ -41,6 +41,14 @@ interface IGame {
     /// Register an Incident (happening of a valued action)
     function reportEvent(uint256 ruleId, address account, string calldata detailsURI_) external;
 
+    /// Opinion about another token
+    function opinionAboutToken(
+        address contractAddr,
+        uint256 tokenId,
+        string calldata domain,
+        int256 score
+    ) external;
+    
     //--- Events
 
     event EventConfirmed(uint256 indexed ruleId, string uri);

@@ -54,11 +54,11 @@ abstract contract Opinions is IOpinions {
     }
 
     /// Add Opinion (sbt to sbt)
-    function _opinionChange(address contractAddr, uint256 tokenId, string calldata domain, int256 score) internal {
+    function _opinionChange(address contractAddr, uint256 tokenId, string calldata domain, int256 delta) internal {
         //Fetch Current SBT
         uint256 sbt = _getCurrentSBT();
         //Apply Change
-        (int256 oldValue, int256 newValue) = _rep[sbt][address(this)][tokenId][domain].push(_add, score);
+        (int256 oldValue, int256 newValue) = _rep[sbt][address(this)][tokenId][domain].push(_add, delta);
         //Opinion Change Event
         emit OpinionChange(sbt, contractAddr, tokenId, domain, oldValue, newValue);
     }

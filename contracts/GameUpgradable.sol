@@ -114,6 +114,7 @@ contract GameUpgradable is IGame
     }
 
     /// Execute Rule's Effects (By Claim Contreact)
+    ///@dev [TODO] can we extract this to an extension contract?
     function onClaimConfirmed(
         uint256 ruleId, 
         address targetContract, 
@@ -138,19 +139,25 @@ contract GameUpgradable is IGame
         for (uint256 j = 0; j < effects.length; ++j) {
             // DataTypes.RepChange memory effect = effects[j];
             DataTypes.RepChange memory effect = effects[j];
-            
-            //Register Rep in Game      //{name:'professional', value:5, direction:false}
-            // _repAdd(targetContract, targetTokenId, effect.name, effect.direction, effect.value);
-            //Update Hub    //DEPRECATED
-            // _HUB.repAdd(targetContract, targetTokenId, effect.name, effect.direction, effect.value);
-
             //Update Soul's Opinion (Reputation)
             try ISoul(getSoulAddr()).opinionAboutToken(targetContract, targetTokenId, effect.domain, effect.value) {}   //Failure should not be fatal
-            // try ISoul(getSoulAddr()).opinionAboutSoul(targetTokenId, effect.domain, effect.value) {}   //Failure should not be fatal
             catch Error(string memory) {}
         }
         //
         emit EffectsExecuted(targetTokenId, ruleId, "");
+    }
+
+    /// Opinion about another token
+    function opinionAboutToken(
+        address contractAddr,
+        uint256 tokenId,
+        string calldata domain,
+        int256 delta
+    ) external override {
+        //Validate Permissions
+        require(roleHas(_msgSender(), "admin"), "Admin Only");
+        //Execute
+        ISoul(getSoulAddr()).opinionAboutToken(contractAddr, tokenId, domain, delta);
     }
 
     /// Disable (Disown) Claim
@@ -165,20 +172,20 @@ contract GameUpgradable is IGame
         return dataRepo().addressHas("claim", claimContract);
     }
 
-    /// Add Post 
+    /// Simple Post as Event 
     /// @param entRole  posting as entitiy in role (posting entity must be assigned to role)
     /// @param tokenId  Acting SBT Token ID
     /// @param uri_     post URI
     function post(string calldata entRole, uint256 tokenId, string calldata uri_) external override {
         //Validate that User Controls The Token
         require(ISoul(getSoulAddr()).hasTokenControlAccount(tokenId, _msgSender())
-            || ISoul(getSoulAddr()).hasTokenControlAccount(tokenId, tx.origin)
+            // || ISoul(getSoulAddr()).hasTokenControlAccount(tokenId, tx.origin)
             , "POST:SOUL_NOT_YOURS"); //Supports Contract Permissions
         //Validate: Soul Assigned to the Role 
         require(roleHasByToken(tokenId, entRole), "POST:SOUL_NOT_IN_ROLE");    //Validate the Calling Account
         // require(roleHasByToken(tokenId, entRole), string(abi.encodePacked("TOKEN: ", tokenId, " NOT_ASSIGNED_AS: ", entRole)) );    //Validate the Calling Account
         //Post Event
-        _post(tx.origin, tokenId, entRole, uri_);
+        _post(_msgSender(), tokenId, entRole, uri_);
     }
 
     //** Multi Proxy

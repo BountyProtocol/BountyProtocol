@@ -36,8 +36,11 @@ async function main() {
     }
 
     //Soul
-    if(0 && contractAddr.avatar){
+    if(1 && contractAddr.avatar){
         const soulContract = await ethers.getContractAt('SoulUpgradable', contractAddr.avatar);
+
+        // await soulContract.opinionAboutSoul(6, 'trust', 5);
+        await soulContract.opinionAboutSoul(5, 'trust', 5);
 
         //Mint a Soul
         // let tokenId = await soulContract.mint("");
@@ -53,7 +56,7 @@ async function main() {
     // else console.error("Failed to find address for 'avatar' Contract", contractAddr);
 
     //Hub Associations & Validation 
-    if(1 && contractAddr.hub){
+    if(0 && contractAddr.hub){
         const hubContract = await ethers.getContractAt('HubUpgradable', contractAddr.hub);
 
         //Update Game Extension: Project
