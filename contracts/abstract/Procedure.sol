@@ -181,34 +181,21 @@ abstract contract Procedure is IProcedure, CTXEntityUpgradable, Posts {
         _roleAssignToToken(ownerToken, role, amount);
     }
 
-    /* Identical to parent
-    /// Remove Tethered Token from a Role
-    function roleRemoveFromToken(uint256 ownerToken, string memory role, uint256 amount) public override roleExists(role) AdminOrOwner {
-        _roleRemoveFromToken(ownerToken, role, amount);
-    }
-    */
-
-    // function post(string entRole, string uri) 
-    // - Post by account + role (in the claim, since an account may have multiple roles)
-
-    // function post(uint256 token_id, string entRole, string uri) 
-    //- Post by Entity (Token ID or a token identifier struct)
- 
-    /// Add Post 
+    /// Simple Post as Event  
     /// @param entRole  posting as entitiy in role (posting entity must be assigned to role)
     /// @param tokenId  Acting SBT Token ID
     /// @param uri_     post URI
     function post(string calldata entRole, uint256 tokenId, string calldata uri_) public override {
         //Validate that User Controls The Token
         require(ISoul(getSoulAddr()).hasTokenControlAccount(tokenId, _msgSender())
-            || ISoul(getSoulAddr()).hasTokenControlAccount(tokenId, tx.origin)
+            // || ISoul(getSoulAddr()).hasTokenControlAccount(tokenId, tx.origin)
             , "POST:SOUL_NOT_YOURS"); //Supports Contract Permissions
         //Validate: Soul Assigned to the Role 
         require(roleHasByToken(tokenId, entRole), "POST:ROLE_NOT_ASSIGNED");    //Validate the Calling Account
         //Validate Stage
         require(stage < DataTypes.ClaimStage.Closed, "STAGE:CLOSED");
         //Post Event
-        _post(tx.origin, tokenId, entRole, uri_);
+        _post(_msgSender(), tokenId, entRole, uri_);
     }
 }
     
