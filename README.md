@@ -25,7 +25,7 @@ This platform allows you to
 - [WIP] Simplified token-based permission mechanism 
 - [WIP] Use soulbound tokens (role, rep, xp...) for governance
 
-## Architecture
+## Fractal Architecture
 
 ![image](https://user-images.githubusercontent.com/5618090/208204563-860d1dcd-ffee-44a1-8c0b-4dfb0791e96e.png)
 
