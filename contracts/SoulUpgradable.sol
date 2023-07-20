@@ -115,13 +115,24 @@ contract SoulUpgradable is
         // return super.balanceOf(owner);
     }
 
+    /// Add a secondary owner for token
+    function addSecondaryOwner(address tokenOwner, uint256 tokenId) external {
+        // require(_msgSender() == owner(), "Only Owner");
+        //Validate Token Owner 
+        require(hasTokenControl(tokenId) 
+            || _isContractOwner(tokenId)
+            || _msgSender() == owner(), "TOKEN_OWNER_ONLY");
+        //Add
+        _tokenOwnerAdd(tokenOwner, tokenId);
+    }
+
     /// Map Account to Existing Token (Alias / Secondary Account)
-    function _tokenOwnerAdd(address owner, uint256 tokenId) internal {
+    function _tokenOwnerAdd(address tokenOwner, uint256 tokenId) internal {
         require(_exists(tokenId), "nonexistent token");
-        require(_owners_rev[owner] == 0, "Account already mapped to token");
-        _owners_rev[owner] = tokenId;
+        require(_owners_rev[tokenOwner] == 0, "Account already mapped to token");
+        _owners_rev[tokenOwner] = tokenId;
         //Faux Transfer Event (Mint)
-        emit Transfer(address(0), owner, tokenId);
+        emit Transfer(address(0), tokenOwner, tokenId);
     }
 
     /// Map Account to Existing Token (Alias / Secondary Account)
@@ -310,10 +321,9 @@ contract SoulUpgradable is
      * ! admin role the owner (Game) entity
      */
     function hasTokenControlAccount(uint256 tokenId, address account) public view override returns (bool) {
-        address ownerAccount = ownerOf(tokenId);
         return (_isApprovedOrOwner(account, tokenId) || // Token Owner or Approved
             // ownerAccount == account //Token Owner (Support for Contract as Owner)
-            (ownerAccount == address(this) && owner() == account) || //Unclaimed Tokens Controlled by Contract Owner Contract (DAO)
+            (ownerOf(tokenId) == address(this) && owner() == account) || //Unclaimed Tokens Controlled by Contract Owner Contract (DAO)
             _isContractOwner(tokenId)); //Owner of the owner contract
     }
 
