@@ -47,7 +47,13 @@ contract ActionExt is GameExtension {
     }
 
     /// Check Permission Triple [TEST]
-    function validatePermissions(uint256 ruleRefId, string memory subject, string memory verb, string memory object, string memory tool) public view returns (bool) {
+    function validatePermissions(
+        uint256 ruleRefId, 
+        string memory subject, 
+        string memory verb, 
+        string memory object, 
+        string memory tool
+    ) public view returns (bool) {
         DataTypes.Rule memory rule = rules().ruleGet(ruleRefId);
         DataTypes.SVO memory action = actionRepo().actionGet(rule.about);
         //Match action
