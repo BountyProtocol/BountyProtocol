@@ -21,8 +21,13 @@ let deployed: any = [];
  * MISC COMMANDS
  */
 async function main() {
+    //Specific Game
+    //Bamboo Culture - 0x05e0ce28ff2d2ee8c7128af89acc72e0399545cb 
+    const gameContract = await ethers.getContractFactory("GameUpgradable").then(res => res.attach("0x05e0ce28ff2d2ee8c7128af89acc72e0399545cb"));
+    //Change Game's Opinion
+    await gameContract.opinionAboutToken(contractAddr.avatar, 22, 'work', 1);
+    
     //Change Game's Conf
-    // const gameContract = await ethers.getContractFactory("GameUpgradable").then(res => res.attach("0x1c879765c9ec09706d80939d58acf1b663de9795"));
     // await gameContract.confSet("type", "GAME");
     // await gameContract.confSet("role", "MDAO");
 
