@@ -106,8 +106,11 @@ interface IOpenRepo {
     /// Get First Address in Index
     function stringGetIndex(string memory key, uint256 index) external view returns (string memory);
 
-    /// Set  Association
+    /// Set String
     function stringSet(string memory key, string memory value) external;
+
+    /// Set Strings
+    function stringsSet(string[] memory key, string[] memory value) external;
 
     /// Add Address to Slot
     function stringAdd(string memory key, string memory value) external;

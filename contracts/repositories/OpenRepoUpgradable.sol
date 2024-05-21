@@ -18,11 +18,12 @@ import "../libraries/StringArray.sol";
 /**
  * @title Generic Data Repository
  * @dev Retains Data for Other Contracts
- * Version 2.3.0
+ * Version 2.3.1
  * - Save & Return Associations
  * - Owned by Requesting Address/Booleans/Strings
  * - Support Multiple Similar Items
- * 
+ * - Set Multiple (for strings)
+ *
  * @dev TODO: Enforce Single Type for each Key (register key's type when used)
  * 
  * Address Functions:
@@ -263,7 +264,7 @@ contract OpenRepoUpgradable is
 
     //-- Strings
         
-    /// Get Boolean By Origin Owner Node
+    /// Get String By Origin Owner Node
     function stringGetOf(address ownerAddr, string memory key) public view override returns (string memory) {
         //Validate
         if(_RepoString[ownerAddr][key].length == 0) return "";
@@ -271,28 +272,28 @@ contract OpenRepoUpgradable is
         return _RepoString[ownerAddr][key][0];
     }
 
-    /// Get First Boolean in Slot
+    /// Get First String in Slot
     function stringGet(string memory key) external view override returns (string memory) {
         return stringGetOf(_msgSender(), key);
     }
     
-    /// Get First Boolean by Index
+    /// Get First String by Index
     function stringGetIndexOf(address originContract, string memory key, uint256 index) public view override returns (string memory) {
         return _RepoString[originContract][key][index];
     }
 
-    /// Get First Boolean in Index
+    /// Get First String in Index
     function stringGetIndex(string memory key, uint256 index) external view override returns (string memory) {
         return stringGetIndexOf(_msgSender(), key, index);
     }
     
-    /// Get All Boolean in Slot
+    /// Get All String in Slot
     function stringGetAll(string memory key) external view returns (string[] memory) {
         return _RepoString[_msgSender()][key];
     }
 
-    /// Set Boolean
-    function stringSet(string memory key, string memory value) external override {
+    /// Set String
+    function stringSet(string memory key, string memory value) public override {
         //Clear Entire Array
         delete _RepoString[_msgSender()][key];
         //Set as the first slot of an empty array
@@ -300,8 +301,13 @@ contract OpenRepoUpgradable is
         //Association Changed Event
         emit StringSet(_msgSender(), key, value);
     }
+
+    /// Set Strings (Multiple)
+    function stringsSet(string[] memory keys, string[] memory values) external override {
+        for (uint256 i = 0; i < keys.length; ++i) stringSet(keys[i], values[i]);
+    }
     
-    /// Add Boolean to Slot
+    /// Add String to Slot
     function stringAdd(string memory key, string memory value) external override {
         //Add to Array
         _RepoString[_msgSender()][key].push(value);
@@ -309,7 +315,7 @@ contract OpenRepoUpgradable is
         emit StringAdd(_msgSender(), key, value);
     }
     
-    /// Remove Boolean from Slot
+    /// Remove String from Slot
     function stringRemove(string memory key, string memory value) external override {
         //Set as the first slot of an empty array
         _RepoString[_msgSender()][key].removeItem(value);
