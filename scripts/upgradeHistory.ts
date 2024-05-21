@@ -22,7 +22,7 @@ async function main() {
   // const [deployer, admin] = await ethers.getSigners();
 
   //Log
-  console.log("Update Soul Proxy:");
+  console.log("Update Action Proxy:");
 
   //Fetch New Implementation Contract
   let NewImplementation = await ethers.getContractFactory("ActionRepoTrackerUp");
