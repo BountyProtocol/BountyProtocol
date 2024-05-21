@@ -31,6 +31,7 @@ const publicAddr: any = {
   aurora_plus:{
     //Owner: 0x874a6E7F5e9537C4F934Fa0d6cea906e24fc287D
     openRepo: "0x2C9cc43C53141AA1CD16699f4Fe24742269c2Fe5", //0.6.1.1
+    // openRepo: "0x41966B4485CBd781fE9e82f90ABBA96958C096CF", //OpenRepo v2.3.1
     ruleRepo: "0xc877ef0c936DF03cB3fC637EF3Db719EFFbED493", //0.6.1.1
   },
   aurora_test:{
